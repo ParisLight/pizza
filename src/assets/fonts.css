@@ -1,0 +1,44 @@
+/* Circe Bold */
+@font-face {
+  font-family: 'Circe';
+  src: url('@/assets/fonts/Circe_Bold.otf') format('opentype'),
+  url('@/assets/fonts/Circe_Bold.woff') format('woff');
+  font-weight: 700; /* Bold */
+  font-style: normal;
+}
+
+/* Circe Extra-Light */
+@font-face {
+  font-family: 'Circe';
+  src: url('@/assets/fonts/Circe_Extra-Light.otf') format('opentype'),
+  url('@/assets/fonts/Circe_Extra-Light.woff') format('woff');
+  font-weight: 200; /* Extra-Light */
+  font-style: normal;
+}
+
+/* Circe Light */
+@font-face {
+  font-family: 'Circe';
+  src: url('@/assets/fonts/Circe_Light.otf') format('opentype'),
+  url('@/assets/fonts/Circe_Light.woff') format('woff');
+  font-weight: 300; /* Light */
+  font-style: normal;
+}
+
+/* Circe Medium */
+@font-face {
+  font-family: 'Circe';
+  src: url('@/assets/fonts/Circe_Medium.otf') format('opentype'),
+  url('@/assets/fonts/Circe_Medium.woff') format('woff');
+  font-weight: 500; /* Medium */
+  font-style: normal;
+}
+
+/* Circe Regular */
+@font-face {
+  font-family: 'Circe';
+  src: url('@/assets/fonts/Circe_Regular.otf') format('opentype'),
+  url('@/assets/fonts/Circe_Regular.woff') format('woff');
+  font-weight: 400; /* Regular */
+  font-style: normal;
+}
