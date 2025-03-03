@@ -18,5 +18,6 @@ export interface IProduct {
     weight?: string,
     description?: string,
     price?: number,
-    nutrition: INutrition
+    nutrition: INutrition,
+    categoryId: number
 }

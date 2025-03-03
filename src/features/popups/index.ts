@@ -1,0 +1,1 @@
+export { usePopupModel } from "./model";

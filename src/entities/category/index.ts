@@ -1,5 +1,6 @@
 import Card from './ui/card/Card.vue'
 import type { ICategory } from './model/types'
+import { useCategoryModel } from './model'
 
-export { Card }
-export type { ICategory }
+export { Card, useCategoryModel }
+export type { ICategory}

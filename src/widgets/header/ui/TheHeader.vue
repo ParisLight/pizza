@@ -5,7 +5,7 @@
         <img src="@/assets/moon-logo.png" alt="logo">
       </div>
       <div class="header__actions">
-        <basket-button />
+        <basket-button :count="cartModel.totalQuantityCart"/>
         <navigation-switcher />
       </div>
     </div>
@@ -15,6 +15,9 @@
 <script setup>
 import { BasketButton } from "@/shared/ui/basket-button";
 import { NavigationSwitcher } from "@/features/navigation-switcher";
+import { useCartModel } from "@/entities/cart";
+
+const cartModel = useCartModel()
 </script>
 
 <style lang="scss" scoped>

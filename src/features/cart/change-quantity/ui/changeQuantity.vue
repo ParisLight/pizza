@@ -7,7 +7,8 @@
         @click="handleClickMinus"
       >
         <slot name="icon">
-          <img :src="IconMinus" alt="minus">
+          <img v-if="size === 'big'" :src="IconBigMinus" alt="minus">
+          <img v-else :src="IconMinus" alt="minus">
         </slot>
       </el-button>
       <div class="change-quantity__quantity">
@@ -20,7 +21,8 @@
       @click="handleClickPlus"
     >
       <slot name="icon">
-        <img :src="IconPlus" alt="plus">
+        <img v-if="size === 'big'" :src="IconBigPlus" alt="plus">
+        <img v-else :src="IconPlus" alt="plus">
       </slot>
     </el-button>
   </div>
@@ -29,6 +31,9 @@
 <script lang="ts" setup>
 import IconPlus from "@/assets/images/plus-bold.svg";
 import IconMinus from "@/assets/images/minus-bold.svg";
+import IconBigPlus from "@/assets/images/plus-big-icon.svg";
+import IconBigMinus from "@/assets/images/minus-big-icon.svg"
+
 import type { IProduct } from "@/entities/product";
 import { useCartModel } from "@/entities/cart";
 
@@ -62,6 +67,10 @@ const handleClickPlus = () => {
     .button-icon {
       width: 42px;
       height: 42px;
+      img {
+        width: 16px;
+        height: 16px;
+      }
     }
     .change-quantity__quantity {
       min-width: 20px;

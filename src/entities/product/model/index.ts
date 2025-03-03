@@ -19,7 +19,8 @@ export const useProductModel = defineStore({
           carbs: 23,
           kcal: 330,
           proteins: 20
-        }
+        },
+        categoryId: 1,
       },
       {
         id: 2,
@@ -33,7 +34,38 @@ export const useProductModel = defineStore({
           carbs: 14,
           kcal: 330,
           proteins: 20
-        }
+        },
+        categoryId: 2,
+      },
+      {
+        id: 55,
+        img: PizzaIcon,
+        name: 'Пепперони2',
+        weight: '100гр',
+        price: 500,
+        description: 'пепперони, моцарелла, томатный соус, сливочный соус, орегано.',
+        nutrition: {
+          fats: 12,
+          carbs: 14,
+          kcal: 330,
+          proteins: 20
+        },
+        categoryId: 2,
+      },
+      {
+        id: 232,
+        img: PizzaIcon,
+        name: 'Пепперони2',
+        weight: '100гр',
+        price: 500,
+        description: 'пепперони, моцарелла, томатный соус, сливочный соус, орегано.',
+        nutrition: {
+          fats: 12,
+          carbs: 14,
+          kcal: 330,
+          proteins: 20
+        },
+        categoryId: 2,
       },
       {
         id: 3,
@@ -47,7 +79,8 @@ export const useProductModel = defineStore({
           carbs: 12,
           kcal: 330,
           proteins: 20
-        }
+        },
+        categoryId: 3
       }
     ],
     product: {},

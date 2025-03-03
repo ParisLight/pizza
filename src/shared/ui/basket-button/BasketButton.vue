@@ -37,7 +37,7 @@ const props = withDefaults(defineProps<IProps>(), {
     border-radius: 100%;
     background-color: var(--color-purple);
     position: absolute;
-    top: 0;
+    top: -6px;
     left: 50%;
     span {
       font-size: 8px;

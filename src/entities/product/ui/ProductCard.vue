@@ -33,7 +33,7 @@ import { type IProduct } from "@/entities/product";
 const emit = defineEmits(['imgClick'])
 
 const onClickImg = () => {
-    emit('imgClick')
+  emit('imgClick')
 }
 
 defineProps<{

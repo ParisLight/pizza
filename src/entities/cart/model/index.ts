@@ -25,5 +25,14 @@ export const useCartModel = defineStore( {
                 this.items = this.items.filter(item => item.productId !== productId)
             }
         }
+    },
+    getters: {
+        totalQuantityCart(): number {
+            if(!this.items.length) return 0
+
+            const totalQuantity = this.items.reduce((acc, curr) => acc + curr.quantity, 0)
+
+            return totalQuantity ? totalQuantity : 0
+        }
     }
 })

@@ -2,22 +2,18 @@
   <div class="main-page">
     <div class="main-page__content mt-16">
       <SearchProduct />
-
       <CategoryList />
       <ProductList />
-      <ProductCardPopup :product="productModel.products[0]" />
+      <PopupsSystem />
     </div>
   </div>
 </template>
 
 <script setup>
-import { CategoryList } from "@/widgets/category-list";
 import { SearchProduct } from '@/features/product'
+import { CategoryList } from "@/widgets/category-list";
 import { ProductList } from "@/widgets/product-list";
-import ProductCardPopup from "@/widgets/product-card-popup/ui/ProductCardPopup.vue";
-import {useProductModel} from "@/entities/product";
-
-const productModel = useProductModel()
+import { PopupsSystem } from "@/widgets/popups-system";
 
 const name = ref('')
 </script>
