@@ -8,9 +8,9 @@
         <span>{{ product.name }}</span>
       </div>
       <div class="product__weight">
-        <span>{{ product.weight }} гр</span>
+        <span>{{ product.weight }}</span>
       </div>
-      <div class="product__description">
+      <div class="product__description line-clamp">
         <span>
           {{ product.description }}
         </span>
@@ -106,5 +106,13 @@ defineProps<{
       color: var(--color-golden);
     }
   }
+}
+.line-clamp {
+ span {
+   display: -webkit-box;
+   -webkit-line-clamp: 3;
+   -webkit-box-orient: vertical;
+   overflow: hidden;
+ }
 }
 </style>

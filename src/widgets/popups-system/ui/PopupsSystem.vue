@@ -1,15 +1,17 @@
 <template>
   <div class="popups-wrapper">
-    <BasePopup
-      v-for="(popup, key) in popupModel.popups"
-      :key="key"
-      @close="popupModel.closePopup(popup.id)"
-    >
-      <component
-        :is="popups[popup.name]"
-        v-bind="popup.props"
-      />
-    </BasePopup>
+    <transition-group name="fade">
+      <BasePopup
+        v-for="(popup, key) in popupModel.popups"
+        :key="key"
+        @close="popupModel.closePopup(popup.id)"
+      >
+        <component
+          :is="popups[popup.name]"
+          v-bind="popup.props"
+        />
+      </BasePopup>
+    </transition-group>
   </div>
 </template>
 
@@ -21,12 +23,11 @@ const popupModel = usePopupModel()
 
 const popups = {
   ProductCardPopup: defineAsyncComponent(() =>
-    import('@/widgets/product-card-popup/index')
+    import('@/widgets/product-card-popup')
       .then(module => module.ProductCardPopup)
   ),
 };
 </script>
 
 <style scoped>
-
 </style>

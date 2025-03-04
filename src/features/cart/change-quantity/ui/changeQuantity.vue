@@ -67,6 +67,7 @@ const handleClickPlus = () => {
     .button-icon {
       width: 42px;
       height: 42px;
+      border-radius: 8px;
       img {
         width: 16px;
         height: 16px;
@@ -93,6 +94,7 @@ const handleClickPlus = () => {
   width: 24px;
   height: 24px;
   box-shadow: 0px 2px 8px 0px #0000008C;
+  border-radius: 6px;
   img {
     width: 10px;
     height: 10px;

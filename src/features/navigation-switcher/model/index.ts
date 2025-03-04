@@ -14,14 +14,10 @@ export const useNavigationModel = defineStore({
     },
     actions: {
         toggleNavigationOpenState(): void {
-            this.isOpenNavigation = !this.isOpenNavigation
+            this.isOpenNavigation = !this.isOpenNavigation;
         },
-        async goToPage(route: string): Promise {
-            if(!route.includes('/')) {
-                route = '/' + route
-            }
-
-            await router.push(route)
+        closeNavigation() {
+            this.isOpenNavigation = false;
         }
     }
 })

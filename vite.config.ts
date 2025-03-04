@@ -18,8 +18,10 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
       imports: [
         'vue',
-        'vue-router'
-      ]
+        'vue-router',
+        'pinia',
+      ],
+      dts: true,
     })
   ],
   resolve: {

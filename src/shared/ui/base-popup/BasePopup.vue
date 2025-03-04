@@ -1,10 +1,10 @@
 <template>
-  <div class="popup-wrapper">
-    <div class="popup">
+  <div class="popup-wrapper" @click="closePopup">
+    <div class="popup" @click.stop>
       <el-button
         class="popup__exit"
         color="var(--color-main)"
-        @click="onClickExit"
+        @click="closePopup"
       >
         <slot name="icon">
           <img :src="IconCross" alt="plus">
@@ -22,7 +22,7 @@ import IconCross from '@/assets/images/cross-icon.svg';
 
 const emit = defineEmits(['close'])
 
-const onClickExit = () => {
+const closePopup = () => {
   emit('close')
 }
 
@@ -40,6 +40,8 @@ const onClickExit = () => {
 }
 .popup {
   position: relative;
+  display: flex;
+  flex-direction: column;
   background-color: var(--color-main);
   width: calc(100% - 40px);
   border-radius: 16px;
@@ -49,6 +51,7 @@ const onClickExit = () => {
     display: flex;
     flex-direction: column;
     align-items: center;
+    flex: 1;
   }
   &__exit {
     position: absolute;

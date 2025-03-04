@@ -4,7 +4,6 @@
       <SearchProduct />
       <CategoryList />
       <ProductList />
-      <PopupsSystem />
     </div>
   </div>
 </template>
@@ -13,9 +12,6 @@
 import { SearchProduct } from '@/features/product'
 import { CategoryList } from "@/widgets/category-list";
 import { ProductList } from "@/widgets/product-list";
-import { PopupsSystem } from "@/widgets/popups-system";
-
-const name = ref('')
 </script>
 
 <style lang="scss" scoped>

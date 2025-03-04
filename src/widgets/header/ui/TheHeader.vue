@@ -1,11 +1,14 @@
 <template>
   <header class="header">
     <div class="header__content">
-      <div class="header__logo">
+      <div class="header__logo" @click="router.push('/')">
         <img src="@/assets/moon-logo.png" alt="logo">
       </div>
       <div class="header__actions">
-        <basket-button :count="cartModel.totalQuantityCart"/>
+        <basket-button
+          :count="cartModel.totalQuantityCart"
+          @click="router.push('/basket')"
+        />
         <navigation-switcher />
       </div>
     </div>
@@ -16,7 +19,9 @@
 import { BasketButton } from "@/shared/ui/basket-button";
 import { NavigationSwitcher } from "@/features/navigation-switcher";
 import { useCartModel } from "@/entities/cart";
+import { useRouter } from "vue-router";
 
+const router = useRouter()
 const cartModel = useCartModel()
 </script>
 
@@ -32,6 +37,7 @@ const cartModel = useCartModel()
     width: 64px;
     height: 54px;
     grid-column-start: 2;
+    cursor: pointer;
     img {
       width: 100%;
       height: 100%;

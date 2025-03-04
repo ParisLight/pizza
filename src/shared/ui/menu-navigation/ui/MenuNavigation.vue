@@ -1,16 +1,16 @@
 <template>
   <div class="menu-navigation">
     <div class="menu-navigation__list">
-      <router-link :to="routesMap.mainPage" class="menu-navigation__item">
+      <router-link :to="routesMap.mainPage" @click.stop="navigationModel.closeNavigation()" class="menu-navigation__item">
         <span>Меню</span>
       </router-link>
-      <router-link :to="routesMap.basket" class="menu-navigation__item">
+      <router-link :to="routesMap.basket" @click.stop="navigationModel.closeNavigation()" class="menu-navigation__item">
         <span>Корзина</span>
       </router-link>
-      <router-link :to="routesMap.profile" class="menu-navigation__item">
+      <router-link :to="routesMap.profile" @click.stop="navigationModel.closeNavigation()" class="menu-navigation__item">
         <span>Профиль</span>
       </router-link>
-      <router-link :to="routesMap.myOrders" class="menu-navigation__item">
+      <router-link :to="routesMap.myOrders" @click.stop="navigationModel.closeNavigation()" class="menu-navigation__item">
         <span>История заказов</span>
       </router-link>
     </div>
@@ -32,6 +32,9 @@
 
 <script setup>
 import { routesMap } from "@/app/providers/router/constants.ts";
+import { useNavigationModel } from '@/features/navigation-switcher'
+
+const navigationModel = useNavigationModel()
 </script>
 
 <style lang="scss" scoped>

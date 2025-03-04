@@ -1,5 +1,9 @@
 <template>
-  <div class="burger-button" :class="{'burger-button--active': model}" @click="onClick">
+  <div
+    class="burger-button"
+    :class="{'burger-button--active': model}"
+    @click="onClick"
+  >
     <div class="burger-button__line"></div>
   </div>
 </template>

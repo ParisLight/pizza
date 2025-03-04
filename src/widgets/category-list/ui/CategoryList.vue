@@ -16,7 +16,7 @@
           <category-card
             :class="{'category-card--active': categoryModel.idActiveCategory === category.id}"
             :data="category"
-            @click="categoryModel.setActiveCategory(category.id)"
+            @click="onClickCategory(category.id)"
           />
         </swiper-slide>
       </swiper-container>
@@ -27,9 +27,16 @@
 <script setup lang="ts">
 import { Card as CategoryCard } from '@/entities/category'
 import { useCategoryModel } from "@/entities/category/model";
+import { useProductModel } from "@/entities/product";
 
 const categoryModel = useCategoryModel()
+const productModel = useProductModel()
 
+
+const onClickCategory = (id: number) => {
+  categoryModel.setActiveCategory(id)
+  productModel.fetchProducts(id)
+}
 </script>
 
 <style lang="scss" scoped>

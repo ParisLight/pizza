@@ -1,7 +1,7 @@
 <template>
   <div class="navigation-switcher">
     <burger-button
-      @on-click="navigationModel.toggleNavigationOpenState()"
+      v-model="navigationModel.isOpenNavigation"
     />
     <transition name="fade">
       <menu-navigation

@@ -19,16 +19,20 @@
     </el-carousel>
   </div>
   <div class="card__description popup__container">
-    <div class="card__name">
+    <div class="card__name" v-if="activeProduct.name">
       <span>{{ activeProduct.name }}</span>
     </div>
-    <div class="card__descr">
+    <div class="card__descr line-clamp" v-if="activeProduct.description">
       <span>{{ activeProduct.description }}</span>
     </div>
   </div>
-  <NutritionBar :nutrition="activeProduct.nutrition" />
+  <NutritionBar
+    class="card__nutrition-info"
+    v-if="activeProduct.nutrition"
+    :nutrition="activeProduct.nutrition"
+  />
   <div class="card__footer popup__container">
-    <div class="card__price">
+    <div class="card__price" v-if="activeProduct.price">
       <span>{{ activeProduct.price }} ₽</span>
     </div>
     <ChangeQuantity :product="activeProduct" :size="'big'" />
@@ -111,6 +115,9 @@ const handleCarouselChange = (index: number) => {
       line-height: 48px;
       color: var(--color-golden);
     }
+  }
+  &__nutrition-info {
+    margin-top: 16px;
   }
   &__footer {
     display: flex;

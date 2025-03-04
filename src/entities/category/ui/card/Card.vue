@@ -29,6 +29,7 @@ const props = defineProps<{
   box-shadow: 0px 2px 8px 0px #0000008C;
   border-radius: 12px;
   transition: .2s ease-in-out background-color;
+  cursor: pointer;
   &--active {
     background-color: var(--color-purple);
     .category-card__name span {

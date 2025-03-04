@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { IProductModel, IProduct } from "./types";
 import PizzaIcon from '@/assets/images/pizza.png';
+import { ProductApi } from '../index'
 
 export const useProductModel = defineStore({
   id: 'product',
@@ -87,6 +88,9 @@ export const useProductModel = defineStore({
     searchQuery: ''
   },
   actions: {
+    async fetchProducts(categoryId: number) {
+      this.products = await ProductApi.fetchProducts(categoryId)
+    },
     setSearchQuery(query: string) {
       this.searchQuery = query
     }
@@ -96,6 +100,9 @@ export const useProductModel = defineStore({
       if(!this.searchQuery) return this.products
 
       return this.products.filter(product => product.name.toLowerCase().includes(this.searchQuery.toLowerCase()))
+    },
+    getProductById: (state) => (id: number | string) => {
+      return state.products.find((product) => product.id === id);
     }
   }
 })

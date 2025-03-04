@@ -53,8 +53,7 @@ const dashColors = {
 
 const getDashWidth = () => {
   const { fats, proteins, carbs } = props.nutrition
-  const totalValue = proteins + carbs + fats
-
+  const totalValue = parseFloat(proteins) + parseFloat(carbs) + parseFloat(fats)
   return {
     fats: fats <= 0 ? 0 : fats / totalValue * 100,
     proteins: proteins <= 0 ? 0 :  proteins / totalValue * 100,
