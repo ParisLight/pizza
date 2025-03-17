@@ -65,7 +65,7 @@ defineProps({
   }
   &__btn {
     border: 1px solid var(--color-golden);
-    border-radius: 6px;
+    border-radius: var(--radius-6);
     color: var(--color-white);
   }
 }

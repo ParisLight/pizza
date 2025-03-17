@@ -4,6 +4,7 @@
 :root {
   --color-background: #1b1e23;
   --color-purple: #6C67AA;
+  --color-purple-light: #9C99FF;
   --color-white: #FFFFFF;
   --color-golden: #F8C625;
   --color-main: #2A2D30;
@@ -23,6 +24,11 @@
   --popup-background: rgba(0, 0, 0, 0.5);
   --color-orange: #D86512;
   --color-green: #1DB510;
+
+  --radius-4: 4px;
+  --radius-6: 6px;
+  --radius-8: 8px;
+  --radius-12: 12px;
 }
 
 *,
@@ -67,16 +73,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: .4s ease-in-out;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
+
 
 
 .mt-16 {
   margin-top: 16px;
 }
+

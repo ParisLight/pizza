@@ -4,5 +4,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import { mask } from 'vue-the-mask'
 
-export const app = createApp(App).use(router).use(createPinia()).directive('maska', mask)
-console.log(app , 'APPP_+')
+export const app = createApp(App)
+  .use(router)
+  .use(createPinia())
+  .directive('maska', mask)

@@ -19,7 +19,7 @@ export default defineConfig({
       imports: [
         'vue',
         'vue-router',
-        'pinia',
+        'pinia'
       ],
       dts: true,
     })

@@ -1,3 +1,1 @@
-import { supabase } from './supabase'
-
-export { supabase }
+export { supabase } from './supabase'

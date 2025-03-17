@@ -45,7 +45,7 @@ const props = defineProps<{
 }>()
 
 const quantityInCart = computed(() => {
-  const cartItem = cartModel.items.find(item => item.productId === props.product.id)
+  const cartItem = cartModel.items.find(item => item.product_id === props.product.id)
 
   return cartItem ? cartItem.quantity : 0
 })
@@ -67,7 +67,7 @@ const handleClickPlus = () => {
     .button-icon {
       width: 42px;
       height: 42px;
-      border-radius: 8px;
+      border-radius: var(--radius-8);
       img {
         width: 16px;
         height: 16px;
@@ -94,7 +94,7 @@ const handleClickPlus = () => {
   width: 24px;
   height: 24px;
   box-shadow: 0px 2px 8px 0px #0000008C;
-  border-radius: 6px;
+  border-radius: var(--radius-6);
   img {
     width: 10px;
     height: 10px;

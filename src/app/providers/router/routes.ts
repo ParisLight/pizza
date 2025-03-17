@@ -4,11 +4,11 @@ import { routesMap } from "./constants.ts";
 export const routes: Array<RouteRecordRaw> = [
   {
     path: routesMap.mainPage,
-    component: () => import('@/pages/mainPage'),
+    component: () => import('@/pages/main-page'),
   },
   {
-    path: routesMap.basket,
-    component: () => import('@/pages/basket-page')
+    path: routesMap.cart,
+    component: () => import('@/pages/cart-page')
   },
   {
     path: routesMap.profile,

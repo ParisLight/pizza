@@ -1,6 +1,6 @@
 <template>
   <el-row class="row" :gutter="16">
-    <transition-group name="fade">
+    <transition-group name="fade-group">
       <el-col
         :span="12"
         v-for="product in filteredProducts"

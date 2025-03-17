@@ -86,7 +86,7 @@ const getDashWidth = () => {
   transition: .2s ease-in-out width;
   &__dash {
     height: 4px;
-    border-radius: 4px;
+    border-radius: var(--radius-4);
     width: 100%;
   }
   &__name {

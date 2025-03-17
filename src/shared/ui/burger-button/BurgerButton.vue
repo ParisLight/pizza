@@ -37,7 +37,7 @@ const onClick = (): void => {
     background-color: var(--color-golden);
     top: 50%;
     transform: translateY(-50%);
-    border-radius: 8px;
+    border-radius: var(--radius-8);
     overflow: hidden;
     transition: .2s ease-in-out;
   }
@@ -47,7 +47,7 @@ const onClick = (): void => {
     width: 100%;
     height: 1px;
     background-color: var(--color-golden);
-    border-radius: 8px;
+    border-radius: var(--radius-8);
     overflow: hidden;
     transition: .2s ease-in-out;
   }

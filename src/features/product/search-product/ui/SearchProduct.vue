@@ -1,5 +1,9 @@
 <template>
-  <BaseInput @input="onInputHandler"/>
+  <BaseInput
+      @input="onInputHandler"
+      :icon-search="true"
+      placeholder="Выеберите пиццу здесь"
+  />
 </template>
 
 <script lang="ts" setup>

@@ -4,45 +4,47 @@
       <span>Ваш заказ</span>
     </div>
     <div class="cart-list__list">
-      <div
-        class="cart-item"
-        v-for="item in cartList"
-        :key="item.id"
-      >
-        <div class="cart-item__img">
-          <img :src="item.product.img" alt="">
-        </div>
-        <transition name="fade" mode="out-in">
-          <div
-            v-if="!visibleDeleteStates[item.product.id]"
-            class="cart-item__center"
-            :class="{'cart-item__center--align-center': visibleDeleteStates[item.product.id]}"
-          >
-            <div class="cart-item__info">
-              <span class="cart-item__category">{{ getCategoryName(item.product.categoryId) }}</span>
-              <span class="cart-item__name">{{ item.product.name }}</span>
+      <transition-group name="fade-group">
+        <div
+          class="cart-item"
+          v-for="(item, index) in cartList"
+          :key="'cart_item_' + index"
+        >
+          <div class="cart-item__img">
+            <img :src="item.product.img" alt="">
+          </div>
+          <transition name="fade" mode="out-in">
+            <div
+              v-if="!visibleDeleteStates[item.product.id]"
+              class="cart-item__center"
+              :class="{'cart-item__center--align-center': visibleDeleteStates[item.product.id]}"
+            >
+              <div class="cart-item__info">
+                <span class="cart-item__category">{{ getCategoryName(item.product.categoryId) }}</span>
+                <span class="cart-item__name">{{ item.product.name }}</span>
+              </div>
+              <div class="cart-item__price">
+                <span>{{ item.product.price }} ₽</span>
+              </div>
+              <ChangeQuantity
+                class="cart-item__change-quantity"
+                :product="item.product"
+              />
             </div>
-            <div class="cart-item__price">
-              <span>{{ item.product.price }} ₽</span>
-            </div>
-            <ChangeQuantity
-              class="cart-item__change-quantity"
-              :product="item.product"
+            <CompletelyDelete
+              v-else
+              @cancel-click="toggleDeleteVisibility(item.product.id)"
+              class="cart-item__completely-delete"
+              :product-id="item.product.id"
             />
-          </div>
-          <CompletelyDelete
-            v-else
-            @cancel-click="toggleDeleteVisibility(item.product.id)"
-            class="cart-item__completely-delete"
-            :product-id="item.product.id"
-          />
-        </transition>
-        <div class="cart-item__right">
-          <div class="cart-item__delete" @click="toggleDeleteVisibility(item.product.id)">
-            <img src="@/assets/images/delete-icon.svg" alt="delete">
+          </transition>
+          <div class="cart-item__right">
+            <div class="cart-item__delete" @click="toggleDeleteVisibility(item.product.id)">
+              <img src="@/assets/images/delete-icon.svg" alt="delete">
+            </div>
           </div>
         </div>
-      </div>
+      </transition-group>
     </div>
   </div>
 </template>
@@ -67,12 +69,8 @@ const cartList = computed(() => {
     if(!productTypes.value.length) return []
 
     return cartModel.items.map(item => {
-        const currentProduct = productTypes.value.find(product => product.id === item.productId)
+        const currentProduct = productTypes.value.find(product => product.id === item.product_id)
         if(currentProduct) {
-            console.log({
-                product: currentProduct,
-                quantity: item.quantity
-            }, 'check_it_')
             return {
                 product: currentProduct,
                 quantity: item.quantity
@@ -82,8 +80,9 @@ const cartList = computed(() => {
 })
 
 onBeforeMount(async () => {
-    const productsIds = cartModel.items.map(item => item.productId)
+    const productsIds = cartModel.items.map(item => item.product_id)
     if(!productsIds || !productsIds.length) return
+    console.log(productsIds, 'product_ids_')
     productTypes.value = await ProductApi.fetchProductsByProductIds(productsIds)
 })
 
@@ -150,6 +149,7 @@ const getCategoryName = (id: number) => {
     line-height: 14px;
     color: var(--color-white);
     opacity: 0.5;
+    font-variant: all-small-caps;
   }
   &__name {
     font-size: 16px;
@@ -177,6 +177,9 @@ const getCategoryName = (id: number) => {
     align-items: flex-end;
     justify-content: space-between;
     margin-top: 16px;
+  }
+  &__delete {
+    cursor: pointer;
   }
 
 }

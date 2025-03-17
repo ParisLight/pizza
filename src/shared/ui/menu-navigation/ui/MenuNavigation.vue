@@ -4,7 +4,7 @@
       <router-link :to="routesMap.mainPage" @click.stop="navigationModel.closeNavigation()" class="menu-navigation__item">
         <span>Меню</span>
       </router-link>
-      <router-link :to="routesMap.basket" @click.stop="navigationModel.closeNavigation()" class="menu-navigation__item">
+      <router-link :to="routesMap.cart" @click.stop="navigationModel.closeNavigation()" class="menu-navigation__item">
         <span>Корзина</span>
       </router-link>
       <router-link :to="routesMap.profile" @click.stop="navigationModel.closeNavigation()" class="menu-navigation__item">

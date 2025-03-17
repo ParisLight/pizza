@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<IProps>(), {
 
 <style lang="scss" scoped>
 .basket-button {
-  max-width: 12px;
+  width: 12px;
   height: 12px;
   position: relative;
   cursor: pointer;

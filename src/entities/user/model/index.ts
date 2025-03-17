@@ -1,26 +1,28 @@
 import { defineStore } from "pinia";
 import type { IUserModal } from "./types";
+import { UserApi } from '../index.ts'
 
-const useUserModal = defineStore({
+export const useUserModel = defineStore({
   id: 'user',
   state: () =>
     <IUserModal>{
       user: {
         id: 1,
         name: 'Konstantin',
-        number: 89221234412,
+        number: '89221234412',
         flat: 12,
         address: 'pushkina street, Moscow',
-        username: '@qwep'
+        username: '@qwep',
+        floor: 3,
       }
     },
 
   actions: {
-    getUser(id: number) {
-      // ....
+    async fetchUser (userId) {
+      const output = await UserApi.fetchUserByTgId(userId)
+      if(!output || !output.length) return
+
+      this.user = output[0]
     },
-    updateUserInfo() {
-    //   ....
-    }
   }
 })

@@ -7,7 +7,7 @@
       <div class="header__actions">
         <basket-button
           :count="cartModel.totalQuantityCart"
-          @click="router.push('/basket')"
+          @click="router.push(routesMap.cart)"
         />
         <navigation-switcher />
       </div>
@@ -20,6 +20,7 @@ import { BasketButton } from "@/shared/ui/basket-button";
 import { NavigationSwitcher } from "@/features/navigation-switcher";
 import { useCartModel } from "@/entities/cart";
 import { useRouter } from "vue-router";
+import { routesMap } from '@/app/providers'
 
 const router = useRouter()
 const cartModel = useCartModel()

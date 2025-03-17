@@ -1,6 +1,6 @@
 <template>
   <div class="popups-wrapper">
-    <transition-group name="fade">
+    <transition-group name="fade-group">
       <BasePopup
         v-for="(popup, key) in popupModel.popups"
         :key="key"

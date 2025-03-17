@@ -1,9 +1,21 @@
-.fade-enter-from,
-.fade-leave-to {
+.fade-group-move,
+.fade-group-enter-active,
+.fade-group-leave-active {
+  transition: .3s ease-in-out;
+}
+.fade-group-enter-from,
+.fade-group-leave-to {
   opacity: 0;
+}
+.fade-group-leave-active {
+  position: absolute;
 }
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: .2s ease-in-out opacity;
+  transition: .4s ease-in-out;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }

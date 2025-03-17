@@ -1,6 +1,6 @@
 interface IRouteMap {
     mainPage: string,
-    basket: string,
+    cart: string,
     profile: string,
     myOrders: string,
     product: string
@@ -8,7 +8,7 @@ interface IRouteMap {
 
 export const routesMap: IRouteMap = {
     mainPage: '/',
-    basket: '/basket',
+    cart: '/cart',
     profile: '/profile',
     myOrders: '/orders',
     product: '/product/:productId'
