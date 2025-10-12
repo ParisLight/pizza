@@ -1,22 +1,24 @@
 <template>
   <div class="popup__swiper">
-    <el-carousel
-      ref="carousel"
-      :cardScale="0.6"
-      height="260px"
-      :autoplay="false"
-      :indicator-position="'none'"
-      :initial-index="activeProductIndex"
-      @change="handleCarouselChange"
+    <swiper
+      class="popup__swiper-instance"
+      @swiper="onSwiper"
+      :slidesPerView="1.4"
+      :centeredSlides="true"
+      spaceBetween="5"
     >
-      <el-carousel-item v-for="item in productModel.products" :key="item.id">
+      <swiper-slide
+        class="popup__swiper-slide"
+        v-for="product in productsArray"
+        :key="product.id"
+      >
         <img
           class="card__img"
-          :src="item.img"
+          :src="product.img"
           :alt="activeProduct.name"
         />
-      </el-carousel-item>
-    </el-carousel>
+      </swiper-slide>
+    </swiper>
   </div>
   <div class="card__description popup__container">
     <div class="card__name" v-if="activeProduct.name">
@@ -35,39 +37,72 @@
     <div class="card__price" v-if="activeProduct.price">
       <span>{{ activeProduct.price }} ₽</span>
     </div>
-    <ChangeQuantity :product="activeProduct" :size="'big'" />
+    <ChangeQuantity
+      :product="activeProduct"
+      size="big"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { type IProduct, useProductModel } from '@/entities/product';
+import 'swiper/css';
+import { IProduct, useProductModel } from '@/entities/product';
+import { useCategoryModel } from '@/entities/category'
 import { ChangeQuantity } from '@/features/cart';
 import { NutritionBar } from '@/features/product';
+import { computed } from "vue";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import type { Swiper as SwiperType } from 'swiper/types/index'
+import { onMounted } from "vue";
 
 const props = defineProps<{
-  product: IProduct;
+  openingIdProduct?: number;
+  closeCallback?: (args: unknown[]) => any;
 }>();
 
 const productModel = useProductModel();
-const carousel = ref(null);
-const activeProductIndex = ref(0);
+const categoryModel = useCategoryModel()
+const swiperInstance = ref<SwiperType | null>(null)
 
-const initializeActiveProductIndex = () => {
-  if (props.product) {
-    activeProductIndex.value = productModel.products.findIndex(
-      (product) => product.id === props.product.id
-    );
+const onSwiper = (swiper: SwiperType): void => {
+  swiperInstance.value = swiper
+}
+
+const productsArray = computed<IProduct[]>(() => {
+  const activeCategory = categoryModel.idActiveCategory
+
+  return Array.from(productModel.products.values()).filter((product: IProduct) => product.categoryId === activeCategory)
+})
+
+const initializeStartSlide = () => {
+  if(props.openingIdProduct && swiperInstance.value) {
+    let index: number = 0
+
+    const indexOpenedProduct = productsArray.value.findIndex(
+      (product: IProduct) => product.id === props.openingIdProduct
+    )
+
+    if(indexOpenedProduct !== -1) {
+      index = indexOpenedProduct
+    }
+
+    swiperInstance.value.slideTo(index)
   }
-};
+}
 
-initializeActiveProductIndex();
+const activeProduct = computed<IProduct>(() => {
+  if(swiperInstance.value?.activeIndex !== undefined && productsArray.value.length) {
+    return productsArray.value[swiperInstance.value.activeIndex]
+  }
+
+  return productsArray.value[0] || {} as IProduct
+})
+
+onMounted(() => {
+  initializeStartSlide()
+});
 
 
-const activeProduct = computed(() => productModel.products[activeProductIndex.value]);
-
-const handleCarouselChange = (index: number) => {
-  activeProductIndex.value = index;
-};
 </script>
 
 <style lang="scss" scoped>
@@ -77,6 +112,9 @@ const handleCarouselChange = (index: number) => {
   }
   &__swiper {
     width: 100%;
+  }
+  &__swiper-slide {
+
   }
 }
 .card {
@@ -96,6 +134,7 @@ const handleCarouselChange = (index: number) => {
     }
   }
   &__descr {
+    height: 32px;
     span {
       font-size: 16px;
       line-height: 14px;
@@ -124,11 +163,5 @@ const handleCarouselChange = (index: number) => {
     justify-content: space-between;
     margin-top: 57px;
   }
-}
-.el-carousel__item {
-  background-color: unset;
-}
-:deep(.el-carousel__mask) {
-  background-color: unset;
 }
 </style>

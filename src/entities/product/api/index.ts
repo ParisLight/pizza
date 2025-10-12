@@ -1,5 +1,20 @@
 import { supabase } from "@/shared/api";
-import { mappedProducts } from "@/entities/product";
+import {IProduct, mappedProducts} from "@/entities/product";
+
+export const fetchAllProducts = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+
+    if(error) return []
+
+    return mappedProducts(data)
+
+  } catch (error) {
+    console.log(error, 'products_')
+  }
+}
 
 export const fetchProducts = async (categoryId: number) => {
   try {
@@ -17,7 +32,7 @@ export const fetchProducts = async (categoryId: number) => {
   }
 }
 
-export const fetchProductsByProductIds = async (productIds: number[]) => {
+export const fetchProductsByProductIds = async (productIds: number[]): Promise<IProduct[]> => {
   try {
     const { data, error } = await supabase
       .from('products')

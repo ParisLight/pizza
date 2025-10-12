@@ -51,9 +51,15 @@ const dashColors = {
   carbs: 'var(--color-golden)'
 }
 
-const getDashWidth = () => {
+type DashWidth = Pick<INutrition, 'fats' | 'proteins' | 'carbs'>
+const getDashWidth = (): DashWidth => {
   const { fats, proteins, carbs } = props.nutrition
-  const totalValue = parseFloat(proteins) + parseFloat(carbs) + parseFloat(fats)
+  const totalValue = proteins + carbs + fats
+
+  if (totalValue <= 0) {
+    return { fats: 0, proteins: 0, carbs: 0 };
+  }
+
   return {
     fats: fats <= 0 ? 0 : fats / totalValue * 100,
     proteins: proteins <= 0 ? 0 :  proteins / totalValue * 100,

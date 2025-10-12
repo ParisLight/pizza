@@ -5,10 +5,10 @@
   />
   <template v-else>
     <component :is="layout">
-      <template v-slot:header>
+      <template #header>
         <the-header />
       </template>
-      <template v-slot:default>
+      <template #default>
         <transition name="fade" mode="out-in">
           <router-view />
         </transition>
@@ -18,12 +18,14 @@
   </template>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { DefaultLayout } from '@/shared/ui/layouts'
 import TheHeader from "@/widgets/header/ui/TheHeader.vue";
 import { PopupsSystem } from "@/widgets/popups-system";
 import { useUserModel } from "@/entities/user";
 import { useCartModel } from "@/entities/cart";
+import { useProductModel } from "@/entities/product";
+import { useCategoryModel } from "@/entities/category";
 import { BaseSpinner } from "@/shared/ui/base-spinner";
 
 const route = useRoute()
@@ -37,9 +39,17 @@ const isLoadingApp = ref(true)
 
 const userModel = useUserModel()
 const cartModel = useCartModel()
+const productModel = useProductModel()
+
+
 const initializeApp = async () => {
   await userModel.fetchUser(10001)
-  await cartModel.fetchCart(userModel.user.user_id)
+
+  await Promise.allSettled([
+    productModel.fetchAllProducts(),
+    cartModel.fetchCart(userModel.user.user_id)
+  ])
+
   isLoadingApp.value = false
 }
 

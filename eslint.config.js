@@ -1,25 +1,30 @@
-import pluginVue from 'eslint-plugin-vue'
-import vueTsEslintConfig from '@vue/eslint-config-typescript'
-import pluginVitest from '@vitest/eslint-plugin'
-import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
+// eslint.config.js
+import { defineConfig } from "eslint/config";
 
-export default [
+export default defineConfig([
   {
-    name: 'app/files-to-lint',
-    files: ['**/*.{ts,mts,tsx,vue}'],
+    "eslint.options": {
+      "overrideConfig": {
+        "env": {
+          "browser": true,
+            "es6": true
+        },
+        "parserOptions": {
+          "ecmaVersion": 2019,
+            "sourceType": "module",
+            "ecmaFeatures": {
+            "jsx": true
+          }
+        },
+        "rules": {
+          "no-debugger": "off"
+        }
+      }
+    },
+    rules: {
+      semi: "error",
+      "prefer-const": "error",
+      reportUnusedDisableDirectives: false,
+    },
   },
-
-  {
-    name: 'app/files-to-ignore',
-    ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**'],
-  },
-
-  ...pluginVue.configs['flat/essential'],
-  ...vueTsEslintConfig(),
-  
-  {
-    ...pluginVitest.configs.recommended,
-    files: ['src/**/__tests__/*'],
-  },
-  skipFormatting,
-]
+]);

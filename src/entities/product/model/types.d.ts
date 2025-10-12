@@ -1,5 +1,5 @@
 export interface IProductModel {
-    products: IProduct[],
+    products: Map<number, IProduct>,
     product: IProduct,
     searchQuery: string
 }
@@ -12,7 +12,7 @@ export interface INutrition {
 }
 
 export interface IProduct {
-    id: number | string,
+    id: number,
     img?: string,
     name: string,
     weight?: string,

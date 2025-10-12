@@ -103,7 +103,6 @@ const displayValue = computed(() => {
       opacity: 0.5;
     }
   }
-
 }
 .dropdown {
   background-color: var(--color-main);
@@ -117,6 +116,7 @@ const displayValue = computed(() => {
   box-shadow: 0px 4px 20px 0px #0000008C;
   min-width: 182px;
   width: 100%;
+  transition: .2s ease-in-out;
   &--active {
     border-radius: 8px 8px 0 0;
   }
@@ -152,9 +152,15 @@ const displayValue = computed(() => {
     background-color: unset;
   }
 }
+:deep(.el-popper) {
+    box-shadow: none;
+}
+:deep(.el-popper__arrow) {
+    display: none;
+}
 :deep(.base-dropdown__list) {
   left: 0 !important;
-  top: 100% !important;
+  top: calc(100% - 1px) !important;
   height: fit-content !important;
   max-height: 200px;
   overflow: hidden;

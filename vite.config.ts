@@ -19,7 +19,10 @@ export default defineConfig({
       imports: [
         'vue',
         'vue-router',
-        'pinia'
+        'pinia',
+        {
+          'swiper/vue': ['Swiper', 'SwiperSlide'],
+        },
       ],
       dts: true,
     })

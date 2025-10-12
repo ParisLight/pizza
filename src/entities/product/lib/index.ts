@@ -1,4 +1,4 @@
-import type {IProduct} from "@/entities/product";
+import type { IProduct } from "@/entities/product";
 
 export const mappedProducts = (products: IProduct[]) => {
   if(!products || !products.length) return []

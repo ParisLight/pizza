@@ -27,15 +27,11 @@
 <script setup lang="ts">
 import { Card as CategoryCard } from '@/entities/category'
 import { useCategoryModel } from "@/entities/category/model";
-import { useProductModel } from "@/entities/product";
 
 const categoryModel = useCategoryModel()
-const productModel = useProductModel()
-
 
 const onClickCategory = (id: number) => {
   categoryModel.setActiveCategory(id)
-  productModel.fetchProducts(id)
 }
 </script>
 

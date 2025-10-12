@@ -1,17 +1,18 @@
 import { defineStore } from 'pinia'
 import type { ICartModel } from "./types";
 import { CartApi } from '../index'
+import { useDebounceFn } from '@vueuse/core'
 
 export const useCartModel = defineStore( {
   id: 'cart',
   state: () =>
-    <ICartModel>{
+    <ICartModel> {
       items: [],
       cartId: null
     },
 
   actions: {
-    async fetchCart (userId) {
+    async fetchCart (userId: number) {
       const cartIdOutput = await CartApi.fetchCartId(userId)
       if(!cartIdOutput || !cartIdOutput.length) return
 
@@ -23,8 +24,9 @@ export const useCartModel = defineStore( {
 
       this.items = output
     },
-    addToCart(productId: number | string) {
+    async addToCart(productId: number): Promise<void> {
       const item = this.items.find(item => item.product_id === productId)
+
       if(item) {
         item.quantity += 1
       } else {
@@ -33,24 +35,30 @@ export const useCartModel = defineStore( {
           quantity: 1
         })
       }
-      CartApi.updateCart(this.cartId, this.items)
+
+      await this.debouncedUpdateCart()
     },
-    removeFromCart(productId: number | string) {
+    async removeFromCart(productId: number): Promise<void> {
       const item = this.items.find(item => item.product_id === productId)
+
       if(item && item.quantity > 1) {
         item.quantity -= 1
-        CartApi.updateCart(this.cartId, this.items)
+        await this.debouncedUpdateCart()
       } else {
-        this.removeCompletelyFromCart(productId)
+        await this.removeCompletelyFromCart(productId)
       }
     },
-    removeCompletelyFromCart(productId: number | string) {
+    async removeCompletelyFromCart(productId: number | string) {
       const item = this.items.find(item => item.product_id === productId)
+
       if(item) {
         this.items = this.items.filter(item => item.product_id !== productId)
-        CartApi.updateCart(this.cartId, this.items)
+        await CartApi.updateCart(this.cartId, this.items)
       }
-    }
+    },
+    debouncedUpdateCart: useDebounceFn(async function() {
+      await CartApi.updateCart(this.cartId, this.items)
+    }, 300)
   },
   getters: {
     totalQuantityCart(): number {

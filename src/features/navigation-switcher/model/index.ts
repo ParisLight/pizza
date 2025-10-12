@@ -1,14 +1,10 @@
 import { defineStore } from "pinia";
-import { useRouter } from "vue-router";
-
-const router = useRouter()
 
 interface INavigationInterface {
     isOpenNavigation: boolean
 }
 
-export const useNavigationModel = defineStore({
-    id: 'navigation',
+export const useNavigationModel = defineStore('navigation', {
     state: () => <INavigationInterface> {
         isOpenNavigation: false
     },

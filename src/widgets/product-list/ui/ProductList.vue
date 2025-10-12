@@ -9,7 +9,7 @@
         <ProductCard
           class="product-list__item"
           :product="product"
-          @img-click="onImgClick(product)"
+          @img-click="onImgClick(product.id)"
         >
           <template #action>
             <ChangeQuantity
@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import {type IProduct, ProductCard} from "@/entities/product";
+import { type IProduct, ProductCard } from "@/entities/product";
 import { ChangeQuantity } from "@/features/cart";
 import { useProductModel } from "@/entities/product";
 import { useCategoryModel } from "@/entities/category";
@@ -34,21 +34,31 @@ const productModel = useProductModel()
 const categoryModel = useCategoryModel()
 const popupModel = usePopupModel()
 
-const onImgClick = (product: IProduct) => {
+
+const onImgClick = (id: number) => {
   popupModel.openPopup('ProductCardPopup',
     {
-      product
+      openingIdProduct: id,
     })
 }
 
-const filteredProducts = computed(() => {
-  let products = !productModel.products.length ? [] : productModel.products.filter(product => product.categoryId === categoryModel.idActiveCategory)
-  products = products.filter(product => product.name.toLowerCase().includes(productModel.searchQuery.toLowerCase()))
+const filteredProducts = computed<IProduct []>(() => {
 
-  return products
+  const productsArray = Array.from(productModel.products.values());
+
+  let products = productsArray.filter((product: IProduct) =>
+    product.categoryId === categoryModel.idActiveCategory
+  );
+
+  if (productModel.searchQuery) {
+    products = products.filter((product: IProduct) => {
+      return product.name.toLowerCase().includes(productModel.searchQuery.toLowerCase())
+    });
+  }
+
+  return products;
+
 })
-
-productModel.fetchProducts(categoryModel.idActiveCategory)
 </script>
 
 <style scoped>

@@ -1,17 +1,14 @@
 <template>
   <div class="menu-navigation">
     <div class="menu-navigation__list">
-      <router-link :to="routesMap.mainPage" @click.stop="navigationModel.closeNavigation()" class="menu-navigation__item">
-        <span>Меню</span>
-      </router-link>
-      <router-link :to="routesMap.cart" @click.stop="navigationModel.closeNavigation()" class="menu-navigation__item">
-        <span>Корзина</span>
-      </router-link>
-      <router-link :to="routesMap.profile" @click.stop="navigationModel.closeNavigation()" class="menu-navigation__item">
-        <span>Профиль</span>
-      </router-link>
-      <router-link :to="routesMap.myOrders" @click.stop="navigationModel.closeNavigation()" class="menu-navigation__item">
-        <span>История заказов</span>
+      <router-link
+          class="menu-navigation__item"
+          v-for="route in links"
+          :key="route.name"
+          :to="route.to"
+          @click.stop="route.onClick"
+      >
+        <span>{{ route.name }}</span>
       </router-link>
     </div>
     <div class="menu-navigation__footer">
@@ -30,11 +27,40 @@
   </div>
 </template>
 
-<script setup>
-import { routesMap } from "@/app/providers/router/constants.ts";
+<script setup lang="ts">
+import { RouteValuesType } from "@/app/providers";
 import { useNavigationModel } from '@/features/navigation-switcher'
-
+//todo: feature_?
 const navigationModel = useNavigationModel()
+
+interface IMenuLink {
+    name: string;
+    to: RouteValuesType;
+    onClick: () => void;
+}
+
+const links: IMenuLink[] = [
+    {
+        name: 'Меню',
+        to: '/',
+        onClick: () => navigationModel.closeNavigation()
+    },
+    {
+        name: 'Корзина',
+        to: '/cart',
+        onClick: () => navigationModel.closeNavigation()
+    },
+    {
+        name: 'Профиль',
+        to: '/profile',
+        onClick: () => navigationModel.closeNavigation()
+    },
+    {
+        name: 'История заказов',
+        to: '/orders',
+        onClick: () => navigationModel.closeNavigation()
+    },
+];
 </script>
 
 <style lang="scss" scoped>

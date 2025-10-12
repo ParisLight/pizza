@@ -1,5 +1,5 @@
 export interface ICartItem {
-    product_id: number | string,
+    product_id: number,
     quantity: number
 }
 

@@ -41,21 +41,38 @@ const cartModel = useCartModel()
 
 const props = defineProps<{
   product: IProduct,
-  size?: string
+  size?: string,
+  customPlusHandler?: boolean,
+  customMinusHandler?: boolean
 }>()
 
-const quantityInCart = computed(() => {
-  const cartItem = cartModel.items.find(item => item.product_id === props.product.id)
 
+const emit = defineEmits<{
+  onClickMinus: [product: IProduct, quantity: number],
+  onClickPlus: [product: IProduct, quantity: number]
+}>()
+
+const quantityInCart = computed<number>(() => {
+  const cartItem = cartModel.items.find(item => item.product_id === props.product.id)
   return cartItem ? cartItem.quantity : 0
 })
 
-const handleClickMinus = () => {
-  cartModel.removeFromCart(props.product.id)
+const handleClickMinus = async (): Promise<void> => {
+  if(!props.customMinusHandler) {
+    await cartModel.removeFromCart(props.product.id)
+  } else {
+    emit('onClickMinus', props.product, quantityInCart.value)
+  }
 }
-const handleClickPlus = () => {
-  cartModel.addToCart(props.product.id)
+
+const handleClickPlus = async (): Promise<void> => {
+  if(!props.customPlusHandler) {
+    await cartModel.addToCart(props.product.id)
+  } else {
+    emit('onClickPlus', props.product, quantityInCart.value)
+  }
 }
+
 </script>
 
 <style lang="scss" scoped>

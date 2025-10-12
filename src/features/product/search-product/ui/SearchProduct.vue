@@ -1,8 +1,8 @@
 <template>
   <BaseInput
-      @input="onInputHandler"
       :icon-search="true"
-      placeholder="Выеберите пиццу здесь"
+      v-model="productModel.searchQuery"
+      placeholder="Выберите пиццу здесь"
   />
 </template>
 
@@ -12,9 +12,6 @@ import { useProductModel } from "@/entities/product";
 
 const productModel = useProductModel()
 
-const onInputHandler = (query: string) => {
-  productModel.setSearchQuery(query)
-}
 </script>
 
 <style lang="scss" scoped>

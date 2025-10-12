@@ -2,10 +2,8 @@ import { defineStore } from "pinia";
 import type { IUserModal } from "./types";
 import { UserApi } from '../index.ts'
 
-export const useUserModel = defineStore({
-  id: 'user',
-  state: () =>
-    <IUserModal>{
+export const useUserModel = defineStore('user', {
+  state: () => <IUserModal> {
       user: {
         id: 1,
         name: 'Konstantin',

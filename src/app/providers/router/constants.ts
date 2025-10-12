@@ -1,15 +1,9 @@
-interface IRouteMap {
-    mainPage: string,
-    cart: string,
-    profile: string,
-    myOrders: string,
-    product: string
-}
-
-export const routesMap: IRouteMap = {
+export const routesMap = {
     mainPage: '/',
     cart: '/cart',
     profile: '/profile',
     myOrders: '/orders',
     product: '/product/:productId'
-}
+} as const
+
+export type RouteValuesType = typeof routesMap[keyof typeof routesMap]

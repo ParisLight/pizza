@@ -5,55 +5,43 @@
     </div>
     <div class="cart-list__list">
       <transition-group name="fade-group">
-        <div
-          class="cart-item"
-          v-for="(item, index) in cartList"
-          :key="'cart_item_' + index"
+        <CartItem
+          class="cart-list__cart-item"
+          v-for="cartItem in cartList"
+          :product="productModel.getProductById(cartItem.product.id)"
+          @on-img-click="onImgCartItemClick"
         >
-          <div class="cart-item__img">
-            <img :src="item.product.img" alt="">
-          </div>
-          <transition name="fade" mode="out-in">
-            <div
-              v-if="!visibleDeleteStates[item.product.id]"
-              class="cart-item__center"
-              :class="{'cart-item__center--align-center': visibleDeleteStates[item.product.id]}"
-            >
-              <div class="cart-item__info">
-                <span class="cart-item__category">{{ getCategoryName(item.product.categoryId) }}</span>
-                <span class="cart-item__name">{{ item.product.name }}</span>
-              </div>
-              <div class="cart-item__price">
-                <span>{{ item.product.price }} ₽</span>
-              </div>
-              <ChangeQuantity
-                class="cart-item__change-quantity"
-                :product="item.product"
-              />
-            </div>
-            <CompletelyDelete
-              v-else
-              @cancel-click="toggleDeleteVisibility(item.product.id)"
-              class="cart-item__completely-delete"
-              :product-id="item.product.id"
+          <template #action>
+            <ChangeQuantity
+              :product="productModel.getProductById(cartItem.product.id)"
+              :custom-minus-handler="true"
+              @on-click-minus="onClickMinusProduct"
             />
-          </transition>
-          <div class="cart-item__right">
-            <div class="cart-item__delete" @click="toggleDeleteVisibility(item.product.id)">
+              <transition name="fade" mode="out-in">
+                <CompletelyDelete
+                  v-if="visibleDeleteStates[cartItem.product.id]"
+                  class="cart-list__completely-delete"
+                  :product-id="cartItem.product.id"
+                  @cancel-click="toggleDeleteVisibility(cartItem.product.id)"
+                />
+              </transition>
+            <div class="cart-list__cart-item-delete" @click="toggleDeleteVisibility(cartItem.product.id)">
               <img src="@/assets/images/delete-icon.svg" alt="delete">
             </div>
-          </div>
-        </div>
+          </template>
+        </CartItem>
       </transition-group>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ProductApi } from "@/entities/product";
+import { IProduct, useProductModel } from "@/entities/product";
 import { useCartModel } from "@/entities/cart";
-import { useCategoryModel} from '@/entities/category'
+import { CartItem } from '@/features/cart'
 import { ChangeQuantity, CompletelyDelete } from "@/features/cart";
+import { computed, ref } from "vue";
+import { usePopupModel } from '@/features/popups'
 
 const visibleDeleteStates = ref<Record<number, boolean>>({});
 const toggleDeleteVisibility = (productId: number) => {
@@ -61,37 +49,49 @@ const toggleDeleteVisibility = (productId: number) => {
 };
 
 const cartModel = useCartModel()
-const categoryModel = useCategoryModel()
+const productModel = useProductModel()
+const popupModel = usePopupModel()
 
-const productTypes = ref([])
-// todo: refactor
-const cartList = computed(() => {
-    if(!productTypes.value.length) return []
+type CartItem = {
+  product: IProduct,
+  quantity: number
+}
 
-    return cartModel.items.map(item => {
-        const currentProduct = productTypes.value.find(product => product.id === item.product_id)
-        if(currentProduct) {
-            return {
-                product: currentProduct,
-                quantity: item.quantity
-            }
-        }
-    })
+const cartList = computed<CartItem[]>(() => {
+
+  const productsList: IProduct[] = Array.from(productModel.products.values())
+  if(!productsList.length) return []
+
+  return cartModel.items.map(item => {
+    const currentProduct = productsList.find(product => product.id === item.product_id)
+    if(!currentProduct) return undefined
+
+
+    return {
+      product: currentProduct,
+      quantity: item.quantity
+    }
+  }).filter(Boolean) as CartItem[]
 })
+
+const onClickMinusProduct = async (product: IProduct, quantityInCart: number) => {
+  const productId = product.id
+
+  if(quantityInCart > 1) {
+    await cartModel.removeFromCart(productId)
+  } else {
+    toggleDeleteVisibility(productId)
+  }
+}
+
+const onImgCartItemClick = (product: IProduct): void => {
+  popupModel.openPopup('ProductCardPopup', {
+    openingIdProduct: product.id,
+  })
+}
 
 onBeforeMount(async () => {
-    const productsIds = cartModel.items.map(item => item.product_id)
-    if(!productsIds || !productsIds.length) return
-    console.log(productsIds, 'product_ids_')
-    productTypes.value = await ProductApi.fetchProductsByProductIds(productsIds)
 })
-
-const getCategoryName = (id: number) => {
-    const category = categoryModel.categories.find(category => category.id === id)
-    if(category) return category.name
-
-    return ''
-}
 </script>
 
 <style lang="scss" scoped>
@@ -109,10 +109,31 @@ const getCategoryName = (id: number) => {
     row-gap: 16px;
     margin-top: 20px;
   }
+  &__cart-item {
+    position: relative;
+  }
+  &__completely-delete {
+    position: absolute;
+    width: fit-content;
+    z-index: 10;
+    right: unset;
+    top: 1px;
+  }
+  &__cart-item-delete {
+    cursor: pointer;
+    align-self: flex-end;
+    margin-left: auto;
+    font-size: 0;
+  }
+  :deep(.product__action) {
+    justify-content: space-between;
+    width: 100%;
+  }
 }
 .cart-item {
   display: flex;
   column-gap: 16px;
+
   &__img {
     display: flex;
     flex-shrink: 0;
@@ -135,10 +156,6 @@ const getCategoryName = (id: number) => {
     &--align-center {
       align-self: center;
     }
-  }
-  &__right {
-    align-self: flex-end;
-    margin-left: auto;
   }
   &__info {
     display: flex;
@@ -177,9 +194,6 @@ const getCategoryName = (id: number) => {
     align-items: flex-end;
     justify-content: space-between;
     margin-top: 16px;
-  }
-  &__delete {
-    cursor: pointer;
   }
 
 }

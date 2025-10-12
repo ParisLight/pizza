@@ -25,12 +25,14 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useCartModel } from "@/entities/cart";
 
 const cartModel = useCartModel()
 
-const emit = defineEmits(['cancelClick'])
+const emit = defineEmits<{
+  (e: 'cancelClick'): void
+}>()
 
 const onCancelClick = () => {
     emit('cancelClick')
@@ -49,7 +51,7 @@ defineProps({
   padding: 12px;
   background-color: var(--color-gray);
   border-radius: 8px 8px 0 8px;
-  right: 100%;
+
   &__title {
     text-align: center;
     span {

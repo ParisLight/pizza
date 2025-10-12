@@ -28,5 +28,7 @@ declare module 'vue' {
     ElSpace: typeof import('element-plus/es')['ElSpace']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Swiper: typeof import('swiper/vue')['Swiper']
+    SwiperSlide: typeof import('swiper/vue')['SwiperSlide']
   }
 }

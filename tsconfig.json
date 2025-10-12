@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "strict": true,
+    "noImplicitAny": true,
+    "alwaysStrict": true,
+
+    "noImplicitThis": true,
     "paths": {
       "@/*": ["src/*"]
     }

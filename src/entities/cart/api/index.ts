@@ -1,4 +1,4 @@
-import {supabase} from "@/shared/api";
+import { supabase } from "@/shared/api";
 
 export const fetchCart = async (cartId) => {
   try {
@@ -32,11 +32,10 @@ export const fetchCartId = async (userId) => {
 
 export const updateCart = async (cartId, items) => {
   try {
-    // Удаляем старые записи из корзины
     const { error: deleteError } = await supabase
       .from('cart_items')
       .delete()
-      .eq('cart_id', cartId); // Удаляем все записи для данной корзины
+      .eq('cart_id', cartId);
 
     if (deleteError) {
       throw deleteError;
@@ -46,19 +45,17 @@ export const updateCart = async (cartId, items) => {
       cart_id: cartId,
       product_id: item.product_id,
       quantity: item.quantity,
-      updated_at: Date.now(), // Устанавливаем текущее время
+      updated_at: Date.now(),
     }));
 
-    // Вставляем новые записи в корзину
     const { data, error: insertError } = await supabase
       .from('cart_items')
-      .insert(newCartItems); // Вставляем новые элементы корзины
+      .insert(newCartItems);
 
     if (insertError) {
-      throw insertError; // Если есть ошибка, выбрасываем её
+      throw insertError;
     }
-    console.log(data, 'data_check_')
-    return data; // Возвращаем обновленные данные
+    return data;
   } catch (error) {
     console.error('Ошибка при обновлении корзины:', error);
     return null;

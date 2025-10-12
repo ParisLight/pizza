@@ -21,7 +21,7 @@ import { BasePopup } from "@/shared/ui/base-popup";
 
 const popupModel = usePopupModel()
 
-const popups = {
+const popups: Record<string, ReturnType<typeof defineAsyncComponent>> = {
   ProductCardPopup: defineAsyncComponent(() =>
     import('@/widgets/product-card-popup')
       .then(module => module.ProductCardPopup)

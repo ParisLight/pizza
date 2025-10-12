@@ -1,8 +1,7 @@
 import { defineStore } from "pinia";
-import type { ICategoryModel } from "./types";
+import type { ICategoryModel, ICategory } from "./types";
 
-export const useCategoryModel = defineStore( {
-  id: 'category',
+export const useCategoryModel = defineStore( 'category', {
   state: () =>
     <ICategoryModel>{
       idActiveCategory: 1,
@@ -16,6 +15,13 @@ export const useCategoryModel = defineStore( {
   actions: {
     setActiveCategory(categoryId: number) {
       this.idActiveCategory = categoryId ? categoryId : 1
+    },
+    getCategoryById(categoryId: number): ICategory | null {
+      console.log(categoryId, 'category_id')
+      console.log(this.categories, 'categories_')
+      const category = this.categories.find(category => category.id === categoryId)
+
+      return category || null
     }
   }
 })
