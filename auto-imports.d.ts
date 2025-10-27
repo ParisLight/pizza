@@ -7,6 +7,7 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
+  const ElNotification: typeof import('element-plus/es')['ElNotification']
   const Swiper: typeof import('swiper/vue')['Swiper']
   const SwiperSlide: typeof import('swiper/vue')['SwiperSlide']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']

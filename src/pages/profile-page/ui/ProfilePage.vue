@@ -1,69 +1,35 @@
 <template>
   <div class="page">
-    <header class="page__header">
+    <div class="page__header">
       <div class="page__title">
         <span>профиль</span>
       </div>
       <div class="user-id">
-        <span>id: {{ userModel.user.user_id }}</span>
-      </div>
-    </header>
-    <div class="user-info page__user-info">
-      <div class="user-info__row">
-        <BaseInput
-          class="user-info__field"
-          placeholder="Имя"
-          title="Имя"
-          v-model="userModel.user.name"
-        />
-      </div>
-      <div class="user-info__row">
-        <BaseInput
-          class="user-info__field"
-          placeholder="Номер телефона"
-          v-maska="'+7 (###) ### ## ##'"
-          title="номер телефона"
-          :formatter="FormatterLib.numberFormat"
-          v-model="userModel.user.number"
-        />
-      </div>
-      <div class="user-info__row">
-        <BaseInput
-          class="user-info__field field-address"
-          title="адрес доставки"
-          placeholder="Адрес"
-          v-model="userModel.user.address"
-        />
-      </div>
-      <div class="user-info__row">
-        <BaseInput
-          class="user-info__field field-flat"
-          title="этаж"
-          placeholder="Этаж"
-          :formatter="FormatterLib.digitalFormat"
-          :parser="FormatterLib.digitalFormat"
-          v-model="userModel.user.floor"
-        />
-        <BaseInput
-          class="user-info__field field-flat"
-          title="квартира"
-          :formatter="FormatterLib.digitalFormat"
-          :parser="FormatterLib.digitalFormat"
-          placeholder="Номер"
-          v-model="userModel.user.flat"
-        />
+        <span>id: {{ userModel.user?.user_id ?? 0 }}</span>
       </div>
     </div>
+    <user-profile-form class="page__form">
+      <template #actions="{ hasChanges, submitForm, isSendingForm }">
+        <base-btn
+          v-if="hasChanges"
+          class="page__base-btn"
+          color="var(--color-purple)"
+          :loading="isSendingForm"
+          @click.stop="submitForm"
+        >
+          Сохранить
+        </base-btn>
+      </template>
+    </user-profile-form>
   </div>
 </template>
 
-<script setup>
-import { BaseInput } from "@/shared/ui/base-input";
-import { useUserModel } from "@/entities/user";
-import { FormatterLib } from '@/shared/lib'
+<script setup lang="ts">
+import { BaseBtn } from "@/shared/ui/base-btn"
+import { UserProfileForm } from "@/features/user"
+import { useUserModel } from "@/entities/user"
 
 const userModel = useUserModel()
-
 </script>
 
 <style lang="scss" scoped>
@@ -83,8 +49,21 @@ const userModel = useUserModel()
       font-variant: all-small-caps;
     }
   }
-  &__user-info {
+  &__form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     margin-top: 36px;
+  }
+  &__base-btn {
+    margin-top: auto;
+
+    &:deep(.el-button) {
+      height: 47px;
+      padding: 10px 15px;
+      font-variant: all-small-caps;
+      width: 100%;
+    }
   }
 }
 .user-id {
@@ -94,25 +73,5 @@ const userModel = useUserModel()
     color: var(--color-golden);
     font-variant: all-small-caps;
   }
-}
-.user-info {
-  display: flex;
-  flex-direction: column;
-  row-gap: 12px;
-  &__row {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    column-gap: 16px;
-  }
-  &__field {
-    width: 100%;
-  }
-}
-.field-address {
-  flex-basis: 100%;
-}
-.field-flat {
-  flex-basis: 50%;
 }
 </style>

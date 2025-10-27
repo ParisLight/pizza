@@ -43,7 +43,7 @@ const productModel = useProductModel()
 
 
 const initializeApp = async () => {
-  await userModel.fetchUser(10001)
+  await userModel.fetchUser(import.meta.env.VITE_USER_ID)
 
   await Promise.allSettled([
     productModel.fetchAllProducts(),

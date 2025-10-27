@@ -4,23 +4,18 @@ import { UserApi } from '../index.ts'
 
 export const useUserModel = defineStore('user', {
   state: () => <IUserModal> {
-      user: {
-        id: 1,
-        name: 'Konstantin',
-        number: '89221234412',
-        flat: 12,
-        address: 'pushkina street, Moscow',
-        username: '@qwep',
-        floor: 3,
-      }
+      user: {}
     },
 
   actions: {
     async fetchUser (userId) {
-      const output = await UserApi.fetchUserByTgId(userId)
+      const output = await UserApi.fetchUserById(userId)
       if(!output || !output.length) return
 
       this.user = output[0]
     },
+    async updateUser (userId: number, userData: IUserModal) {
+      return await UserApi.updateUser(userId, userData)
+    }
   }
 })

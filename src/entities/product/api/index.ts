@@ -1,6 +1,7 @@
 import { supabase } from "@/shared/api";
 import {IProduct, mappedProducts} from "@/entities/product";
 
+
 export const fetchAllProducts = async () => {
   try {
     const { data, error } = await supabase

@@ -11,7 +11,7 @@
                 title="номер телефона"
                 placeholder="+7 (999) 999 99 99"
                 v-maska="'+7 (###) ### ## ##'"
-                :formatter="FormatterLib.numberFormat"
+                :formatter="numberFormat"
             />
         </div>
         <div class="current-order__row">
@@ -26,15 +26,15 @@
                 class="current-order__field"
                 title="квартира"
                 placeholder="1"
-                :formatter="FormatterLib.digitalFormat"
-                :parser="FormatterLib.digitalFormat"
+                :formatter="digitalFormat"
+                :parser="digitalFormat"
             />
             <base-input
                 class="current-order__field"
                 title="этаж"
                 placeholder="3"
-                :formatter="FormatterLib.digitalFormat"
-                :parser="FormatterLib.digitalFormat"
+                :formatter="digitalFormat"
+                :parser="digitalFormat"
             />
         </div>
         <div class="current-order__row">
@@ -99,13 +99,15 @@ import {BaseDropdown} from "@/shared/ui/base-dropdown";
 import {BaseCheckbox} from "@/shared/ui/base-checkbox";
 import {BaseTextarea} from "@/shared/ui/base-textarea";
 import {BaseRadioGroup} from "@/shared/ui/base-radio-group";
-import {FormatterLib} from '@/shared/lib'
+import {useFormatter} from '@/shared/lib'
 
 const test = ref(1)
 const isCard = ref(false)
 const isCash = ref(false)
 const isNotIntercom = ref(false)
 const isUsedBonuses = ref(false)
+
+const {digitalFormat, numberFormat} = useFormatter()
 </script>
 
 <style lang="scss" scoped>

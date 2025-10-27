@@ -1,5 +1,5 @@
 <template>
-  <div class="popups-wrapper">
+  <div class="popups-wrapper" v-if="popupModel.popups.length">
     <transition-group name="fade-group">
       <BasePopup
         v-for="(popup, key) in popupModel.popups"
