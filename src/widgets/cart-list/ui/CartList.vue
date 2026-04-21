@@ -7,7 +7,8 @@
       <transition-group name="fade-group">
         <CartItem
           class="cart-list__cart-item"
-          v-for="cartItem in cartList"
+          v-for="(cartItem, key) in cartList"
+          :key="key"
           :product="productModel.getProductById(cartItem.product.id)"
           @on-img-click="onImgCartItemClick"
         >

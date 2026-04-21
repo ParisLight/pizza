@@ -33,13 +33,13 @@
           v-model="currentData.address"
         />
       </el-form-item>
-      <div class="user-info__row">
+      <div class="user-info__row col-gap-16">
         <el-form-item
           class="user-info__field"
           prop="floor"
         >
           <BaseInput
-            class=" field-flat"
+            class="field-flat"
             title="этаж"
             placeholder="Этаж"
             :formatter="digitalFormat"

@@ -85,8 +85,8 @@ const initializeStartSlide = () => {
     if(indexOpenedProduct !== -1) {
       index = indexOpenedProduct
     }
-
-    swiperInstance.value.slideTo(index)
+    
+    swiperInstance.value.activeIndex = index
   }
 }
 

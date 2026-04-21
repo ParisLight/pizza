@@ -38,7 +38,7 @@
             />
         </div>
         <div class="current-order__row">
-            <BaseRadioGroup
+            <base-radio-group
                 :list="[{id: 1, name: 'доставка'}, {id: 2, name: 'самовывоз'}]"
                 v-model="test"
             />

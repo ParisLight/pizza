@@ -17,8 +17,6 @@ export const useCategoryModel = defineStore( 'category', {
       this.idActiveCategory = categoryId ? categoryId : 1
     },
     getCategoryById(categoryId: number): ICategory | null {
-      console.log(categoryId, 'category_id')
-      console.log(this.categories, 'categories_')
       const category = this.categories.find(category => category.id === categoryId)
 
       return category || null

@@ -1,28 +1,43 @@
 <template>
   <div class="change-quantity" :class="size">
-    <template v-if="quantityInCart">
+    <template v-if="isInCart">
       <el-button
         class="button-icon"
         color="var(--color-purple)"
-        @click="handleClickMinus"
+        @click="remove"
       >
         <slot name="icon">
-          <img v-if="size === 'big'" :src="IconBigMinus" alt="minus">
-          <img v-else :src="IconMinus" alt="minus">
+          <img
+            v-if="size === 'big'"
+            :src="IconBigMinus"
+            alt="minus"
+          >
+          <img
+            v-else
+            :src="IconMinus"
+            alt="minus">
         </slot>
       </el-button>
       <div class="change-quantity__quantity">
-        <span>{{ quantityInCart }}</span>
+        <span>{{ quantity }}</span>
       </div>
     </template>
     <el-button
       class="button-icon"
       color="var(--color-purple)"
-      @click="handleClickPlus"
+      @click="add"
     >
       <slot name="icon">
-        <img v-if="size === 'big'" :src="IconBigPlus" alt="plus">
-        <img v-else :src="IconPlus" alt="plus">
+        <img
+          v-if="size === 'big'"
+          :src="IconBigPlus"
+          alt="plus"
+        >
+        <img
+          v-else
+          :src="IconPlus"
+          alt="plus"
+        >
       </slot>
     </el-button>
   </div>
@@ -35,44 +50,15 @@ import IconBigPlus from "@/assets/images/plus-big-icon.svg";
 import IconBigMinus from "@/assets/images/minus-big-icon.svg"
 
 import type { IProduct } from "@/entities/product";
-import { useCartModel } from "@/entities/cart";
+import { useChangeQuantity } from '../model/useChangeQuantity'
 
-const cartModel = useCartModel()
 
 const props = defineProps<{
   product: IProduct,
-  size?: string,
-  customPlusHandler?: boolean,
-  customMinusHandler?: boolean
+  size?: 'big' | 'small'
 }>()
 
-
-const emit = defineEmits<{
-  onClickMinus: [product: IProduct, quantity: number],
-  onClickPlus: [product: IProduct, quantity: number]
-}>()
-
-const quantityInCart = computed<number>(() => {
-  const cartItem = cartModel.items.find(item => item.product_id === props.product.id)
-  return cartItem ? cartItem.quantity : 0
-})
-
-const handleClickMinus = async (): Promise<void> => {
-  if(!props.customMinusHandler) {
-    await cartModel.removeFromCart(props.product.id)
-  } else {
-    emit('onClickMinus', props.product, quantityInCart.value)
-  }
-}
-
-const handleClickPlus = async (): Promise<void> => {
-  if(!props.customPlusHandler) {
-    await cartModel.addToCart(props.product.id)
-  } else {
-    emit('onClickPlus', props.product, quantityInCart.value)
-  }
-}
-
+const { quantity, add, remove, isInCart } = useChangeQuantity(props.product)
 </script>
 
 <style lang="scss" scoped>
