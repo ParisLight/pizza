@@ -1,21 +1,20 @@
 import { supabase } from "@/shared/api";
+import { mappedCartItems } from "@/entities/cart/lib/mappers";
+import type { CartItemsDTO } from "@/entities/cart/api/dto";
+import type { ICartItem } from "@/entities/cart/model/types";
 
-export const fetchCart = async (cartId) => {
-  try {
-    const { data, error } = await supabase
-      .from('cart_items')
-      .select('product_id, quantity')
-      .eq('cart_id', cartId)
+export const fetchCart = async (cartId: number): Promise<ICartItem[]> => {
+  const { data, error } = await supabase
+    .from('cart_items')
+    .select('product_id, quantity')
+    .eq('cart_id', cartId)
 
-    if(error) return []
+  if(error || !data) return []
 
-    return data
-  } catch (error) {
-    console.log(error, 'cart_items')
-  }
+  return mappedCartItems(data as CartItemsDTO[])
 }
 
-export const fetchCartId = async (userId) => {
+export const fetchCartId = async (userId: number) => {
   try {
     const { data, error } = await supabase
       .from('carts')
@@ -30,7 +29,7 @@ export const fetchCartId = async (userId) => {
   }
 }
 
-export const updateCart = async (cartId, items) => {
+export const updateCart = async (cartId: number, items: []) => {
   try {
     const { error: deleteError } = await supabase
       .from('cart_items')

@@ -41,7 +41,6 @@ import { IProduct, useProductModel } from "@/entities/product";
 import { useCartModel } from "@/entities/cart";
 import { CartItem } from '@/features/cart'
 import { ChangeQuantity, CompletelyDelete } from "@/features/cart";
-import { computed, ref } from "vue";
 import { usePopupModel } from '@/features/popups'
 
 const visibleDeleteStates = ref<Record<number, boolean>>({});
@@ -60,7 +59,7 @@ type CartItem = {
 
 const cartList = computed<CartItem[]>(() => {
 
-  const productsList: IProduct[] = Array.from(productModel.products.values())
+  const productsList: IProduct[] = Object.values(productModel.products)
   if(!productsList.length) return []
 
   return cartModel.items.map(item => {

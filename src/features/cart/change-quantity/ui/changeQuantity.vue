@@ -58,7 +58,9 @@ const props = defineProps<{
   size?: 'big' | 'small'
 }>()
 
-const { quantity, add, remove, isInCart } = useChangeQuantity(props.product)
+const { product } = toRefs(props)
+
+const { quantity, isInCart, add, remove } = useChangeQuantity(product)
 </script>
 
 <style lang="scss" scoped>

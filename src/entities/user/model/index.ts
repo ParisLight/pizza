@@ -8,7 +8,7 @@ export const useUserModel = defineStore('user', {
     },
 
   actions: {
-    async fetchUser (userId) {
+    async fetchUser (userId: number) {
       const output = await UserApi.fetchUserById(userId)
       if(!output || !output.length) return
 

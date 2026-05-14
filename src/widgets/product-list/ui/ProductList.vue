@@ -44,7 +44,7 @@ const onImgClick = (id: number) => {
 
 const filteredProducts = computed<IProduct []>(() => {
 
-  const productsArray = Array.from(productModel.products.values());
+  const productsArray = Object.values(productModel.products);
 
   let products = productsArray.filter((product: IProduct) =>
     product.categoryId === categoryModel.idActiveCategory

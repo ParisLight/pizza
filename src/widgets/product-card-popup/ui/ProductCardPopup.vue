@@ -2,10 +2,11 @@
   <div class="popup__swiper">
     <swiper
       class="popup__swiper-instance"
-      @swiper="onSwiper"
       :slidesPerView="1.4"
       :centeredSlides="true"
       spaceBetween="5"
+      @swiper="swiperInstance.onSwiper"
+      @slide-change="swiperInstance.onSlideChange"
     >
       <swiper-slide
         class="popup__swiper-slide"
@@ -34,7 +35,10 @@
     :nutrition="activeProduct.nutrition"
   />
   <div class="card__footer popup__container">
-    <div class="card__price" v-if="activeProduct.price">
+    <div
+      v-if="activeProduct.price"
+      class="card__price"
+    >
       <span>{{ activeProduct.price }} ₽</span>
     </div>
     <ChangeQuantity
@@ -46,63 +50,25 @@
 
 <script lang="ts" setup>
 import 'swiper/css';
-import { IProduct, useProductModel } from '@/entities/product';
-import { useCategoryModel } from '@/entities/category'
 import { ChangeQuantity } from '@/features/cart';
 import { NutritionBar } from '@/features/product';
-import { computed } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import type { Swiper as SwiperType } from 'swiper/types/index'
-import { onMounted } from "vue";
+import { useProductsList } from '../model/useProductsList';
+import { useSwiper } from "../model/useSwiper";
+import { IProduct } from "@/entities/product";
 
 const props = defineProps<{
   openingIdProduct?: number;
   closeCallback?: (args: unknown[]) => any;
 }>();
 
-const productModel = useProductModel();
-const categoryModel = useCategoryModel()
-const swiperInstance = ref<SwiperType | null>(null)
+const { productsArray, startProductIndex } = useProductsList(props.openingIdProduct)
 
-const onSwiper = (swiper: SwiperType): void => {
-  swiperInstance.value = swiper
-}
-
-const productsArray = computed<IProduct[]>(() => {
-  const activeCategory = categoryModel.idActiveCategory
-
-  return Array.from(productModel.products.values()).filter((product: IProduct) => product.categoryId === activeCategory)
-})
-
-const initializeStartSlide = () => {
-  if(props.openingIdProduct && swiperInstance.value) {
-    let index: number = 0
-
-    const indexOpenedProduct = productsArray.value.findIndex(
-      (product: IProduct) => product.id === props.openingIdProduct
-    )
-
-    if(indexOpenedProduct !== -1) {
-      index = indexOpenedProduct
-    }
-    
-    swiperInstance.value.activeIndex = index
-  }
-}
+const swiperInstance = useSwiper(startProductIndex.value)
 
 const activeProduct = computed<IProduct>(() => {
-  if(swiperInstance.value?.activeIndex !== undefined && productsArray.value.length) {
-    return productsArray.value[swiperInstance.value.activeIndex]
-  }
-
-  return productsArray.value[0] || {} as IProduct
+  return productsArray.value[swiperInstance.activeIndex.value] ?? null
 })
-
-onMounted(() => {
-  initializeStartSlide()
-});
-
-
 </script>
 
 <style lang="scss" scoped>

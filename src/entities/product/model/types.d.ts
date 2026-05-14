@@ -1,23 +1,17 @@
-export interface IProductModel {
-    products: Map<number, IProduct>,
-    product: IProduct,
-    searchQuery: string
-}
-
 export interface INutrition {
-    proteins: number;
-    fats: number;
-    carbs: number;
-    kcal: number;
+    proteins: number
+    fats: number
+    carbs: number
+    kcal: number
 }
 
 export interface IProduct {
-    id: number,
-    img?: string,
-    name: string,
-    weight?: string,
-    description?: string,
-    price?: number,
-    nutrition: INutrition,
-    categoryId: number
+  id: number
+  img: string | null
+  name: string
+  weight: string | null
+  description: string | null
+  price: number | null
+  nutrition: INutrition
+  categoryId: number
 }

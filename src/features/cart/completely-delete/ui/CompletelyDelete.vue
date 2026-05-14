@@ -12,6 +12,7 @@
         color="var(--color-gray)"
         @click="cartModel.removeCompletelyFromCart(productId)"
       >
+<!--        todo: removecompletely-->
         да
       </el-button>
       <el-button

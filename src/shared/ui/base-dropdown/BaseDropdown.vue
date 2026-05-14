@@ -35,8 +35,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from "vue"
-
 const props = withDefaults(defineProps<{
   list: any | Record<string, any>,
   idItem?: string,
