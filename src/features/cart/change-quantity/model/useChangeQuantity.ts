@@ -11,7 +11,7 @@ export const useChangeQuantity = (product: Ref<IProduct>) => {
   }, 300)
 
   const quantity = computed(() => {
-    const item = cartModel.items.find(i => i.product_id === product.value.id)
+    const item = cartModel.items.find(i => i.productId === product.value.id)
     return item?.quantity ?? 0
   })
 

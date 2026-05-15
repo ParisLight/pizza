@@ -7,27 +7,31 @@
       <transition-group name="fade-group">
         <CartItem
           class="cart-list__cart-item"
-          v-for="(cartItem, key) in cartList"
-          :key="key"
-          :product="productModel.getProductById(cartItem.product.id)"
+          v-for="cartItem in cartDetailedItems"
+          :key="cartItem.product.id"
+          :product="cartItem.product"
           @on-img-click="onImgCartItemClick"
         >
           <template #action>
             <ChangeQuantity
-              :product="productModel.getProductById(cartItem.product.id)"
-              :custom-minus-handler="true"
-              @on-click-minus="onClickMinusProduct"
+              :product="cartItem.product"
             />
               <transition name="fade" mode="out-in">
                 <CompletelyDelete
-                  v-if="visibleDeleteStates[cartItem.product.id]"
+                  v-if="isDeleteVisible(cartItem.product.id)"
                   class="cart-list__completely-delete"
                   :product-id="cartItem.product.id"
-                  @cancel-click="toggleDeleteVisibility(cartItem.product.id)"
+                  @cancel="toggleDeleteVisibility(cartItem.product.id)"
                 />
               </transition>
-            <div class="cart-list__cart-item-delete" @click="toggleDeleteVisibility(cartItem.product.id)">
-              <img src="@/assets/images/delete-icon.svg" alt="delete">
+            <div
+              class="cart-list__cart-item-delete"
+              @click="toggleDeleteVisibility(cartItem.product.id)"
+            >
+              <img
+                src="@/assets/images/delete-icon.svg"
+                alt="delete"
+              >
             </div>
           </template>
         </CartItem>
@@ -37,61 +41,24 @@
 </template>
 
 <script lang="ts" setup>
-import { IProduct, useProductModel } from "@/entities/product";
-import { useCartModel } from "@/entities/cart";
-import { CartItem } from '@/features/cart'
+import { type IProduct } from "@/entities/product";
+import { useProductCartList } from "../model/useProductCartList";
+import { useConfirmationCompletelyDelete } from "../model/useConfirmationCompletelyDelete";
 import { ChangeQuantity, CompletelyDelete } from "@/features/cart";
+import { CartItem } from '@/features/cart'
 import { usePopupModel } from '@/features/popups'
 
-const visibleDeleteStates = ref<Record<number, boolean>>({});
-const toggleDeleteVisibility = (productId: number) => {
-    visibleDeleteStates.value[productId] = !visibleDeleteStates.value[productId];
-};
-
-const cartModel = useCartModel()
-const productModel = useProductModel()
 const popupModel = usePopupModel()
 
-type CartItem = {
-  product: IProduct,
-  quantity: number
-}
+const { cartDetailedItems } = useProductCartList()
 
-const cartList = computed<CartItem[]>(() => {
-
-  const productsList: IProduct[] = Object.values(productModel.products)
-  if(!productsList.length) return []
-
-  return cartModel.items.map(item => {
-    const currentProduct = productsList.find(product => product.id === item.product_id)
-    if(!currentProduct) return undefined
-
-
-    return {
-      product: currentProduct,
-      quantity: item.quantity
-    }
-  }).filter(Boolean) as CartItem[]
-})
-
-const onClickMinusProduct = async (product: IProduct, quantityInCart: number) => {
-  const productId = product.id
-
-  if(quantityInCart > 1) {
-    await cartModel.removeFromCart(productId)
-  } else {
-    toggleDeleteVisibility(productId)
-  }
-}
+const { toggleDeleteVisibility, isDeleteVisible } = useConfirmationCompletelyDelete()
 
 const onImgCartItemClick = (product: IProduct): void => {
   popupModel.openPopup('ProductCardPopup', {
     openingIdProduct: product.id,
   })
 }
-
-onBeforeMount(async () => {
-})
 </script>
 
 <style lang="scss" scoped>

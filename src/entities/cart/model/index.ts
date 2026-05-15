@@ -23,13 +23,13 @@ export const useCartModel = defineStore('cart', {
     },
 
     addToCart(productId: number) {
-      const item = this.items.find(item => item.product_id === productId)
+      const item = this.items.find(item => item.productId === productId)
 
       if(item) {
         item.quantity += 1
       } else {
         this.items.push({
-          product_id: productId,
+          productId: productId,
           quantity: 1
         })
       }
@@ -37,11 +37,11 @@ export const useCartModel = defineStore('cart', {
 
     async syncCart() {
       if(!this.cartId) return
-      await CartApi.updateCart(this.cartId, this.items)
+      this.items = await CartApi.updateCart(this.cartId, this.items)
     },
 
     removeFromCart(productId: number) {
-      const item = this.items.find(item => item.product_id === productId)
+      const item = this.items.find(item => item.productId === productId)
 
       if(item && item.quantity > 1) {
         item.quantity -= 1
@@ -51,10 +51,10 @@ export const useCartModel = defineStore('cart', {
     },
 
     removeCompletelyFromCart(productId: number | string) {
-      const item = this.items.find(item => item.product_id === productId)
+      const item = this.items.find(item => item.productId === productId)
 
       if(item) {
-        this.items = this.items.filter(item => item.product_id !== productId)
+        this.items = this.items.filter(item => item.productId !== productId)
       }
     },
   },

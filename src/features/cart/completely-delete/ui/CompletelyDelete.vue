@@ -10,9 +10,8 @@
       <el-button
         class="confirmation-window__btn"
         color="var(--color-gray)"
-        @click="cartModel.removeCompletelyFromCart(productId)"
+        @click="completelyDelete(productId)"
       >
-<!--        todo: removecompletely-->
         да
       </el-button>
       <el-button
@@ -27,24 +26,21 @@
 </template>
 
 <script setup lang="ts">
-import { useCartModel } from "@/entities/cart";
+import { useCompletelyDeleteActions } from "../model/useCompletelyDeleteActions"
 
-const cartModel = useCartModel()
+const props = defineProps<{
+  productId: number
+}>()
 
 const emit = defineEmits<{
-  (e: 'cancelClick'): void
+  (e: 'cancel'): void
 }>()
 
 const onCancelClick = () => {
-    emit('cancelClick')
+    emit('cancel')
 }
 
-defineProps({
-  productId: {
-    type: [Number, String],
-    required: true
-  }
-})
+const { completelyDelete } = useCompletelyDeleteActions()
 </script>
 
 <style lang="scss" scoped>

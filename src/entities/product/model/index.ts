@@ -19,7 +19,7 @@ export const useProductModel = defineStore('product', {
       })
 
     },
-    getProductById(id: number): IProduct {
+    getProductById(id: number): IProduct | undefined {
       return this.products[id]
     }
   }
