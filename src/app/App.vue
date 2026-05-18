@@ -37,10 +37,15 @@ const isLoadingApp = ref(true)
 
 const userModel = useUserModel()
 const cartModel = useCartModel()
+const categoryModel = useCategoryModel()
 const productModel = useProductModel()
 
 const initializeApp = async () => {
-  await userModel.fetchUser(import.meta.env.VITE_USER_ID)
+  await userModel.fetchUserById(import.meta.env.VITE_USER_ID)
+
+  if(!userModel.user) return
+
+  await categoryModel.fetchCategories()
 
   await Promise.allSettled([
     productModel.fetchAllProducts(),

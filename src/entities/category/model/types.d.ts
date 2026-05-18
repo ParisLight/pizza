@@ -1,10 +1,5 @@
 export interface ICategory {
     id: number,
-    icon: string,
+    icon: string | null,
     name: string
-}
-
-export interface ICategoryModel {
-    categories: ICategory[],
-    idActiveCategory: number
 }

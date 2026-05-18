@@ -1,25 +1,19 @@
 import { defineStore } from "pinia";
-import type { ICategoryModel, ICategory } from "./types";
+import type { ICategory } from "./types";
+import * as CategoryApi from "../api"
 
 export const useCategoryModel = defineStore( 'category', {
-  state: () =>
-    <ICategoryModel>{
+  state: () => ({
       idActiveCategory: 1,
-      categories: [
-        {id: 1, icon: '', name: 'Пицца'},
-        {id: 2, icon: '', name: 'Напитки'},
-        {id: 3, icon: '', name: 'Снеки'}
-      ]
-    },
+      categories: {} as Record<number, ICategory>
+    }),
 
   actions: {
+    async fetchCategories() {
+      this.categories = await CategoryApi.fetchCategories()
+    },
     setActiveCategory(categoryId: number) {
       this.idActiveCategory = categoryId ? categoryId : 1
     },
-    getCategoryById(categoryId: number): ICategory | null {
-      const category = this.categories.find(category => category.id === categoryId)
-
-      return category || null
-    }
   }
 })

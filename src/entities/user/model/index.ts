@@ -1,21 +1,27 @@
 import { defineStore } from "pinia";
-import type { IUserModal } from "./types";
 import { UserApi } from '../index.ts'
+import type { IUser } from "./types";
 
 export const useUserModel = defineStore('user', {
-  state: () => <IUserModal> {
-      user: {}
-    },
+  state: () => ({
+      user: null as IUser | null
+  }),
 
   actions: {
-    async fetchUser (userId: number) {
-      const output = await UserApi.fetchUserById(userId)
-      if(!output || !output.length) return
+    async fetchUserById (userId: number) {
+      const userData = await UserApi.fetchUserById(userId)
 
-      this.user = output[0]
+      if(!userData) return
+
+      this.user = userData
     },
-    async updateUser (userId: number, userData: IUserModal) {
-      return await UserApi.updateUser(userId, userData)
+
+    async updateUser (userId: number, userData: IUser) {
+      const updatedData = await UserApi.updateUser(userId, userData)
+
+      if(!updatedData) return
+
+      this.user = updatedData
     }
   }
 })

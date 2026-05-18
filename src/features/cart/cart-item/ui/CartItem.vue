@@ -2,7 +2,7 @@
   <ProductCard
     class="cart-item__product-card"
     :product="product"
-    :category-name="categoryModel.getCategoryById(product.categoryId)?.name || ''"
+    :category-name="categoryModel.categories[product.categoryId]?.name || ''"
     direction="row"
     @img-click="onImgClick"
   >
@@ -13,8 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import ProductCard from "@/entities/product/ui/ProductCard.vue";
-import { IProduct } from "@/entities/product";
+import { IProduct, ProductCard } from "@/entities/product";
 import { useCategoryModel } from "@/entities/category";
 
 const categoryModel = useCategoryModel()
@@ -24,11 +23,11 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  onImgClick: [product: IProduct]
+  (e: 'img-click', product: IProduct): void
 }>()
 
 const onImgClick = (): void => {
-  emit('onImgClick', props.product)
+  emit('img-click', props.product)
 }
 
 </script>

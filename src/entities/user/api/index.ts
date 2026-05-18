@@ -1,39 +1,34 @@
 import { supabase } from '@/shared/api'
-import { IUser } from '../model'
+import type { IUser } from '@/entities/user'
+import type { UserDTO } from "@/entities/user/api/dto";
+import { mappedUser, mapUserToInsert } from "../lib/mappers"
 
-export const fetchUserById = async (userId: number) => {
-  try {
-    console.log(userId, 'user_id_get_')
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('user_id', userId)
 
-    if(error) return []
+export const fetchUserById = async (userId: number): Promise<IUser | null> => {
+  const { data: userData, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('user_id', userId)
+    .single()
 
-    return data
-  } catch (error) {
-    console.log(error, 'user_')
-  }
+  if(error || !userData) return null
+
+  return mappedUser(userData as UserDTO)
 }
 
-export const updateUser = async (userId: number, userData: IUser) => {
-  try {
-    const { data, error } = await supabase
-      .from('users')
-      .update(userData)
-      .eq('user_id', userId)
-      .select()
+export const updateUser = async (userId: number, userData: IUser): Promise<IUser | null> => {
+  const updatingData = mapUserToInsert(userData)
 
-    console.log({data, error}, 'get___')
-    if (error) {
-      console.error('Error updating user:', error)
-      return null
-    }
-    console.log(data, 'data_get_')
-    return data
-  } catch (error) {
-    console.log(error)
+  const { data: updatedUser, error } = await supabase
+    .from('users')
+    .update(updatingData)
+    .eq('user_id', userId)
+    .select()
+    .single()
+
+  if (error || !updatedUser) {
     return null
   }
+
+  return mappedUser(updatedUser as UserDTO)
 }

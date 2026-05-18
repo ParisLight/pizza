@@ -1,11 +1,11 @@
 <template>
   <div class="category-list">
     <div class="category-list__main">
-      <swiper-container
+      <swiper
         ref="swiperEl"
         class="swiper"
         slidesPerView="auto"
-        freeMode="true"
+        :freeMode="true"
         spaceBetween="16"
       >
         <swiper-slide
@@ -19,7 +19,7 @@
             @click="onClickCategory(category.id)"
           />
         </swiper-slide>
-      </swiper-container>
+      </swiper>
     </div>
   </div>
 </template>
@@ -27,6 +27,9 @@
 <script setup lang="ts">
 import { Card as CategoryCard } from '@/entities/category'
 import { useCategoryModel } from "@/entities/category/model";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import 'swiper/css';
+
 
 const categoryModel = useCategoryModel()
 
