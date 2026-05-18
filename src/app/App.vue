@@ -49,7 +49,7 @@ const initializeApp = async () => {
 
   await Promise.allSettled([
     productModel.fetchAllProducts(),
-    cartModel.fetchCart(userModel.user.user_id),
+    cartModel.fetchCart(userModel.user.userId),
   ])
 
   isLoadingApp.value = false

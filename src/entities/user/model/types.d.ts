@@ -2,7 +2,7 @@ export interface IUser {
   id: number;
   name: string;
   username: string;
-  user_id: number,
+  userId: number,
   number: string;
   address: string
   flat: number | null

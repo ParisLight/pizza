@@ -11,13 +11,13 @@ import { CartList } from '@/widgets/cart-list'
 import { CurrentOrder } from '@/widgets/current-order'
 import { useCartModel } from "@/entities/cart";
 import { useUserModel } from "@/entities/user";
-
 import SendOrder from "@/features/order/send-order/ui/SendOrder.vue";
+
 const userModel = useUserModel()
 const cartModel = useCartModel()
 
-if(!cartModel.cartId) {
-  cartModel.fetchCart(userModel.user.user_id)
+if(!cartModel.cartId && userModel.user?.userId) {
+  cartModel.fetchCart(userModel.user.userId)
 }
 </script>
 

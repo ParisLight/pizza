@@ -1,3 +1,3 @@
-export type { IOrder, IOrderModel } from './model/types'
+export type { IOrder } from './model/types'
 export { useOrderModel } from './model/index'
 export * as OrderApi from './api'

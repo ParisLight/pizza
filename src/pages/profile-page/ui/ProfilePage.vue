@@ -5,7 +5,7 @@
         <span>профиль</span>
       </div>
       <div class="user-id">
-        <span>id: {{ userModel.user?.user_id ?? 0 }}</span>
+        <span>id: {{ userModel.user?.userId ?? 0 }}</span>
       </div>
     </div>
     <user-profile-form class="page__form">

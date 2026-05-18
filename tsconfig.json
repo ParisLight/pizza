@@ -4,29 +4,21 @@
     "strict": true,
     "noImplicitAny": true,
     "alwaysStrict": true,
-
     "noImplicitThis": true,
+
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+
     "paths": {
       "@/*": ["src/*"]
     }
   },
+
   "files": [],
-  "include": [
-    "env.d.ts",
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.vue",
-    "auto-imports.d.ts"
-  ],
+
   "references": [
-    {
-      "path": "./tsconfig.node.json"
-    },
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.vitest.json"
-    }
+    { "path": "./tsconfig.node.json" },
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.vitest.json" }
   ]
 }

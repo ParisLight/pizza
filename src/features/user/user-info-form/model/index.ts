@@ -1,4 +1,4 @@
-import { useUserModel, IUser } from "@/entities/user";
+import { useUserModel, type IUser } from "@/entities/user";
 import { useFormatter, useFormChanges } from '@/shared/lib'
 import { h } from "vue"
 import type { FormRules, FormInstance, ElNotification } from "element-plus"
@@ -52,7 +52,7 @@ export const useUserProfileForm = () => {
 
     formEl.validate(async (valid) => {
       if (valid) {
-        const output = await userModel.updateUser(userModel.user.user_id, currentData.value)
+        const output = await userModel.updateUser(userModel.user.userId, currentData.value)
         console.log(output)
       } else {
         ElNotification({

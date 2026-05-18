@@ -1,23 +1,21 @@
 import { defineStore } from "pinia";
-import { IOrder, IOrderModel } from "../index";
-import { OrderApi } from '../index'
+import type { IOrder } from "./types";
+import * as OrderApi from "../api"
 
-export const useOrderModel = defineStore({
-  id: 'order',
-  state: () =>
-    <IOrderModel> {
+export const useOrderModel = defineStore('order', {
+  state: () => ({
       currentOrder: <IOrder> {
-        payer_name: '',
-        payer_number: '',
-        delivery_type: 1,
-        payment_type: 1
+        payerName: '',
+        payerNumber: '',
+        deliveryType: 1,
+        paymentType: 1
       },
       ordersList: []
-    },
+    }),
 
   actions: {
     async sendOrder() {
-
+      const orderId = await OrderApi.sendOrder(this.currentOrder)
     }
   }
 })

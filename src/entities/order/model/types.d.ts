@@ -1,17 +1,15 @@
 export interface IOrder {
-  payer_name: string;
-  payer_number: string;
-  delivery_type: number;
-  delivery_time?: number;
-  delivery_address?: string;
-  flat?: number;
-  floor?: number;
-  payment_type: number;
-  available_intercom?: number;
-  bonuses_sum?: number;
-}
-
-export interface IOrderModel {
-  currentOrder: IOrder;
-  ordersList: IOrder[];
+  id: number | null;
+  payerName: string
+  payerNumber: string;
+  deliveryType: number;
+  deliveryTime: number;
+  deliveryAddress: string;
+  flat: number | null;
+  floor: number | null;
+  paymentType: number;
+  availableIntercom: boolean;
+  userId: number
+  createdAt: number | null; // todo: kick
+  // bonusesSum?: number;
 }
