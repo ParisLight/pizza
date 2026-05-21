@@ -7,7 +7,7 @@
       <div class="header__actions">
         <basket-button
           :count="cartModel.totalQuantityCart"
-          @click="router.push(routesMap.cart)"
+          @click="router.push(routesMap.order)"
         />
         <navigation-switcher />
       </div>

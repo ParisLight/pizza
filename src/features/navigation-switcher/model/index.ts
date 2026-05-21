@@ -1,19 +1,19 @@
 import { defineStore } from "pinia";
 
 interface INavigationInterface {
-    isOpenNavigation: boolean
+  isOpenNavigation: boolean
 }
 
 export const useNavigationModel = defineStore('navigation', {
-    state: () => <INavigationInterface> {
-        isOpenNavigation: false
+  state: () => <INavigationInterface> {
+    isOpenNavigation: false
+  },
+  actions: {
+    toggleNavigationOpenState(): void {
+      this.isOpenNavigation = !this.isOpenNavigation;
     },
-    actions: {
-        toggleNavigationOpenState(): void {
-            this.isOpenNavigation = !this.isOpenNavigation;
-        },
-        closeNavigation() {
-            this.isOpenNavigation = false;
-        }
+    closeNavigation() {
+      this.isOpenNavigation = false;
     }
+  }
 })

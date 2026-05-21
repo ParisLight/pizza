@@ -16,9 +16,6 @@
 
 <script setup lang="ts">
 import { BaseBtn } from "@/shared/ui/base-btn";
-import { useOrderModel } from "@/entities/order";
-
-const orderModel = useOrderModel()
 </script>
 
 <style lang="scss" scoped>

@@ -76,7 +76,7 @@
 import { BaseInput } from "@/shared/ui/base-input";
 import { useFormatter } from "@/shared/lib";
 import { useUserProfileForm } from "../model"
-import { FormInstance } from "element-plus"
+import type { FormInstance } from "element-plus"
 
 const ruleFormRef = ref<FormInstance>()
 

@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { RouteValuesType } from "@/app/providers";
+import type { RouteValuesType } from "@/app/providers";
 import { useNavigationModel } from '@/features/navigation-switcher'
 //todo: feature_?
 const navigationModel = useNavigationModel()
@@ -47,7 +47,7 @@ const links: IMenuLink[] = [
     },
     {
         name: 'Корзина',
-        to: '/cart',
+        to: '/order',
         onClick: () => navigationModel.closeNavigation()
     },
     {

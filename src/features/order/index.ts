@@ -1,3 +1,4 @@
-import SendOrder from './send-order/ui/SendOrder.vue'
+import CheckoutOrder from './checkout/ui/CheckoutOrder.vue'
 
-export { SendOrder }
+export { CheckoutOrder }
+export { useCurrentOrder } from './current-order/model/useCurrentOrder.ts'

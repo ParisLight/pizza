@@ -1,4 +1,4 @@
-import {cloneDeep, isEqual} from 'lodash';
+import { cloneDeep, isEqual } from 'lodash';
 
 export const useFormChanges = <T>(
   originalData: T,

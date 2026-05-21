@@ -1,6 +1,6 @@
 export const routesMap = {
     mainPage: '/',
-    cart: '/cart',
+    order: '/order',
     profile: '/profile',
     myOrders: '/orders',
     product: '/product/:productId'
