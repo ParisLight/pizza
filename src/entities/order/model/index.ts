@@ -14,8 +14,8 @@ export const useOrderModel = defineStore('order', {
     }),
 
   actions: {
-    async sendOrder() {
-      const orderId = await OrderApi.sendOrder(this.currentOrder)
+    async sendOrder(order: IOrder): Promise<number | null> {
+      return await OrderApi.sendOrder(order)
     }
   }
 })

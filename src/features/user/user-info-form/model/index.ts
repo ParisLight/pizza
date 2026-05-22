@@ -2,6 +2,7 @@ import { useUserModel, type IUser } from "@/entities/user"
 import { useFormatter, useFormChanges } from "@/shared/lib"
 import { h } from "vue"
 import { type FormRules, type FormInstance, ElNotification } from "element-plus"
+import { validatePhone } from "@/shared/lib/formValidation";
 
 export const useUserProfileForm = () => {
   const { user, updateUser } = useUserModel()
@@ -13,16 +14,6 @@ export const useUserProfileForm = () => {
   const { hasChanges, currentData } = useFormChanges(user, {
     number: (value: string) => normalizePhone(value),
   })
-
-  const validateNumber = (rule: any, value: any, callback: any) => {
-    const cleanValue = value ? value.replace(/\D/g, "") : ""
-
-    if (!cleanValue.startsWith("7") || cleanValue.length !== 11) {
-      callback(new Error("Некорректный номер"))
-    } else {
-      callback()
-    }
-  }
 
   const profileFormRules = reactive<FormRules<IUser>>({
     name: [
@@ -36,7 +27,7 @@ export const useUserProfileForm = () => {
     number: [
       {
         required: true,
-        validator: validateNumber,
+        validator: validatePhone,
         trigger: "blur",
       },
     ],

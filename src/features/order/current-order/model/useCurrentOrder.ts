@@ -1,9 +1,22 @@
 import type { OrderFormValues } from './types';
-import { createOrderFormValues } from './createOrderFormValues'
 import { createDeliverySlots } from '@/entities/order/lib/createDeliverySlots.ts'
 import { useNow } from '@vueuse/core'
+import { PaymentType, DeliveryType } from '@/entities/order'
 
 export const useCurrentOrder = () => {
+  const createOrderFormValues = (): OrderFormValues => ({
+    payerName: "",
+    payerNumber: "",
+    deliveryType: DeliveryType.DELIVERY,
+    paymentType: PaymentType.CARD,
+    deliveryAddress: '',
+    dontRingIntercom: false,
+    floor: '',
+    flat: '',
+    deliveryTime: '',
+    orderComment: ''
+  })
+
   const form = reactive<OrderFormValues>(createOrderFormValues())
 
   const now = useNow({

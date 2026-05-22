@@ -3,6 +3,7 @@
         <base-btn
           class="send-order__base-btn"
           color="var(--color-purple)"
+          @click.stop="emit('submit')"
         >
           <div class="send-order__content">
             <span class="send-order__name">Заказать</span>
@@ -16,6 +17,11 @@
 
 <script setup lang="ts">
 import { BaseBtn } from "@/shared/ui/base-btn";
+
+const emit = defineEmits<{
+  (e: 'submit'): void
+}>()
+
 </script>
 
 <style lang="scss" scoped>

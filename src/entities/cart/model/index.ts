@@ -50,6 +50,10 @@ export const useCartModel = defineStore('cart', {
       }
     },
 
+    clearCart() {
+      this.items = [] as ICartItem[]
+    },
+
     removeCompletelyFromCart(productId: number | string) {
       const item = this.items.find(item => item.productId === productId)
 

@@ -1,82 +1,123 @@
 <template>
   <div class="current-order">
-    <div class="current-order__row">
-      <base-input
-        v-model="form.payerName"
-        class="current-order__field"
-        title="имя"
-        placeholder="Введите своё имя"
-      />
-      <base-input
-        v-model="form.payerNumber"
-        class="current-order__field"
-        title="номер телефона"
-        placeholder="+7 (999) 999 99 99"
-        v-maska="'+7 (###) ### ## ##'"
-        :formatter="numberFormat"
-      />
-    </div>
-    <div class="current-order__row">
-      <base-input
-        v-model="form.deliveryAddress"
-        class="current-order__field"
-        title="адрес доставки"
-        placeholder="Введите адрес"
-      />
-    </div>
-    <div class="current-order__row">
-      <base-input
-        v-model="form.flat"
-        class="current-order__field"
-        title="квартира"
-        placeholder="1"
-        :formatter="digitalFormat"
-        :parser="digitalFormat"
-      />
-      <base-input
-        v-model="form.floor"
-        class="current-order__field"
-        title="этаж"
-        placeholder="3"
-        :formatter="digitalFormat"
-        :parser="digitalFormat"
-      />
-    </div>
-    <div class="current-order__row">
-      <base-radio-group
-        v-model="form.deliveryType"
-        :list="DELIVERY_OPTIONS"
-      />
-    </div>
-    <div class="current-order__row">
-      <base-dropdown
-        v-model="form.deliveryTime"
-        class="current-order__field"
-        title="Время доставки"
-        :list="deliverySlots"
-      />
-    </div>
-    <div class="current-order__row">
-      <base-checkbox
-        v-model="form.dontRingIntercom"
-        label="Не звонить в домофон"
-      />
-    </div>
-    <div class="current-order__row">
-      <base-radio-group
-        v-model="form.paymentType"
-        :list="PAYMENT_OPTIONS"
-      />
-    </div>
-    <div class="current-order__row">
-      <base-textarea
-        v-model="form.orderComment"
-        class="current-order__field"
-        title="комментарий"
-        placeholder="Комментарий к заказу"
-        rows="4"
-      />
-    </div>
+    <el-form
+      ref="formRef"
+      :model="form"
+      :rules="rules"
+    >
+      <div class="current-order__row">
+        <el-form-item
+          prop="payerName"
+          class="current-order__field"
+        >
+          <base-input
+            v-model="form.payerName"
+            title="имя"
+            placeholder="Введите своё имя"
+          />
+        </el-form-item>
+        <el-form-item
+          prop="payerNumber"
+          class="current-order__field"
+        >
+          <base-input
+            v-model="form.payerNumber"
+            title="номер телефона"
+            placeholder="+7 (999) 999 99 99"
+            v-maska="'+7 (###) ### ## ##'"
+            :formatter="numberFormat"
+          />
+        </el-form-item>
+      </div>
+      <div class="current-order__row">
+        <el-form-item prop="floor">
+          <base-radio-group
+            v-model="form.deliveryType"
+            :list="DELIVERY_OPTIONS"
+          />
+        </el-form-item>
+      </div>
+      <div class="current-order__row">
+        <el-form-item
+          prop="deliveryAddress"
+          class="current-order__field"
+        >
+          <base-input
+            v-model="form.deliveryAddress"
+            title="адрес доставки"
+            placeholder="Введите адрес"
+          />
+        </el-form-item>
+      </div>
+      <div class="current-order__row">
+        <el-form-item
+          prop="flat"
+          class="current-order__field"
+        >
+          <base-input
+            v-model="form.flat"
+            title="квартира"
+            placeholder="1"
+            :formatter="digitalFormat"
+            :parser="digitalFormat"
+          />
+        </el-form-item>
+        <el-form-item
+          prop="floor"
+          class="current-order__field"
+        >
+          <base-input
+            v-model="form.floor"
+            title="этаж"
+            placeholder="3"
+            :formatter="digitalFormat"
+            :parser="digitalFormat"
+          />
+        </el-form-item>
+      </div>
+      <div class="current-order__row">
+        <el-form-item
+          prop="deliveryTime"
+          class="current-order__field"
+        >
+          <base-dropdown
+            v-model="form.deliveryTime"
+            title="Время доставки"
+            :list="deliverySlots"
+          />
+        </el-form-item>
+      </div>
+      <div class="current-order__row">
+        <el-form-item prop="dontRingIntercom">
+          <base-checkbox
+            v-model="form.dontRingIntercom"
+            label="Не звонить в домофон"
+          />
+        </el-form-item>
+      </div>
+      <div class="current-order__row">
+        <el-form-item prop="paymentType">
+          <base-radio-group
+            v-model="form.paymentType"
+            :list="PAYMENT_OPTIONS"
+          />
+        </el-form-item>
+      </div>
+      <div class="current-order__row">
+        <el-form-item
+          prop="orderComment"
+          class="current-order__field"
+        >
+          <base-textarea
+            v-model="form.orderComment"
+            id="orderComment"
+            title="комментарий"
+            placeholder="Комментарий к заказу"
+            rows="4"
+          />
+        </el-form-item>
+      </div>
+    </el-form>
   </div>
 </template>
 
@@ -87,13 +128,26 @@ import { BaseCheckbox } from "@/shared/ui/base-checkbox"
 import { BaseTextarea } from "@/shared/ui/base-textarea"
 import { BaseRadioGroup } from "@/shared/ui/base-radio-group"
 import { useFormatter } from "@/shared/lib"
-import { useCurrentOrder } from "@/features/order"
-import { DELIVERY_OPTIONS, PAYMENT_OPTIONS } from "@/entities/order"
+import { useCurrentOrderValidation, type OrderFormValues } from "@/features/order"
+import { DELIVERY_OPTIONS, PAYMENT_OPTIONS, type DeliveryTimeSlot } from "@/entities/order"
+import type { FormInstance } from "element-plus";
 
-const { form, deliverySlots } = useCurrentOrder()
+const formRef = ref<FormInstance>()
+
+const props = defineProps<{
+  form: OrderFormValues,
+  deliverySlots: DeliveryTimeSlot[]
+}>()
+
+const { form, deliverySlots } = toRefs(props)
+
+const { rules, validateForm } = useCurrentOrderValidation(formRef)
 
 const { digitalFormat, numberFormat } = useFormatter()
 
+defineExpose({
+  validateForm
+})
 </script>
 
 <style lang="scss" scoped>
@@ -121,6 +175,12 @@ const { digitalFormat, numberFormat } = useFormatter()
 
   &__field {
     width: 100%;
+
+    .base-input,
+    .base-dropdown,
+    .base-textarea {
+      width: 100%;
+    }
   }
 }
 
