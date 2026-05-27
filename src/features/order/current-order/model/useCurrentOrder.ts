@@ -2,6 +2,7 @@ import type { OrderFormValues } from './types';
 import { createDeliverySlots } from '@/entities/order/lib/createDeliverySlots.ts'
 import { useNow } from '@vueuse/core'
 import { PaymentType, DeliveryType } from '@/entities/order'
+import { CURRENT_ORDER_FORM_RULES } from '../config/validation.ts';
 
 export const useCurrentOrder = () => {
   const createOrderFormValues = (): OrderFormValues => ({
@@ -29,5 +30,7 @@ export const useCurrentOrder = () => {
     })
   })
 
-  return { form, deliverySlots }
+  const formRules = CURRENT_ORDER_FORM_RULES
+
+  return { form, deliverySlots, formRules }
 }

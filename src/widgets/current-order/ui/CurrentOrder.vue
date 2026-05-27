@@ -3,7 +3,7 @@
     <el-form
       ref="formRef"
       :model="form"
-      :rules="rules"
+      :rules="formRules"
     >
       <div class="current-order__row">
         <el-form-item
@@ -30,7 +30,7 @@
         </el-form-item>
       </div>
       <div class="current-order__row">
-        <el-form-item prop="floor">
+        <el-form-item prop="deliveryType">
           <base-radio-group
             v-model="form.deliveryType"
             :list="DELIVERY_OPTIONS"
@@ -128,20 +128,24 @@ import { BaseCheckbox } from "@/shared/ui/base-checkbox"
 import { BaseTextarea } from "@/shared/ui/base-textarea"
 import { BaseRadioGroup } from "@/shared/ui/base-radio-group"
 import { useFormatter } from "@/shared/lib"
-import { useCurrentOrderValidation, type OrderFormValues } from "@/features/order"
+import { type OrderFormValues } from "@/features/order"
 import { DELIVERY_OPTIONS, PAYMENT_OPTIONS, type DeliveryTimeSlot } from "@/entities/order"
-import type { FormInstance } from "element-plus";
-
-const formRef = ref<FormInstance>()
+import type { FormInstance, FormRules } from "element-plus";
 
 const props = defineProps<{
   form: OrderFormValues,
-  deliverySlots: DeliveryTimeSlot[]
+  deliverySlots: DeliveryTimeSlot[],
+  formRules: FormRules<OrderFormValues>
 }>()
 
-const { form, deliverySlots } = toRefs(props)
+const formRef = ref<FormInstance>()
 
-const { rules, validateForm } = useCurrentOrderValidation(formRef)
+const validateForm = async () => {
+  if (!formRef.value) return false
+  return await formRef.value.validate()
+}
+
+const { form, deliverySlots, formRules } = toRefs(props)
 
 const { digitalFormat, numberFormat } = useFormatter()
 

@@ -5,45 +5,48 @@
       ref="currentOrderRef"
       :form="form"
       :delivery-slots="deliverySlots"
+      :form-rules="formRules"
     />
     <CheckoutOrder
       :form="form"
-      @submit="handleCheckout(); console.log('qweqewwqeqew')"
+      @submit="handleCheckout"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import { CartList } from "@/widgets/cart-list"
-import { CurrentOrder } from "@/widgets/current-order"
+import { CurrentOrder, type CurrentOrderExpose } from "@/widgets/current-order"
 import { useCartModel } from "@/entities/cart"
 import { useUserModel } from "@/entities/user"
 import { CheckoutOrder } from "@/widgets/checkout"
 import { useCurrentOrder, useCheckout } from "@/features/order";
 
-const currentOrderRef = ref<InstanceType<typeof CurrentOrder>>()
-
 
 const userModel = useUserModel()
 const cartModel = useCartModel()
 
+const currentOrderRef = ref<CurrentOrderExpose | undefined>()
+
 const { submitOrder } = useCheckout()
 
-const { form, deliverySlots } = useCurrentOrder()
+const { form, deliverySlots, formRules } = useCurrentOrder()
+
 
 if (!cartModel.cartId && userModel.user?.userId) {
   cartModel.fetchCart(userModel.user.userId)
 }
 
 const handleCheckout = async () => {
-  const isValid = await currentOrderRef.value?.validateForm()
-  console.log(currentOrderRef.value, 'current_order_ref_')
+  if(!currentOrderRef.value) {
+    return
+  }
+
+  const isValid = await currentOrderRef.value.validateForm()
+
   if (!isValid) return
-  console.log(isValid, 'is_valid_get_')
-  await submitOrder({
-    form,
-    validateForm: async () => true
-  })
+
+  await submitOrder({form})
 }
 </script>
 
