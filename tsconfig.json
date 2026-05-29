@@ -1,21 +1,4 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "strict": true,
-    "noImplicitAny": true,
-    "alwaysStrict": true,
-    "noImplicitThis": true,
-
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-
-    "paths": {
-      "@/*": ["src/*"]
-    }
-  },
-
-  "files": [],
-
   "references": [
     { "path": "./tsconfig.node.json" },
     { "path": "./tsconfig.app.json" },

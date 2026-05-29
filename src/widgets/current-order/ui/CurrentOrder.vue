@@ -37,64 +37,66 @@
           />
         </el-form-item>
       </div>
-      <div class="current-order__row">
-        <el-form-item
-          prop="deliveryAddress"
-          class="current-order__field"
-        >
-          <base-input
-            v-model="form.deliveryAddress"
-            title="адрес доставки"
-            placeholder="Введите адрес"
-          />
-        </el-form-item>
-      </div>
-      <div class="current-order__row">
-        <el-form-item
-          prop="flat"
-          class="current-order__field"
-        >
-          <base-input
-            v-model="form.flat"
-            title="квартира"
-            placeholder="1"
-            :formatter="digitalFormat"
-            :parser="digitalFormat"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="floor"
-          class="current-order__field"
-        >
-          <base-input
-            v-model="form.floor"
-            title="этаж"
-            placeholder="3"
-            :formatter="digitalFormat"
-            :parser="digitalFormat"
-          />
-        </el-form-item>
-      </div>
-      <div class="current-order__row">
-        <el-form-item
-          prop="deliveryTime"
-          class="current-order__field"
-        >
-          <base-dropdown
-            v-model="form.deliveryTime"
-            title="Время доставки"
-            :list="deliverySlots"
-          />
-        </el-form-item>
-      </div>
-      <div class="current-order__row">
-        <el-form-item prop="dontRingIntercom">
-          <base-checkbox
-            v-model="form.dontRingIntercom"
-            label="Не звонить в домофон"
-          />
-        </el-form-item>
-      </div>
+      <template v-if="form.deliveryType === DeliveryType.DELIVERY">
+        <div class="current-order__row">
+          <el-form-item
+            prop="deliveryAddress"
+            class="current-order__field"
+          >
+            <base-input
+              v-model="form.deliveryAddress"
+              title="адрес доставки"
+              placeholder="Введите адрес"
+            />
+          </el-form-item>
+        </div>
+        <div class="current-order__row">
+          <el-form-item
+            prop="flat"
+            class="current-order__field"
+          >
+            <base-input
+              v-model="form.flat"
+              title="квартира"
+              placeholder="1"
+              :formatter="digitalFormat"
+              :parser="digitalFormat"
+            />
+          </el-form-item>
+          <el-form-item
+            prop="floor"
+            class="current-order__field"
+          >
+            <base-input
+              v-model="form.floor"
+              title="этаж"
+              placeholder="3"
+              :formatter="digitalFormat"
+              :parser="digitalFormat"
+            />
+          </el-form-item>
+        </div>
+        <div class="current-order__row">
+          <el-form-item
+            prop="deliveryTime"
+            class="current-order__field"
+          >
+            <base-dropdown
+              v-model="form.deliveryTime"
+              title="Время доставки"
+              :list="deliverySlots"
+            />
+          </el-form-item>
+        </div>
+        <div class="current-order__row">
+          <el-form-item prop="dontRingIntercom">
+            <base-checkbox
+              v-model="form.dontRingIntercom"
+              label="Не звонить в домофон"
+            />
+          </el-form-item>
+        </div>
+      </template>
       <div class="current-order__row">
         <el-form-item prop="paymentType">
           <base-radio-group
@@ -129,7 +131,7 @@ import { BaseTextarea } from "@/shared/ui/base-textarea"
 import { BaseRadioGroup } from "@/shared/ui/base-radio-group"
 import { useFormatter } from "@/shared/lib"
 import { type OrderFormValues } from "@/features/order"
-import { DELIVERY_OPTIONS, PAYMENT_OPTIONS, type DeliveryTimeSlot } from "@/entities/order"
+import { DELIVERY_OPTIONS, PAYMENT_OPTIONS, type DeliveryTimeSlot, DeliveryType } from "@/entities/order"
 import type { FormInstance, FormRules } from "element-plus";
 
 const props = defineProps<{

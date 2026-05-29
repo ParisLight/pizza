@@ -41,12 +41,20 @@ const handleCheckout = async () => {
   if(!currentOrderRef.value) {
     return
   }
+  //
+  try {
+    const isValid = await currentOrderRef.value.validateForm()
 
-  const isValid = await currentOrderRef.value.validateForm()
+    if(!isValid) return
 
-  if (!isValid) return
-
-  await submitOrder({form})
+    await submitOrder(form)
+  } catch (error) {
+    ElNotification({
+      title: 'Error',
+      message: 'This is an error message',
+      type: 'error',
+    })
+  }
 }
 </script>
 

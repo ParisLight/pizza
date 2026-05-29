@@ -12,7 +12,8 @@ export default defineConfig({
     vue(),
     vueDevTools(),
       Components({
-        resolvers: [ElementPlusResolver()]
+        resolvers: [ElementPlusResolver()],
+        dts: 'components.d.ts',
       }),
     AutoImport({
       resolvers: [ElementPlusResolver()],
@@ -20,11 +21,8 @@ export default defineConfig({
         'vue',
         'vue-router',
         'pinia',
-        {
-          'swiper/vue': ['Swiper', 'SwiperSlide'],
-        },
       ],
-      dts: true,
+      dts: 'auto-imports.d.ts',
     })
   ],
   resolve: {

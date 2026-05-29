@@ -3,16 +3,12 @@ import { useUserModel } from '@/entities/user'
 import { useOrderModel } from '@/entities/order'
 import { type OrderFormValues, mapFormToOrder } from "@/features/order"
 
-interface CheckoutParams {
-  form: OrderFormValues
-}
-
 export const useCheckout = () => {
   const cartModel = useCartModel()
   const orderModel = useOrderModel()
   const userModel = useUserModel()
 
-  const submitOrder = async ({ form }: CheckoutParams) => {
+  const submitOrder = async (form: OrderFormValues) => {
     const userId = userModel.user?.userId
 
     if (!userId) return
