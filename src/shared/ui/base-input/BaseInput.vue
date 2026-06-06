@@ -1,38 +1,35 @@
 <template>
   <div class="base-input">
-      <div class="base-input__title" v-if="title">
-          <span>{{ title }}</span>
-      </div>
-      <el-input
-          class="input"
-          size="large"
-          v-model="model"
-          v-bind="$attrs"
-      >
-          <template #suffix v-if="iconSearch">
-              <img :src="SearchIcon" alt="search">
-          </template>
-      </el-input>
+    <div class="base-input__title" v-if="title">
+      <span>{{ title }}</span>
+    </div>
+    <el-input class="input" size="large" v-model="model" v-bind="$attrs">
+      <template #suffix v-if="iconSearch">
+        <img :src="SearchIcon" alt="search" />
+      </template>
+    </el-input>
   </div>
 </template>
 
 <script setup lang="ts">
-import SearchIcon from "@/assets/images/search-icon.svg";
+import SearchIcon from "@/assets/images/search-icon.svg"
 
 defineProps({
   iconSearch: {
     type: Boolean,
     required: false,
-    default: false
+    default: false,
   },
   title: {
     type: String,
     required: false,
-    default: ''
-  }
+    default: "",
+  },
 })
 
-const model = defineModel()
+const model = defineModel<string>({
+  required: true,
+})
 </script>
 
 <style lang="scss" scoped>
@@ -41,7 +38,7 @@ const model = defineModel()
   :deep(.el-input__wrapper) {
     background-color: var(--color-main);
     border-radius: var(--radius-8);
-    box-shadow: 0px 4px 20px 0px #0000008C;
+    box-shadow: 0px 4px 20px 0px #0000008c;
   }
   :deep(input) {
     color: white;

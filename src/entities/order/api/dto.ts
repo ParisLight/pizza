@@ -1,4 +1,4 @@
-import type { Database } from "@/shared/api/supabase.types";
+import type { Database, Tables } from "@/shared/api/supabase.types";
 
-export type OrderDTO = Database['public']['Tables']['orders']['Row']
+export type OrderDTO = Tables<'orders'>
 export type OrderInsertDTO = Database['public']['Tables']['orders']['Insert']

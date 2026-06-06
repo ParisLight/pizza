@@ -1,3 +1,5 @@
+import type { FormValidationResult } from "element-plus"
+
 export type CurrentOrderExpose = {
-  validateForm: () => Promise<boolean>
+  validateForm: () => undefined | FormValidationResult
 }

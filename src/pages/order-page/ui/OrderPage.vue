@@ -4,13 +4,10 @@
     <CurrentOrder
       ref="currentOrderRef"
       :form="form"
-      :delivery-slots="deliverySlots"
+      :time-slots="deliverySlots"
       :form-rules="formRules"
     />
-    <CheckoutOrder
-      :form="form"
-      @submit="handleCheckout"
-    />
+    <CheckoutOrder :form="form" @submit="handleCheckout" />
   </div>
 </template>
 
@@ -20,8 +17,7 @@ import { CurrentOrder, type CurrentOrderExpose } from "@/widgets/current-order"
 import { useCartModel } from "@/entities/cart"
 import { useUserModel } from "@/entities/user"
 import { CheckoutOrder } from "@/widgets/checkout"
-import { useCurrentOrder, useCheckout } from "@/features/order";
-
+import { useCheckout, useCurrentOrder } from "@/features/order"
 
 const userModel = useUserModel()
 const cartModel = useCartModel()
@@ -32,27 +28,26 @@ const { submitOrder } = useCheckout()
 
 const { form, deliverySlots, formRules } = useCurrentOrder()
 
-
 if (!cartModel.cartId && userModel.user?.userId) {
   cartModel.fetchCart(userModel.user.userId)
 }
 
 const handleCheckout = async () => {
-  if(!currentOrderRef.value) {
+  if (!currentOrderRef.value) {
     return
   }
-  //
   try {
     const isValid = await currentOrderRef.value.validateForm()
 
-    if(!isValid) return
+    if (!isValid) return
 
     await submitOrder(form)
   } catch (error) {
+    console.log({ error }, "error_get_")
     ElNotification({
-      title: 'Error',
-      message: 'This is an error message',
-      type: 'error',
+      title: "Error",
+      message: "This is an error message",
+      type: "error",
     })
   }
 }

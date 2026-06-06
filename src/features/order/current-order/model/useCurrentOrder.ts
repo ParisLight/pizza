@@ -1,21 +1,27 @@
 import type { OrderFormValues } from './types';
-import { createDeliverySlots } from '@/entities/order/lib/createDeliverySlots.ts'
 import { useNow } from '@vueuse/core'
-import { PaymentType, DeliveryType } from '@/entities/order'
+import { createDeliverySlots } from '@/entities/order'
+import { PaymentType, DeliveryType, type TimeSlot } from '@/entities/order'
 import { CURRENT_ORDER_FORM_RULES } from '../config/validation.ts';
+import type { ComputedRef, Reactive } from 'vue'
 
-export const useCurrentOrder = () => {
+export function useCurrentOrder(): {
+  form: Reactive<OrderFormValues>
+  deliverySlots: ComputedRef<TimeSlot[]>
+  formRules: typeof CURRENT_ORDER_FORM_RULES
+} {
   const createOrderFormValues = (): OrderFormValues => ({
-    payerName: "",
-    payerNumber: "",
+    payerName: '',
+    payerNumber: '',
     deliveryType: DeliveryType.DELIVERY,
     paymentType: PaymentType.CARD,
     deliveryAddress: '',
     dontRingIntercom: false,
     floor: '',
     flat: '',
-    deliveryTime: '',
-    orderComment: ''
+    orderComment: '',
+    readyBy: null,
+    deliveryTime: null,
   })
 
   const form = reactive<OrderFormValues>(createOrderFormValues())

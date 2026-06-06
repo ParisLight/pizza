@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="burger-button"
-    :class="{'burger-button--active': model}"
-    @click="onClick"
-  >
+  <div class="burger-button" :class="{ 'burger-button--active': model }" @click="onClick">
     <div class="burger-button__line"></div>
   </div>
 </template>
@@ -11,16 +7,16 @@
 <script setup lang="ts">
 const model = defineModel({
   type: Boolean,
-  default: false
+  default: false,
 })
 
 const emit = defineEmits<{
-  (e: 'onClick', state: model)
+  (e: "onClick", state: boolean): void
 }>()
 
 const onClick = (): void => {
   model.value = !model.value
-  emit('onClick')
+  emit("onClick", model.value)
 }
 </script>
 
@@ -39,17 +35,18 @@ const onClick = (): void => {
     transform: translateY(-50%);
     border-radius: var(--radius-8);
     overflow: hidden;
-    transition: .2s ease-in-out;
+    transition: 0.2s ease-in-out;
   }
-  &::before, &::after {
-    content: '';
+  &::before,
+  &::after {
+    content: "";
     position: absolute;
     width: 100%;
     height: 1px;
     background-color: var(--color-golden);
     border-radius: var(--radius-8);
     overflow: hidden;
-    transition: .2s ease-in-out;
+    transition: 0.2s ease-in-out;
   }
   &::before {
     top: 0;

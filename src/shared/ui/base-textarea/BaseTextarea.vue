@@ -1,24 +1,21 @@
 <template>
-    <div class="base-textarea">
-        <div class="base-textarea__title" v-if="title">
-            <span>{{ title }}</span>
-        </div>
-        <textarea
-          v-bind="$attrs"
-          v-model="model"
-        />
+  <div class="base-textarea">
+    <div class="base-textarea__title" v-if="title">
+      <span>{{ title }}</span>
     </div>
+    <textarea v-bind="$attrs" v-model="model" />
+  </div>
 </template>
 
 <script setup>
 const model = defineModel()
 
-const props = defineProps({
+defineProps({
   title: {
     type: String,
     required: false,
-    default: ''
-  }
+    default: "",
+  },
 })
 </script>
 

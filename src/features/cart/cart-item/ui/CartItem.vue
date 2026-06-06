@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import { IProduct, ProductCard } from "@/entities/product";
-import { useCategoryModel } from "@/entities/category";
+import { type IProduct, ProductCard } from "@/entities/product"
+import { useCategoryModel } from "@/entities/category"
 
 const categoryModel = useCategoryModel()
 
@@ -23,14 +23,12 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'img-click', product: IProduct): void
+  (e: "img-click", product: IProduct): void
 }>()
 
 const onImgClick = (): void => {
-  emit('img-click', props.product)
+  emit("img-click", props.product)
 }
-
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

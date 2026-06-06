@@ -1,5 +1,6 @@
 import type { FormRules } from "element-plus";
 import type { OrderFormValues } from "@/features/order";
+import { DeliveryType } from "@/entities/order"
 import { validatePhone } from "@/shared/lib/formValidation";
 
 export const CURRENT_ORDER_FORM_RULES: FormRules<OrderFormValues> = {
@@ -16,8 +17,24 @@ export const CURRENT_ORDER_FORM_RULES: FormRules<OrderFormValues> = {
     validator: validatePhone
   },
   deliveryAddress: {
-    required: true,
-    message: 'Укажите адрес доставки',
     trigger: 'blur',
+    validator: (_, value, callback, source) => {
+      console.log({
+        d_type: source.deliveryType,
+        enusm: DeliveryType.PICKUP,
+        comp: source.deliveryType === DeliveryType.PICKUP
+      }, 'qwewqeqwwe')
+      if(source.deliveryType === DeliveryType.PICKUP) {
+        callback()
+        return
+      }
+
+      if(!value.trim()) {
+        callback(new Error('Укажите адрес доставки'))
+        return
+      }
+
+      callback()
+    }
   }
 }

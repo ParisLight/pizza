@@ -8,16 +8,8 @@
       @swiper="swiperInstance.onSwiper"
       @slide-change="swiperInstance.onSlideChange"
     >
-      <swiper-slide
-        class="popup__swiper-slide"
-        v-for="product in productsArray"
-        :key="product.id"
-      >
-        <img
-          class="card__img"
-          :src="product.img"
-          :alt="activeProduct.name"
-        />
+      <swiper-slide v-for="product in productsArray" :key="product.id" class="popup__swiper-slide">
+        <img v-if="product.img" class="card__img" :src="product.img" :alt="activeProduct.name" />
       </swiper-slide>
     </swiper>
   </div>
@@ -35,32 +27,26 @@
     :nutrition="activeProduct.nutrition"
   />
   <div class="card__footer popup__container">
-    <div
-      v-if="activeProduct.price"
-      class="card__price"
-    >
+    <div v-if="activeProduct.price" class="card__price">
       <span>{{ activeProduct.price }} ₽</span>
     </div>
-    <ChangeQuantity
-      :product="activeProduct"
-      size="big"
-    />
+    <ChangeQuantity :product="activeProduct" size="big" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import 'swiper/css';
-import { ChangeQuantity } from '@/features/cart';
-import { NutritionBar } from '@/features/product';
-import { Swiper, SwiperSlide } from "swiper/vue";
-import { useProductsList } from '../model/useProductsList';
-import { useSwiper } from "../model/useSwiper";
-import { IProduct } from "@/entities/product";
+import "swiper/css"
+import { ChangeQuantity } from "@/features/cart"
+import { NutritionBar } from "@/features/product"
+import { Swiper, SwiperSlide } from "swiper/vue"
+import { useProductsList } from "../model/useProductsList"
+import { useSwiper } from "../model/useSwiper"
+import { type IProduct } from "@/entities/product"
 
 const props = defineProps<{
-  openingIdProduct?: number;
-  closeCallback?: (args: unknown[]) => any;
-}>();
+  openingIdProduct?: number
+  closeCallback?: (args: unknown[]) => void
+}>()
 
 const { productsArray, startProductIndex } = useProductsList(props.openingIdProduct)
 
@@ -80,7 +66,6 @@ const activeProduct = computed<IProduct>(() => {
     width: 100%;
   }
   &__swiper-slide {
-
   }
 }
 .card {
@@ -111,7 +96,7 @@ const activeProduct = computed<IProduct>(() => {
   &__img {
     width: 100%;
     height: 100%;
-    object-fit: contain
+    object-fit: contain;
   }
   &__price {
     span {

@@ -1,27 +1,22 @@
 <template>
-    <div class="send-order" @click="">
-        <base-btn
-          class="send-order__base-btn"
-          color="var(--color-purple)"
-          @click.stop="emit('submit')"
-        >
-          <div class="send-order__content">
-            <span class="send-order__name">Заказать</span>
-            <div class="send-order__total-price">
-              <span>888 ₽</span>
-            </div>
-          </div>
-        </base-btn>
-    </div>
+  <div class="send-order" @click="">
+    <base-btn class="send-order__base-btn" color="var(--color-purple)" @click.stop="emit('submit')">
+      <div class="send-order__content">
+        <span class="send-order__name">Заказать</span>
+        <div class="send-order__total-price">
+          <span>888 ₽</span>
+        </div>
+      </div>
+    </base-btn>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { BaseBtn } from "@/shared/ui/base-btn";
+import { BaseBtn } from "@/shared/ui/base-btn"
 
 const emit = defineEmits<{
-  (e: 'submit'): void
+  (e: "submit"): void
 }>()
-
 </script>
 
 <style lang="scss" scoped>

@@ -8,7 +8,7 @@ export enum PaymentType {
   CASH = 2
 }
 
-export interface DeliveryTimeSlot {
+export interface TimeSlot {
   id: string
   name: string
   from: Date
@@ -17,18 +17,26 @@ export interface DeliveryTimeSlot {
 }
 
 export interface IOrder {
-  id: number | null;
+  userId: number;
+
   payerName: string
   payerNumber: string;
+
   deliveryType: DeliveryType;
-  deliveryTime: number | null;
-  deliveryAddress: string;
+  deliveryAddress: string | null;
+
   flat: number | null;
   floor: number | null;
+
   paymentType: PaymentType;
-  dontRingIntercom: boolean;
-  userId: number | null;
-  createdAt: number | null; // todo: kick
+  dontRingIntercom: boolean | null;
+
+  deliveryTimeFrom: string | null;
+  deliveryTimeTo: string | null;
+
+  readyByFrom: string | null;
+  readyByTo: string | null;
+
+  createdAt: string;
   orderComment: string;
-  // bonusesSum?: number;
 }

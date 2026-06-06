@@ -26,7 +26,7 @@
             :key="'drop_element' + index"
             @click="itemClick(item)"
           >
-            <span>{{ typeof item === "object" ? item[nameItem] : item }}</span>
+            <span>{{ nameItem ? item[nameItem] : item }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>
@@ -34,49 +34,49 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-const props = withDefaults(defineProps<{
-  list: any | Record<string, any>,
-  idItem?: string,
-  nameItem?: string,
+<script lang="ts" setup generic="T extends object">
+const props = defineProps<{
+  list: T[]
+  idItem?: keyof T & string
+  nameItem?: keyof T & string
   title?: string
-}>(), {
-  idItem: 'id',
-  nameItem: 'name'
-})
+}>()
 
 const model = defineModel()
 
 const isVisible = ref(false)
 
-const onVisible = (event) => {
+const onVisible = (event: boolean) => {
   isVisible.value = event
 }
 
-const itemClick = (item) => {
-  if (typeof item === "object") {
-    model.value = item[props.idItem]
-  } else {
+const itemClick = (item: T) => {
+  if (!props.idItem) {
     model.value = item
+    return
   }
+
+  model.value = item[props.idItem]
 }
 
 const displayValue = computed(() => {
   if (!model.value) return ""
 
-  const selectedItem = props.list.find((item) => {
-    if (typeof item === "object") {
+  const selectedItem = props.list.find((item: T) => {
+    if (props.idItem) {
       return item[props.idItem] === model.value
-    } else {
-      return item === model.value
     }
+
+    return item === model.value
   })
 
+  if (!selectedItem) return ""
+
+  if (props.nameItem) {
+    return selectedItem[props.nameItem]
+  }
+
   return selectedItem
-    ? typeof selectedItem === "object"
-      ? selectedItem[props.nameItem]
-      : selectedItem
-    : ""
 })
 </script>
 

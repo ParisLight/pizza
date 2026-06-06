@@ -1,2 +1,2 @@
-export * from './router'
-export type { IRouteMap, RouteValuesType } from './router/constants.ts'
+export * from "./router"
+export type { RouteValuesType } from "./router/constants.ts"

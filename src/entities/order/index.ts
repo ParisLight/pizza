@@ -1,4 +1,5 @@
-export { type IOrder, type DeliveryTimeSlot, DeliveryType, PaymentType } from './model/types'
+export { type IOrder, type TimeSlot, DeliveryType, PaymentType } from './model/types'
+export { createDeliverySlots } from './lib/createDeliverySlots'
 export { DELIVERY_OPTIONS, PAYMENT_OPTIONS } from './config'
 export { useOrderModel } from './model/index'
 export * as OrderApi from './api'

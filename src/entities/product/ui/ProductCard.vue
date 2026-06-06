@@ -1,14 +1,11 @@
 <template>
-  <div
-    class="product"
-    :class="`product--direction-${direction}`"
-  >
+  <div class="product" :class="`product--direction-${direction}`">
     <div
       class="product__img"
       @click="onClickImg"
       :class="{ 'product__img--clickable': direction === 'default' }"
     >
-      <img :src="product.img" :alt="product.name">
+      <img v-if="product.img" :src="product.img" :alt="product.name" />
     </div>
 
     <div class="product__content">
@@ -34,23 +31,26 @@
 </template>
 
 <script lang="ts" setup>
-import {type IProduct} from "@/entities/product";
+import { type IProduct } from "@/entities/product"
 
-const emit = defineEmits(['img-click']);
+const emit = defineEmits(["img-click"])
 
-type DirectionType = 'default' | 'row';
+type DirectionType = "default" | "row"
 
-withDefaults(defineProps<{
-  product: IProduct,
-  direction?: DirectionType,
-  categoryName?: string
-}>(), {
-  direction: 'default'
-});
+withDefaults(
+  defineProps<{
+    product: IProduct
+    direction?: DirectionType
+    categoryName?: string
+  }>(),
+  {
+    direction: "default",
+  },
+)
 
 const onClickImg = () => {
-  emit('img-click');
-};
+  emit("img-click")
+}
 </script>
 
 <style lang="scss" scoped>
@@ -60,7 +60,7 @@ const onClickImg = () => {
 
   display: flex;
   background: var(--color-main);
-  box-shadow: 0 4px 20px 0 #0000008C;
+  box-shadow: 0 4px 20px 0 #0000008c;
   border-radius: 16px;
   position: relative;
 
@@ -91,7 +91,7 @@ const onClickImg = () => {
       height: 124px;
       border-radius: 16px;
       background-color: var(--color-main);
-      box-shadow: 0 4px 20px 0 #0000008C;
+      box-shadow: 0 4px 20px 0 #0000008c;
 
       img {
         width: 100px;

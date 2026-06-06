@@ -1,4 +1,4 @@
-import type { DeliveryTimeSlot } from '@/entities/order'
+import type { TimeSlot } from '../model/types'
 
 interface CreateDeliverySlotsParams {
   now?: Date
@@ -48,8 +48,8 @@ export const createDeliverySlots = ({
                                       tomorrowEndHour = 21,
 
                                       intervalMinutes = 30,
-                                    }: CreateDeliverySlotsParams = {}): DeliveryTimeSlot[] => {
-  const slots: DeliveryTimeSlot[] = []
+                                    }: CreateDeliverySlotsParams = {}): TimeSlot[] => {
+  const slots: TimeSlot[] = []
 
   const currentDate = new Date(now)
 

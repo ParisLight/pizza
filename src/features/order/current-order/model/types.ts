@@ -1,14 +1,15 @@
-import { PaymentType, DeliveryType } from "@/entities/order";
+import { PaymentType, DeliveryType, type TimeSlot } from "@/entities/order/model/types";
 
 export interface OrderFormValues {
   payerName: string
   payerNumber: string
   deliveryType: DeliveryType
   paymentType: PaymentType
-  deliveryAddress?: string
-  dontRingIntercom?: boolean
-  floor?: string
-  flat?: string
-  deliveryTime?: string
+  deliveryAddress: string
+  dontRingIntercom: boolean
+  floor: string
+  flat: string
+  readyBy: TimeSlot | null,
+  deliveryTime: TimeSlot | null,
   orderComment: string
 }

@@ -23,6 +23,9 @@ export default defineConfig({
         'pinia',
       ],
       dts: 'auto-imports.d.ts',
+      eslintrc: {
+        enabled: true,
+      },
     })
   ],
   resolve: {

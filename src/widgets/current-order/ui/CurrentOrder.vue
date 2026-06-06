@@ -1,48 +1,30 @@
 <template>
   <div class="current-order">
-    <el-form
-      ref="formRef"
-      :model="form"
-      :rules="formRules"
-    >
+    {{ form }}
+    <el-form ref="formRef" :model="form" :rules="formRules">
       <div class="current-order__row">
-        <el-form-item
-          prop="payerName"
-          class="current-order__field"
-        >
-          <base-input
-            v-model="form.payerName"
-            title="имя"
-            placeholder="Введите своё имя"
-          />
+        <el-form-item prop="payerName" class="current-order__field">
+          <base-input v-model="form.payerName" title="имя" placeholder="Введите своё имя" />
         </el-form-item>
-        <el-form-item
-          prop="payerNumber"
-          class="current-order__field"
-        >
+        <el-form-item prop="payerNumber" class="current-order__field">
           <base-input
             v-model="form.payerNumber"
             title="номер телефона"
-            placeholder="+7 (999) 999 99 99"
-            v-maska="'+7 (###) ### ## ##'"
+            v-maska
+            :data-maska="INPUT_MASK.mask"
+            :placeholder="INPUT_MASK.placeholder"
             :formatter="numberFormat"
           />
         </el-form-item>
       </div>
       <div class="current-order__row">
         <el-form-item prop="deliveryType">
-          <base-radio-group
-            v-model="form.deliveryType"
-            :list="DELIVERY_OPTIONS"
-          />
+          <base-radio-group v-model="form.deliveryType" :list="DELIVERY_OPTIONS" />
         </el-form-item>
       </div>
       <template v-if="form.deliveryType === DeliveryType.DELIVERY">
         <div class="current-order__row">
-          <el-form-item
-            prop="deliveryAddress"
-            class="current-order__field"
-          >
+          <el-form-item prop="deliveryAddress" class="current-order__field">
             <base-input
               v-model="form.deliveryAddress"
               title="адрес доставки"
@@ -51,10 +33,7 @@
           </el-form-item>
         </div>
         <div class="current-order__row">
-          <el-form-item
-            prop="flat"
-            class="current-order__field"
-          >
+          <el-form-item prop="flat" class="current-order__field">
             <base-input
               v-model="form.flat"
               title="квартира"
@@ -63,10 +42,7 @@
               :parser="digitalFormat"
             />
           </el-form-item>
-          <el-form-item
-            prop="floor"
-            class="current-order__field"
-          >
+          <el-form-item prop="floor" class="current-order__field">
             <base-input
               v-model="form.floor"
               title="этаж"
@@ -77,39 +53,34 @@
           </el-form-item>
         </div>
         <div class="current-order__row">
-          <el-form-item
-            prop="deliveryTime"
-            class="current-order__field"
-          >
-            <base-dropdown
-              v-model="form.deliveryTime"
-              title="Время доставки"
-              :list="deliverySlots"
-            />
+          <el-form-item prop="deliveryTime" class="current-order__field">
+            <base-dropdown v-model="form.deliveryTime" title="Время доставки" :list="timeSlots" />
           </el-form-item>
         </div>
         <div class="current-order__row">
           <el-form-item prop="dontRingIntercom">
-            <base-checkbox
-              v-model="form.dontRingIntercom"
-              label="Не звонить в домофон"
+            <base-checkbox v-model="form.dontRingIntercom" label="Не звонить в домофон" />
+          </el-form-item>
+        </div>
+      </template>
+      <template v-if="form.deliveryType === DeliveryType.PICKUP">
+        <div class="current-order__row">
+          <el-form-item prop="deliveryTime" class="current-order__field">
+            <base-dropdown
+              v-model="form.deliveryTime"
+              title="Приготовить ко времени"
+              :list="timeSlots"
             />
           </el-form-item>
         </div>
       </template>
       <div class="current-order__row">
         <el-form-item prop="paymentType">
-          <base-radio-group
-            v-model="form.paymentType"
-            :list="PAYMENT_OPTIONS"
-          />
+          <base-radio-group v-model="form.paymentType" :list="PAYMENT_OPTIONS" />
         </el-form-item>
       </div>
       <div class="current-order__row">
-        <el-form-item
-          prop="orderComment"
-          class="current-order__field"
-        >
+        <el-form-item prop="orderComment" class="current-order__field">
           <base-textarea
             v-model="form.orderComment"
             id="orderComment"
@@ -130,29 +101,31 @@ import { BaseCheckbox } from "@/shared/ui/base-checkbox"
 import { BaseTextarea } from "@/shared/ui/base-textarea"
 import { BaseRadioGroup } from "@/shared/ui/base-radio-group"
 import { useFormatter } from "@/shared/lib"
+import { INPUT_MASK } from "@/shared/config"
 import { type OrderFormValues } from "@/features/order"
-import { DELIVERY_OPTIONS, PAYMENT_OPTIONS, type DeliveryTimeSlot, DeliveryType } from "@/entities/order"
-import type { FormInstance, FormRules } from "element-plus";
+import { DELIVERY_OPTIONS, DeliveryType, PAYMENT_OPTIONS, type TimeSlot } from "@/entities/order"
+import type { FormInstance, FormRules } from "element-plus"
 
 const props = defineProps<{
-  form: OrderFormValues,
-  deliverySlots: DeliveryTimeSlot[],
+  form: OrderFormValues
+  timeSlots: TimeSlot[]
   formRules: FormRules<OrderFormValues>
 }>()
 
 const formRef = ref<FormInstance>()
 
-const validateForm = async () => {
+const validateForm = async (): Promise<boolean> => {
   if (!formRef.value) return false
+
   return await formRef.value.validate()
 }
 
-const { form, deliverySlots, formRules } = toRefs(props)
+const { form, timeSlots, formRules } = toRefs(props)
 
 const { digitalFormat, numberFormat } = useFormatter()
 
 defineExpose({
-  validateForm
+  validateForm,
 })
 </script>
 

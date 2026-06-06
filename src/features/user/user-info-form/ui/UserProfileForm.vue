@@ -2,31 +2,32 @@
   <div class="user-profile-form">
     <el-form
       ref="ruleFormRef"
-      class="user-info"
       :model="currentData"
+      class="user-info"
       :rules="profileFormRules"
       label-width="auto"
     >
       <el-form-item class="user-info__row" prop="name">
-        <BaseInput
+        <base-input
+          v-model="currentData.name"
           class="user-info__field"
           placeholder="Имя"
           title="Имя"
-          v-model="currentData.name"
         />
       </el-form-item>
       <el-form-item class="user-info__row" prop="number">
-        <BaseInput
+        <base-input
+          v-model="currentData.number"
           class="user-info__field"
-          placeholder="Номер телефона"
-          v-maska="'+7 (###) ### ## ##'"
+          v-maska
+          :data-maska="INPUT_MASK.mask"
+          :placeholder="INPUT_MASK.placeholder"
           title="номер телефона"
           :formatter="numberFormat"
-          v-model="currentData.number"
         />
       </el-form-item>
       <el-form-item class="user-info__row" prop="address">
-        <BaseInput
+        <base-input
           class="user-info__field field-address"
           title="адрес доставки"
           placeholder="Адрес"
@@ -34,11 +35,8 @@
         />
       </el-form-item>
       <div class="user-info__row col-gap-16">
-        <el-form-item
-          class="user-info__field"
-          prop="floor"
-        >
-          <BaseInput
+        <el-form-item class="user-info__field" prop="floor">
+          <base-input
             class="field-flat"
             title="этаж"
             placeholder="Этаж"
@@ -47,11 +45,8 @@
             v-model="currentData.floor"
           />
         </el-form-item>
-        <el-form-item
-          class="user-info__field"
-          prop="flat"
-        >
-          <BaseInput
+        <el-form-item class="user-info__field" prop="flat">
+          <base-input
             class="user-info__field field-flat"
             title="квартира"
             :formatter="digitalFormat"
@@ -73,16 +68,18 @@
 </template>
 
 <script lang="ts" setup>
-import { BaseInput } from "@/shared/ui/base-input";
-import { useFormatter } from "@/shared/lib";
+import { BaseInput } from "@/shared/ui/base-input"
+import { useFormatter } from "@/shared/lib"
 import { useUserProfileForm } from "../model"
 import type { FormInstance } from "element-plus"
+import { INPUT_MASK } from "@/shared/config"
 
 const ruleFormRef = ref<FormInstance>()
 
 const { numberFormat, digitalFormat } = useFormatter()
 
-const { hasChanges, currentData, profileFormRules, submitForm, isSendingForm } = useUserProfileForm()
+const { hasChanges, currentData, profileFormRules, submitForm, isSendingForm } =
+  useUserProfileForm()
 </script>
 
 <style lang="scss" scoped>
