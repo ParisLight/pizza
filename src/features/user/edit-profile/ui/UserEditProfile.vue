@@ -74,6 +74,17 @@ const { numberFormat, digitalFormat } = useFormatter()
 </script>
 
 <style lang="scss" scoped>
+.page {
+  &__base-btn {
+    margin-top: auto;
+    &:deep(.el-button) {
+      height: 47px;
+      padding: 10px 15px;
+      font-variant: all-small-caps;
+      width: 100%;
+    }
+  }
+}
 .user-info {
   display: flex;
   flex-direction: column;

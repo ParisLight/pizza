@@ -44,13 +44,6 @@ const userModel = useUserModel()
   }
   &__base-btn {
     margin-top: auto;
-
-    &:deep(.el-button) {
-      height: 47px;
-      padding: 10px 15px;
-      font-variant: all-small-caps;
-      width: 100%;
-    }
   }
 }
 .user-id {
