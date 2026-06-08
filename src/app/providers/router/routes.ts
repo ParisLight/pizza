@@ -1,17 +1,21 @@
-import type { RouteRecordRaw } from "vue-router";
-import { routesMap } from "./constants.ts";
+import type { RouteRecordRaw } from "vue-router"
+import { ROUTES } from "@/shared/config"
 
 export const routes: Array<RouteRecordRaw> = [
   {
-    path: routesMap.mainPage,
-    component: () => import('@/pages/main-page'),
+    path: ROUTES.mainPage,
+    component: () => import("@/pages/main-page"),
   },
   {
-    path: routesMap.order,
-    component: () => import('@/pages/order-page')
+    path: ROUTES.order,
+    component: () => import("@/pages/order-page"),
   },
   {
-    path: routesMap.profile,
-    component: () => import('@/pages/profile-page')
-  }
+    path: ROUTES.profile,
+    component: () => import("@/pages/profile-page"),
+  },
+  {
+    path: ROUTES.myOrders,
+    component: () => import("@/pages/profile-page"),
+  },
 ]

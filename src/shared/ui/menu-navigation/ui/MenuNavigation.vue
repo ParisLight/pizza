@@ -2,11 +2,11 @@
   <div class="menu-navigation">
     <div class="menu-navigation__list">
       <router-link
-          class="menu-navigation__item"
-          v-for="route in links"
-          :key="route.name"
-          :to="route.to"
-          @click.stop="route.onClick"
+        class="menu-navigation__item"
+        v-for="route in links"
+        :key="route.name"
+        :to="route.to"
+        @click.stop="route.onClick"
       >
         <span>{{ route.name }}</span>
       </router-link>
@@ -14,11 +14,11 @@
     <div class="menu-navigation__footer">
       <div class="help menu-navigation__help">
         <div class="help__icon">
-          <img src="@/assets/images/phone-icon.svg" alt="phone">
+          <img src="@/assets/images/phone-icon.svg" alt="phone" />
         </div>
         <div class="help__text">
           <span>
-            позвони нам, если возникли <br>
+            позвони нам, если возникли <br />
             трудности
           </span>
         </div>
@@ -28,39 +28,39 @@
 </template>
 
 <script setup lang="ts">
-import type { RouteValuesType } from "@/app/providers";
-import { useNavigationModel } from '@/features/navigation-switcher'
+import { type ROUTE_TYPE, ROUTES } from "@/shared/config"
+import { useNavigationModel } from "@/features/navigation-switcher"
 //todo: feature_?
 const navigationModel = useNavigationModel()
 
 interface IMenuLink {
-    name: string;
-    to: RouteValuesType;
-    onClick: () => void;
+  name: string
+  to: ROUTE_TYPE
+  onClick: () => void
 }
 
 const links: IMenuLink[] = [
-    {
-        name: 'Меню',
-        to: '/',
-        onClick: () => navigationModel.closeNavigation()
-    },
-    {
-        name: 'Корзина',
-        to: '/order',
-        onClick: () => navigationModel.closeNavigation()
-    },
-    {
-        name: 'Профиль',
-        to: '/profile',
-        onClick: () => navigationModel.closeNavigation()
-    },
-    {
-        name: 'История заказов',
-        to: '/orders',
-        onClick: () => navigationModel.closeNavigation()
-    },
-];
+  {
+    name: "Меню",
+    to: ROUTES.mainPage,
+    onClick: () => navigationModel.closeNavigation(),
+  },
+  {
+    name: "Корзина",
+    to: ROUTES.order,
+    onClick: () => navigationModel.closeNavigation(),
+  },
+  {
+    name: "Профиль",
+    to: ROUTES.profile,
+    onClick: () => navigationModel.closeNavigation(),
+  },
+  {
+    name: "История заказов",
+    to: ROUTES.myOrders,
+    onClick: () => navigationModel.closeNavigation(),
+  },
+]
 </script>
 
 <style lang="scss" scoped>

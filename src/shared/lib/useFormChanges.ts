@@ -1,47 +1,35 @@
-import { cloneDeep, isEqual } from 'lodash';
+import { type MaybeRefOrGetter, toValue } from "vue"
+import isEqual from "fast-deep-equal"
 
-export const useFormChanges = <T>(
-  originalData: T,
-  normalizers?: {
-    [K in keyof T]?: (value: T[K]) => T[K]
-  }
+type UseFormChangesOptions<T> = {
+  normalize?: (data: T) => T
+}
+
+export const useFormChanges = <T extends object>(
+  currentData: MaybeRefOrGetter<T>,
+  options?: UseFormChangesOptions<T>,
 ) => {
-  const currentData = ref<T>(cloneDeep(originalData))
+  const normalize = (value: T): T =>
+    options?.normalize
+      ? options.normalize(JSON.parse(JSON.stringify(value)))
+      : JSON.parse(JSON.stringify(value))
 
-  const normalizeForComparison = (data: T) => {
-    if(!data || !normalizers) return data
+  const savedData = ref<T>()
 
-    const normalized = cloneDeep(data)
-
-    Object.keys(normalizers).forEach(key => {
-      const normalizer = normalizers[key as keyof T];
-      if (normalizer && normalized[key as keyof T] !== undefined) {
-        (normalized as any)[key] = normalizer(normalized[key as keyof T]);
-      }
-    });
-
-    return normalized;
+  const saveData = () => {
+    savedData.value = normalize(toValue(currentData))
   }
 
   const hasChanges = computed(() => {
-    const normalizedOriginal = normalizeForComparison(originalData);
-    const normalizedCurrent = normalizeForComparison(currentData.value);
+    if (!savedData.value) {
+      return false
+    }
 
-    return !isEqual(normalizedOriginal, normalizedCurrent)
+    return !isEqual(savedData.value, normalize(toValue(currentData)))
   })
-
-  const resetChanges = () => {
-    currentData.value = cloneDeep(originalData)
-  }
-
-  const confirmChanges = () => {
-    Object.assign(originalData, cloneDeep(currentData.value))
-  }
 
   return {
     hasChanges,
-    currentData,
-    resetChanges,
-    confirmChanges,
+    saveData,
   }
 }

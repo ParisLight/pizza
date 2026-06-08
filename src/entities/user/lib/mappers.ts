@@ -1,24 +1,23 @@
-import type { UserDTO } from "@/entities/user/api/dto";
-import type { IUser } from "@/entities/user";
+import type { UserDTO, UserInsertDTO } from "@/entities/user/api/dto"
+import type { IUser } from "@/entities/user"
 
-export const mappedUser = (userData: UserDTO): IUser  => {
-  return {
-    ...userData,
-    userId: userData.user_id,
-    address: !userData.address ? '' : userData.address,
-    username: !userData.username ? '' : userData.username,
-    number: !userData.number ? '' : userData.number
-  }
-}
+export const mappedUser = (userData: UserDTO): IUser => ({
+  id: userData.id,
+  name: userData.name,
+  userId: userData.user_id,
+  username: userData.username ?? "",
+  number: userData.number ?? "",
+  address: userData.address ?? "",
+  flat: userData.flat,
+  floor: userData.floor,
+})
 
-export const mapUserToInsert = (userData: IUser): any => {
-  return {
-    ...userData,
-    flat: !userData.flat ? null : Number(userData.flat),
-    address: !userData.address ? null : userData.address,
-    username: !userData.username ? null : userData.username,
-    floor: !userData.floor ? null : Number(userData.floor),
-    number: !userData.number ? null : userData.number,
-    user_id: userData.userId
-  }
-}
+export const mapUserToInsert = (userData: IUser): UserInsertDTO => ({
+  name: userData.name,
+  user_id: userData.userId,
+  username: userData.username || null,
+  number: userData.number || null,
+  address: userData.address || null,
+  flat: userData.flat,
+  floor: userData.floor,
+})

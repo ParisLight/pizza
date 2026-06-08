@@ -1,85 +1,76 @@
 <template>
   <div class="user-profile-form">
-    <el-form
-      ref="ruleFormRef"
-      :model="currentData"
-      class="user-info"
-      :rules="profileFormRules"
-      label-width="auto"
-    >
+    <el-form ref="formRef" :model="form" :rules="formRules" class="user-info" label-width="auto">
       <el-form-item class="user-info__row" prop="name">
-        <base-input
-          v-model="currentData.name"
-          class="user-info__field"
-          placeholder="Имя"
-          title="Имя"
-        />
+        <base-input v-model="form.name" class="user-info__field" placeholder="Имя" title="Имя" />
       </el-form-item>
       <el-form-item class="user-info__row" prop="number">
         <base-input
-          v-model="currentData.number"
+          v-model="form.number"
           class="user-info__field"
           v-maska
           :data-maska="INPUT_MASK.mask"
           :placeholder="INPUT_MASK.placeholder"
-          title="номер телефона"
           :formatter="numberFormat"
+          title="номер телефона"
         />
       </el-form-item>
       <el-form-item class="user-info__row" prop="address">
         <base-input
+          v-model="form.address"
           class="user-info__field field-address"
           title="адрес доставки"
           placeholder="Адрес"
-          v-model="currentData.address"
         />
       </el-form-item>
       <div class="user-info__row col-gap-16">
         <el-form-item class="user-info__field" prop="floor">
           <base-input
+            v-model="form.floor"
             class="field-flat"
             title="этаж"
             placeholder="Этаж"
             :formatter="digitalFormat"
             :parser="digitalFormat"
-            v-model="currentData.floor"
           />
         </el-form-item>
         <el-form-item class="user-info__field" prop="flat">
           <base-input
+            v-model="form.flat"
             class="user-info__field field-flat"
             title="квартира"
+            placeholder="Номер"
             :formatter="digitalFormat"
             :parser="digitalFormat"
-            placeholder="Номер"
-            v-model="currentData.flat"
           />
         </el-form-item>
       </div>
     </el-form>
-    <slot
-      v-if="$slots.actions"
-      name="actions"
-      :has-changes="hasChanges"
-      :submit-form="() => submitForm(ruleFormRef)"
-      :is-sending-form="isSendingForm"
-    />
+    <base-btn
+      v-if="hasChanges"
+      class="page__base-btn"
+      color="var(--color-purple)"
+      :loading="isSavingProfile"
+      @click.stop="saveProfile"
+    >
+      Сохранить
+    </base-btn>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { BaseInput } from "@/shared/ui/base-input"
 import { useFormatter } from "@/shared/lib"
-import { useUserProfileForm } from "../model"
-import type { FormInstance } from "element-plus"
+import { useEditProfile } from "../model"
 import { INPUT_MASK } from "@/shared/config"
+import { BaseBtn } from "@/shared/ui/base-btn"
+import type { FormInstance } from "element-plus"
 
-const ruleFormRef = ref<FormInstance>()
+const formRef = ref<FormInstance | undefined>()
+
+const { form, formRules, hasChanges, isSavingProfile, saveProfile } = useEditProfile(formRef)
 
 const { numberFormat, digitalFormat } = useFormatter()
-
-const { hasChanges, currentData, profileFormRules, submitForm, isSendingForm } =
-  useUserProfileForm()
 </script>
 
 <style lang="scss" scoped>

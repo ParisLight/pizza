@@ -1,14 +1,11 @@
 <template>
   <header class="header">
     <div class="header__content">
-      <div class="header__logo" @click="router.push('/')">
-        <img src="@/assets/moon-logo.png" alt="logo">
+      <div class="header__logo" @click="router.push(ROUTES.mainPage)">
+        <img src="@/assets/moon-logo.png" alt="logo" />
       </div>
       <div class="header__actions">
-        <basket-button
-          :count="cartModel.totalQuantityCart"
-          @click="router.push(routesMap.order)"
-        />
+        <basket-button :count="cartModel.totalQuantityCart" @click="router.push(ROUTES.order)" />
         <navigation-switcher />
       </div>
     </div>
@@ -16,11 +13,11 @@
 </template>
 
 <script setup>
-import { BasketButton } from "@/shared/ui/basket-button";
-import { NavigationSwitcher } from "@/features/navigation-switcher";
-import { useCartModel } from "@/entities/cart";
-import { useRouter } from "vue-router";
-import { routesMap } from '@/app/providers'
+import { BasketButton } from "@/shared/ui/basket-button"
+import { NavigationSwitcher } from "@/features/navigation-switcher"
+import { useCartModel } from "@/entities/cart"
+import { useRouter } from "vue-router"
+import { ROUTES } from "@/shared/config"
 
 const router = useRouter()
 const cartModel = useCartModel()

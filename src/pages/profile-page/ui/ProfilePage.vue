@@ -8,25 +8,12 @@
         <span>id: {{ userModel.user?.userId ?? 0 }}</span>
       </div>
     </div>
-    <user-profile-form class="page__form">
-      <template #actions="{ hasChanges, submitForm, isSendingForm }">
-        <base-btn
-          v-if="hasChanges"
-          class="page__base-btn"
-          color="var(--color-purple)"
-          :loading="isSendingForm"
-          @click.stop="submitForm"
-        >
-          Сохранить
-        </base-btn>
-      </template>
-    </user-profile-form>
+    <user-edit-profile class="page__form" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { BaseBtn } from "@/shared/ui/base-btn"
-import { UserProfileForm } from "@/features/user"
+import { UserEditProfile } from "@/features/user"
 import { useUserModel } from "@/entities/user"
 
 const userModel = useUserModel()

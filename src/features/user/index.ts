@@ -1,3 +1,3 @@
-import UserProfileForm from './user-info-form/ui/UserProfileForm.vue'
+import UserEditProfile from "./edit-profile/ui/UserEditProfile.vue"
 
-export { UserProfileForm }
+export { UserEditProfile }
