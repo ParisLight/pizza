@@ -23,10 +23,19 @@ export const useSaveProfile = ({ formRef, formData, hasChanges, saveFormData }: 
     if (!formRef.value) return
 
     try {
-      isSavingProfile.value = true
-
       await formRef.value.validate()
+    } catch {
+      ElNotification({
+        title: "Ошибка",
+        message: "Проверьте правильность заполненных полей",
+        type: "error",
+      })
+      return
+    }
 
+    isSavingProfile.value = true
+
+    try {
       const updatingUserData = mapFormToUser(toValue(formData), userModel.user)
 
       const isUpdated = await userModel.updateUser(updatingUserData)
@@ -34,7 +43,7 @@ export const useSaveProfile = ({ formRef, formData, hasChanges, saveFormData }: 
       if (!isUpdated) {
         ElNotification({
           title: "Ошибка",
-          message: "Что-то пошло не так",
+          message: "Не удалось сохранить данные. Попробуйте позже",
           type: "error",
         })
         return
@@ -47,7 +56,7 @@ export const useSaveProfile = ({ formRef, formData, hasChanges, saveFormData }: 
       })
 
       saveFormData()
-    } catch (e) {
+    } catch {
       ElNotification({
         title: "Ошибка",
         message: "Что-то пошло не так",
