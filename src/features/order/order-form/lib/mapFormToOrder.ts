@@ -1,35 +1,26 @@
-import type { IOrder } from "@/entities/order"
+import { type IOrderDraft, normalizeOrderDraft } from "@/entities/order"
 import type { OrderFormValues } from "@/features/order"
 
-export const mapFormToOrder = (form: OrderFormValues, userId: number): IOrder => {
-  const getISODate = (str: Date) => {
-    return new Date(str).toISOString()
-  }
+export const mapFormToOrderDraft = (form: OrderFormValues, userId: number): IOrderDraft => {
+  const toISO = (date: Date) => new Date(date).toISOString()
 
-  return {
-    createdAt: new Date().toISOString(),
-
+  const draft: IOrderDraft = {
     userId,
-
     payerName: form.payerName,
     payerNumber: form.payerNumber,
-
     deliveryType: form.deliveryType,
     paymentType: form.paymentType,
+    orderComment: form.orderComment,
 
-    deliveryAddress: form.deliveryAddress || null,
-
+    deliveryAddress: form.deliveryAddress?.trim() || null,
     flat: form.flat ? Number(form.flat) : null,
     floor: form.floor ? Number(form.floor) : null,
-
-    readyByFrom: form.readyBy?.from ? getISODate(form.readyBy.from) : null,
-    readyByTo: form.readyBy?.to ? getISODate(form.readyBy.to) : null,
-
-    deliveryTimeFrom: form.deliveryTime?.from ? getISODate(form.deliveryTime.from) : null,
-    deliveryTimeTo: form.deliveryTime?.to ? getISODate(form.deliveryTime.to) : null,
-
-    dontRingIntercom: typeof form.dontRingIntercom !== "boolean" ? null : form.dontRingIntercom,
-
-    orderComment: form.orderComment,
+    dontRingIntercom: form.dontRingIntercom ?? null,
+    deliveryTimeFrom: form.deliveryTime?.from ? toISO(form.deliveryTime.from) : null,
+    deliveryTimeTo: form.deliveryTime?.to ? toISO(form.deliveryTime.to) : null,
+    readyByFrom: form.readyBy?.from ? toISO(form.readyBy.from) : null,
+    readyByTo: form.readyBy?.to ? toISO(form.readyBy.to) : null,
   }
+
+  return normalizeOrderDraft(draft)
 }

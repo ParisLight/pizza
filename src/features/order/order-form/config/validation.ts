@@ -1,7 +1,7 @@
 import type { FormRules } from "element-plus"
 import type { OrderFormValues } from "@/features/order"
 import { DeliveryType } from "@/entities/order"
-import { validatePhone } from "@/shared/lib/formValidation"
+import { validatePhone } from "@/shared/lib"
 
 export const CURRENT_ORDER_FORM_RULES: FormRules<OrderFormValues> = {
   payerName: {

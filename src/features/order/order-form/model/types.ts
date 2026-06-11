@@ -1,4 +1,4 @@
-import { DeliveryType, PaymentType, type TimeSlot } from "@/entities/order/model/types"
+import { DeliveryType, PaymentType, type TimeSlot } from "@/entities/order"
 
 export interface OrderFormValues {
   payerName: string

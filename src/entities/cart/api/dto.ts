@@ -1,6 +1,6 @@
-import type { Database } from "@/shared/api/supabase.types";
+import type { Database } from "@/shared/api"
 
-export type CartDTO = Database['public']['Tables']['carts']['Row']
+export type CartDTO = Database["public"]["Tables"]["carts"]["Row"]
 
-export type CartItemsDTO = Database['public']['Tables']['cart_items']['Row']
-export type CartItemsInsertDTO = Database['public']['Tables']['cart_items']['Insert']
+export type CartItemsDTO = Database["public"]["Tables"]["cart_items"]["Row"]
+export type CartItemsInsertDTO = Database["public"]["Tables"]["cart_items"]["Insert"]

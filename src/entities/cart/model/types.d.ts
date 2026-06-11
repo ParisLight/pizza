@@ -1,10 +1,4 @@
 export interface ICartItem {
-  productId: number,
+  productId: number
   quantity: number
-}
-
-export interface ICart {
-  id: number
-  userId: number
-  createdAt: string
 }

@@ -1,7 +1,7 @@
 import { useCartModel } from "@/entities/cart"
 import { useUserModel } from "@/entities/user"
 import { useOrderModel } from "@/entities/order"
-import { mapFormToOrder, useOrderForm } from "@/features/order"
+import { mapFormToOrderDraft, useOrderForm } from "@/features/order"
 
 export const useCheckout = () => {
   const cartModel = useCartModel()
@@ -37,7 +37,7 @@ export const useCheckout = () => {
     isInProcess.value = true
 
     try {
-      const order = mapFormToOrder(form, userId)
+      const order = mapFormToOrderDraft(form, userId)
       console.log({ order }, "order_i_get___")
 
       const orderId = await orderModel.sendOrder(order)

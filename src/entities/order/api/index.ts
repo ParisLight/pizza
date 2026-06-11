@@ -1,9 +1,9 @@
 import { supabase } from "@/shared/api"
-import type { IOrder } from "../model"
-import { mapOrderToInsert, mappedOrder } from "../lib/mappers.ts"
+import type { IOrder, IOrderDraft } from "../model"
+import { mapOrderDraftToInsert, mappedOrder } from "../lib/mappers.ts"
 
-export const sendOrder = async (order: IOrder): Promise<null | number> => {
-  const orderDTOData = mapOrderToInsert(order)
+export const sendOrder = async (order: IOrderDraft): Promise<null | number> => {
+  const orderDTOData = mapOrderDraftToInsert(order)
 
   const { data, error } = await supabase.from("orders").insert(orderDTOData).select("id").single()
 

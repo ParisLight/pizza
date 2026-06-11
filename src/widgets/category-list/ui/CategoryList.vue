@@ -1,20 +1,14 @@
 <template>
   <div class="category-list">
     <div class="category-list__main">
-      <swiper
-        ref="swiperEl"
-        class="swiper"
-        slidesPerView="auto"
-        :freeMode="true"
-        spaceBetween="16"
-      >
+      <swiper ref="swiperEl" class="swiper" slidesPerView="auto" :freeMode="true" spaceBetween="16">
         <swiper-slide
           class="swiper__slide"
           v-for="category in categoryModel.categories"
           :key="category.id"
         >
           <category-card
-            :class="{'category-card--active': categoryModel.idActiveCategory === category.id}"
+            :class="{ 'category-card--active': categoryModel.idActiveCategory === category.id }"
             :data="category"
             @click="onClickCategory(category.id)"
           />
@@ -25,11 +19,9 @@
 </template>
 
 <script setup lang="ts">
-import { Card as CategoryCard } from '@/entities/category'
-import { useCategoryModel } from "@/entities/category/model";
-import { Swiper, SwiperSlide } from "swiper/vue";
-import 'swiper/css';
-
+import { Card as CategoryCard, useCategoryModel } from "@/entities/category"
+import { Swiper, SwiperSlide } from "swiper/vue"
+import "swiper/css"
 
 const categoryModel = useCategoryModel()
 
@@ -51,7 +43,7 @@ const onClickCategory = (id: number) => {
   column-gap: 16px;
   position: relative;
   &__main {
-    width: 100%
+    width: 100%;
   }
 }
 </style>

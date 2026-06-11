@@ -1,3 +1,3 @@
-import type { Database } from "@/shared/api/supabase.types";
+import type { Database } from "@/shared/api"
 
-export type ProductDTO = Database['public']['Tables']['products']['Row']
+export type ProductDTO = Database["public"]["Tables"]["products"]["Row"]

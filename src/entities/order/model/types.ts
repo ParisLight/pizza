@@ -16,8 +16,32 @@ export interface TimeSlot {
   isToday: boolean
 }
 
-export interface IOrder {
-  orderId?: number
+export interface IOrderDraft {
+  userId: number
+
+  payerName: string
+  payerNumber: string
+
+  deliveryType: DeliveryType
+  deliveryAddress: string | null
+
+  flat: number | null
+  floor: number | null
+
+  paymentType: PaymentType
+  dontRingIntercom: boolean | null
+
+  deliveryTimeFrom: string | null
+  deliveryTimeTo: string | null
+
+  readyByFrom: string | null
+  readyByTo: string | null
+
+  orderComment: string
+}
+
+export interface IOrder extends IOrderDraft {
+  orderId: number
   userId: number
 
   payerName: string

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import type { IOrder } from "./types"
+import type { IOrder, IOrderDraft } from "./types"
 import * as OrderApi from "../api"
 
 export const useOrderModel = defineStore("order", {
@@ -14,7 +14,7 @@ export const useOrderModel = defineStore("order", {
   }),
 
   actions: {
-    async sendOrder(order: IOrder): Promise<number | null> {
+    async sendOrder(order: IOrderDraft): Promise<number | null> {
       return await OrderApi.sendOrder(order)
     },
     async loadOrders(userId: number | undefined) {

@@ -1,22 +1,25 @@
-import type { IOrder } from "@/entities/order"
-import type { OrderDTO, OrderInsertDTO } from "@/entities/order/api/dto"
+import type { IOrder, IOrderDraft } from "../model"
+import type { OrderDTO, OrderInsertDTO } from "../api/dto"
+import { normalizeOrderDraft } from "../lib"
 
-export const mapOrderToInsert = (order: IOrder): OrderInsertDTO => {
+export const mapOrderDraftToInsert = (order: IOrderDraft): OrderInsertDTO => {
+  const normalizedDraft = normalizeOrderDraft(order)
+
   return {
-    user_id: order.userId,
-    flat: order.flat,
-    floor: order.floor,
-    dont_ring_intercom: order.dontRingIntercom,
-    delivery_address: order.deliveryAddress,
-    delivery_type: order.deliveryType,
-    payer_number: order.payerNumber,
-    payment_type: order.paymentType,
-    // created_at: order.createdAt,
-    order_comment: order.orderComment,
-    delivery_time_from: order.deliveryTimeFrom,
-    delivery_time_to: order.deliveryTimeTo,
-    ready_by_from: order.readyByFrom,
-    ready_by_to: order.readyByTo,
+    user_id: normalizedDraft.userId,
+    flat: normalizedDraft.flat,
+    floor: normalizedDraft.floor,
+    payer_name: normalizedDraft.payerName,
+    dont_ring_intercom: normalizedDraft.dontRingIntercom,
+    delivery_address: normalizedDraft.deliveryAddress,
+    delivery_type: normalizedDraft.deliveryType,
+    payer_number: normalizedDraft.payerNumber,
+    payment_type: normalizedDraft.paymentType,
+    order_comment: normalizedDraft.orderComment,
+    delivery_time_from: normalizedDraft.deliveryTimeFrom,
+    delivery_time_to: normalizedDraft.deliveryTimeTo,
+    ready_by_from: normalizedDraft.readyByFrom,
+    ready_by_to: normalizedDraft.readyByTo,
   }
 }
 
