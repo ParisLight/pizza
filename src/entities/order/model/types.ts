@@ -43,25 +43,4 @@ export interface IOrderDraft {
 export interface IOrder extends IOrderDraft {
   orderId: number
   userId: number
-
-  payerName: string
-  payerNumber: string
-
-  deliveryType: DeliveryType
-  deliveryAddress: string | null
-
-  flat: number | null
-  floor: number | null
-
-  paymentType: PaymentType
-  dontRingIntercom: boolean | null
-
-  deliveryTimeFrom: string | null
-  deliveryTimeTo: string | null
-
-  readyByFrom: string | null
-  readyByTo: string | null
-
-  createdAt: string
-  orderComment: string
 }

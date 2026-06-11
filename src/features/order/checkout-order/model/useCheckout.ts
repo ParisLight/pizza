@@ -13,7 +13,6 @@ export const useCheckout = () => {
   const { form, formRef, setFormRef, deliverySlots, formRules } = useOrderForm()
 
   const checkoutOrder = async () => {
-    console.log("checloit")
     const userId = userModel.user?.userId
 
     if (!userId) return
