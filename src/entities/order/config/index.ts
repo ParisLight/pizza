@@ -1,23 +1,23 @@
-import { DeliveryType, PaymentType } from "@/entities/order";
+import { DeliveryType, PaymentType } from "../model"
 
 export const DELIVERY_OPTIONS = [
   {
     id: DeliveryType.DELIVERY,
-    name: 'доставка'
+    name: "доставка",
   },
   {
     id: DeliveryType.PICKUP,
-    name: 'самовывоз'
-  }
+    name: "самовывоз",
+  },
 ]
 
 export const PAYMENT_OPTIONS = [
   {
     id: PaymentType.CARD,
-    name: 'Карта',
+    name: "Карта",
   },
   {
     id: PaymentType.CASH,
-    name: 'Наличные',
+    name: "Наличные",
   },
 ]

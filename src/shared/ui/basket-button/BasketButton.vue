@@ -1,6 +1,6 @@
 <template>
   <div class="basket-button">
-    <img src="@/shared/ui/assets/basket-icon.svg" alt="basket">
+    <img src="@/shared/ui/assets/basket-icon.svg" alt="basket" />
     <div class="basket-button__count" v-if="count > 0">
       <span>{{ count }}</span>
     </div>
@@ -8,9 +8,10 @@
 </template>
 
 <script setup lang="ts">
-import { type IProps } from "./type";
-const props = withDefaults(defineProps<IProps>(), {
-  count: 0
+import { type IProps } from "./type"
+
+withDefaults(defineProps<IProps>(), {
+  count: 0,
 })
 </script>
 

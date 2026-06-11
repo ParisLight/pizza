@@ -16,6 +16,6 @@ export const routes: Array<RouteRecordRaw> = [
   },
   {
     path: ROUTES.myOrders,
-    component: () => import("@/pages/profile-page"),
+    component: () => import("@/pages/my-orders"),
   },
 ]

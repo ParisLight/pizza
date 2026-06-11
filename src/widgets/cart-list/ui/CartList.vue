@@ -1,8 +1,5 @@
 <template>
   <div class="cart-list">
-    <div class="cart-list__title">
-      <span>Ваш заказ</span>
-    </div>
     <div class="cart-list__list">
       <transition-group name="fade-group">
         <CartItem
@@ -13,25 +10,20 @@
           @on-img-click="onImgCartItemClick"
         >
           <template #action>
-            <ChangeQuantity
-              :product="cartItem.product"
-            />
-              <transition name="fade" mode="out-in">
-                <CompletelyDelete
-                  v-if="isDeleteVisible(cartItem.product.id)"
-                  class="cart-list__completely-delete"
-                  :product-id="cartItem.product.id"
-                  @cancel="toggleDeleteVisibility(cartItem.product.id)"
-                />
-              </transition>
+            <ChangeQuantity :product="cartItem.product" />
+            <transition name="fade" mode="out-in">
+              <CompletelyDelete
+                v-if="isDeleteVisible(cartItem.product.id)"
+                class="cart-list__completely-delete"
+                :product-id="cartItem.product.id"
+                @cancel="toggleDeleteVisibility(cartItem.product.id)"
+              />
+            </transition>
             <div
               class="cart-list__cart-item-delete"
               @click="toggleDeleteVisibility(cartItem.product.id)"
             >
-              <img
-                src="@/assets/images/delete-icon.svg"
-                alt="delete"
-              >
+              <img src="@/assets/images/delete-icon.svg" alt="delete" />
             </div>
           </template>
         </CartItem>
@@ -41,12 +33,11 @@
 </template>
 
 <script lang="ts" setup>
-import { type IProduct } from "@/entities/product";
-import { useProductCartList } from "../model/useProductCartList";
-import { useConfirmationCompletelyDelete } from "../model/useConfirmationCompletelyDelete";
-import { ChangeQuantity, CompletelyDelete } from "@/features/cart";
-import { CartItem } from '@/features/cart'
-import { usePopupModel } from '@/features/popups'
+import { type IProduct } from "@/entities/product"
+import { useProductCartList } from "../model/useProductCartList"
+import { useConfirmationCompletelyDelete } from "../model/useConfirmationCompletelyDelete"
+import { CartItem, ChangeQuantity, CompletelyDelete } from "@/features/cart"
+import { usePopupModel } from "@/features/popups"
 
 const popupModel = usePopupModel()
 
@@ -55,7 +46,7 @@ const { cartDetailedItems } = useProductCartList()
 const { toggleDeleteVisibility, isDeleteVisible } = useConfirmationCompletelyDelete()
 
 const onImgCartItemClick = (product: IProduct): void => {
-  popupModel.openPopup('ProductCardPopup', {
+  popupModel.openPopup("ProductCardPopup", {
     openingIdProduct: product.id,
   })
 }
@@ -63,13 +54,6 @@ const onImgCartItemClick = (product: IProduct): void => {
 
 <style lang="scss" scoped>
 .cart-list {
-  &__title span {
-    font-variant: all-small-caps;
-    font-size: 24px;
-    font-weight: 700;
-    line-height: 14px;
-    color: var(--color-golden);
-  }
   &__list {
     display: flex;
     flex-direction: column;
@@ -110,7 +94,7 @@ const onImgCartItemClick = (product: IProduct): void => {
     height: 124px;
     border-radius: 16px;
     background-color: var(--color-main);
-    box-shadow: 0px 4px 20px 0px #0000008C;
+    box-shadow: 0px 4px 20px 0px #0000008c;
     img {
       width: 100px;
       height: 100px;
@@ -137,7 +121,7 @@ const onImgCartItemClick = (product: IProduct): void => {
   }
   &__name {
     font-size: 16px;
-    line-height: 14px ;
+    line-height: 14px;
     font-weight: 700;
     color: var(--color-golden);
   }
@@ -162,6 +146,5 @@ const onImgCartItemClick = (product: IProduct): void => {
     justify-content: space-between;
     margin-top: 16px;
   }
-
 }
 </style>

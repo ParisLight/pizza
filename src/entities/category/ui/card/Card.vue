@@ -1,18 +1,18 @@
 <template>
   <div class="category-card">
     <div class="category-card__image">
-      <img src="@/assets/images/search-icon.svg" alt="category-img">
+      <img src="@/assets/images/search-icon.svg" alt="category-img" />
     </div>
     <div class="category-card__name">
-      <span>{{ data.name || 'name' }}</span>
+      <span>{{ data.name || "name" }}</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { type ICategory } from "@/entities/category";
+import { type ICategory } from "@/entities/category"
 
-const props = defineProps<{
+defineProps<{
   data: ICategory
 }>()
 </script>
@@ -26,9 +26,9 @@ const props = defineProps<{
   width: 72px;
   height: 54px;
   background-color: var(--color-main);
-  box-shadow: 0px 2px 8px 0px #0000008C;
+  box-shadow: 0px 2px 8px 0px #0000008c;
   border-radius: 12px;
-  transition: .2s ease-in-out background-color;
+  transition: 0.2s ease-in-out background-color;
   cursor: pointer;
   &--active {
     background-color: var(--color-purple);
@@ -50,7 +50,7 @@ const props = defineProps<{
     font-weight: 700;
     color: var(--color-white);
     opacity: 0.5;
-    transition: .2s ease-in-out opacity;
+    transition: 0.2s ease-in-out opacity;
   }
 }
 </style>

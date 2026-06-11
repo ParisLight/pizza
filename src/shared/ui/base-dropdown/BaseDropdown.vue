@@ -7,9 +7,10 @@
       v-bind="$attrs"
       trigger="click"
       popper-class="base-popper-dropdown"
+      style="width: 100%"
       :teleported="false"
       @visible-change="onVisible"
-      style="width: 100%"
+      @command="onCommand"
     >
       <div class="dropdown" :class="{ 'dropdown--active': isVisible }">
         <span>
@@ -21,12 +22,8 @@
       </div>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item
-            v-for="(item, index) in list"
-            :key="'drop_element' + index"
-            @click="itemClick(item)"
-          >
-            <span>{{ nameItem ? item[nameItem] : item }}</span>
+          <el-dropdown-item v-for="item in list" :key="item.value" :command="item">
+            <span>{{ item.label }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>
@@ -34,15 +31,20 @@
   </div>
 </template>
 
-<script lang="ts" setup generic="T extends object">
+<script lang="ts" setup>
+interface DropdownItem {
+  readonly label: string
+  readonly value: string | number
+}
+
 const props = defineProps<{
-  list: T[]
-  idItem?: keyof T & string
-  nameItem?: keyof T & string
+  list: DropdownItem[]
   title?: string
 }>()
 
-const model = defineModel()
+const model = defineModel<DropdownItem | null>({
+  required: true,
+})
 
 const isVisible = ref(false)
 
@@ -50,34 +52,13 @@ const onVisible = (event: boolean) => {
   isVisible.value = event
 }
 
-const itemClick = (item: T) => {
-  if (!props.idItem) {
-    model.value = item
-    return
-  }
-
-  model.value = item[props.idItem]
+const onCommand = (item: DropdownItem) => {
+  model.value = item
 }
 
-const displayValue = computed(() => {
-  if (!model.value) return ""
+const selectedItem = computed(() => props.list.find((item) => item.value === model.value?.value))
 
-  const selectedItem = props.list.find((item: T) => {
-    if (props.idItem) {
-      return item[props.idItem] === model.value
-    }
-
-    return item === model.value
-  })
-
-  if (!selectedItem) return ""
-
-  if (props.nameItem) {
-    return selectedItem[props.nameItem]
-  }
-
-  return selectedItem
-})
+const displayValue = computed(() => selectedItem.value?.label ?? "")
 </script>
 
 <style lang="scss" scoped>

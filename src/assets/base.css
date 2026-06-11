@@ -3,11 +3,11 @@
 /* semantic color variables for this project */
 :root {
   --color-background: #1b1e23;
-  --color-purple: #6C67AA;
-  --color-purple-light: #9C99FF;
-  --color-white: #FFFFFF;
-  --color-golden: #F8C625;
-  --color-main: #2A2D30;
+  --color-purple: #6c67aa;
+  --color-purple-light: #9c99ff;
+  --color-white: #ffffff;
+  --color-golden: #f8c625;
+  --color-main: #2a2d30;
   --color-secondary: #55575b;
   --color-gray: #404449;
   --color-background-soft: var(--vt-c-white-soft);
@@ -21,9 +21,11 @@
 
   --section-gap: 160px;
 
+  --opacity-white: rgba(255, 255, 255, 0.5);
+
   --popup-background: rgba(0, 0, 0, 0.5);
-  --color-orange: #D86512;
-  --color-green: #1DB510;
+  --color-orange: #d86512;
+  --color-green: #1db510;
 
   --radius-4: 4px;
   --radius-6: 6px;
@@ -51,18 +53,18 @@ body {
     color 0.5s,
     background-color 0.5s;
   font-family:
-    'Circe',
+    "Circe",
     Inter,
     -apple-system,
     BlinkMacSystemFont,
-    'Segoe UI',
+    "Segoe UI",
     Roboto,
     Oxygen,
     Ubuntu,
     Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
+    "Fira Sans",
+    "Droid Sans",
+    "Helvetica Neue",
     sans-serif;
   font-size: 14px;
   text-rendering: optimizeLegibility;
@@ -70,14 +72,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
-  height: 100%;
 }
 
 #app {
-  height: 100%;
   display: flex;
   flex-direction: column;
   max-width: calc(100% - 40px);
@@ -92,11 +93,6 @@ html, body {
   flex-direction: column;
 }
 
-.mt-16 {
-  margin-top: 16px;
-}
-
 .is-locked-scroll {
   overflow: hidden;
 }
-

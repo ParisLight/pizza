@@ -1,7 +1,6 @@
 <template>
   <div class="current-order">
-    {{ form }}
-    <el-form ref="formRef" :model="form" :rules="formRules">
+    <el-form :ref="setFormRef" :model="form" :rules="formRules">
       <div class="current-order__row">
         <el-form-item prop="payerName" class="current-order__field">
           <base-input v-model="form.payerName" title="имя" placeholder="Введите своё имя" />
@@ -54,7 +53,12 @@
         </div>
         <div class="current-order__row">
           <el-form-item prop="deliveryTime" class="current-order__field">
-            <base-dropdown v-model="form.deliveryTime" title="Время доставки" :list="timeSlots" />
+            <base-dropdown
+              v-model="form.deliveryTime"
+              title="Время доставки"
+              name-item="name"
+              :list="timeSlots"
+            />
           </el-form-item>
         </div>
         <div class="current-order__row">
@@ -67,8 +71,9 @@
         <div class="current-order__row">
           <el-form-item prop="deliveryTime" class="current-order__field">
             <base-dropdown
-              v-model="form.deliveryTime"
+              v-model="form.readyBy"
               title="Приготовить ко времени"
+              name-item="name"
               :list="timeSlots"
             />
           </el-form-item>
@@ -104,29 +109,19 @@ import { useFormatter } from "@/shared/lib"
 import { INPUT_MASK } from "@/shared/config"
 import { type OrderFormValues } from "@/features/order"
 import { DELIVERY_OPTIONS, DeliveryType, PAYMENT_OPTIONS, type TimeSlot } from "@/entities/order"
-import type { FormInstance, FormRules } from "element-plus"
+import type { FormRules } from "element-plus"
+import type { VNodeRef } from "vue"
 
 const props = defineProps<{
   form: OrderFormValues
   timeSlots: TimeSlot[]
   formRules: FormRules<OrderFormValues>
+  setFormRef: VNodeRef
 }>()
-
-const formRef = ref<FormInstance>()
-
-const validateForm = async (): Promise<boolean> => {
-  if (!formRef.value) return false
-
-  return await formRef.value.validate()
-}
 
 const { form, timeSlots, formRules } = toRefs(props)
 
 const { digitalFormat, numberFormat } = useFormatter()
-
-defineExpose({
-  validateForm,
-})
 </script>
 
 <style lang="scss" scoped>
@@ -134,7 +129,6 @@ defineExpose({
   display: flex;
   flex-direction: column;
   row-gap: 16px;
-  margin-top: 28px;
 
   &__row {
     display: flex;

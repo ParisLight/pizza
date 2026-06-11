@@ -1,32 +1,70 @@
-import { useCartModel } from '@/entities/cart'
-import { useUserModel } from '@/entities/user'
-import { useOrderModel } from '@/entities/order'
-import { type OrderFormValues, mapFormToOrder } from "@/features/order"
+import { useCartModel } from "@/entities/cart"
+import { useUserModel } from "@/entities/user"
+import { useOrderModel } from "@/entities/order"
+import { mapFormToOrder, useOrderForm } from "@/features/order"
 
 export const useCheckout = () => {
   const cartModel = useCartModel()
   const orderModel = useOrderModel()
   const userModel = useUserModel()
 
-  const submitOrder = async (form: OrderFormValues) => {
+  const isInProcess = ref(false)
+
+  const { form, formRef, setFormRef, deliverySlots, formRules } = useOrderForm()
+
+  const checkoutOrder = async () => {
+    console.log("checloit")
     const userId = userModel.user?.userId
 
     if (!userId) return
 
     if (!cartModel.items.length) return
 
-    const order = mapFormToOrder(form, userId)
+    if (!formRef.value) return
 
-    const orderId = await orderModel.sendOrder(order)
+    try {
+      await formRef.value.validate()
+    } catch {
+      ElNotification({
+        title: "Ошибка",
+        message: "Проверьте правильность заполненных полей",
+        type: "error",
+      })
 
-    if (!orderId) {
-      console.error("ERROR")
       return
     }
 
-    cartModel.clearCart()
-    await cartModel.syncCart()
+    isInProcess.value = true
+
+    try {
+      const order = mapFormToOrder(form, userId)
+      console.log({ order }, "order_i_get___")
+
+      const orderId = await orderModel.sendOrder(order)
+
+      if (!orderId) {
+        console.error("ERROR")
+        return
+      }
+
+      cartModel.clearCart()
+      await cartModel.syncCart()
+    } catch {
+      ElNotification({
+        title: "Ошибка",
+        message: "Что-то пошло не так",
+        type: "error",
+      })
+    } finally {
+      isInProcess.value = false
+    }
   }
 
-  return { submitOrder }
+  return {
+    checkoutOrder,
+    form,
+    deliverySlots,
+    formRules,
+    setFormRef,
+  }
 }

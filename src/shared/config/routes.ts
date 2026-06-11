@@ -2,7 +2,7 @@ export const ROUTES = {
   mainPage: "/",
   order: "/order",
   profile: "/profile",
-  myOrders: "/orders",
+  myOrders: "/my-orders",
   product: "/product/:productId",
 } as const
 

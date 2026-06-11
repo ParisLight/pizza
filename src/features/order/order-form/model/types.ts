@@ -1,4 +1,4 @@
-import { PaymentType, DeliveryType, type TimeSlot } from "@/entities/order/model/types";
+import { DeliveryType, PaymentType, type TimeSlot } from "@/entities/order/model/types"
 
 export interface OrderFormValues {
   payerName: string
@@ -9,7 +9,7 @@ export interface OrderFormValues {
   dontRingIntercom: boolean
   floor: string
   flat: string
-  readyBy: TimeSlot | null,
-  deliveryTime: TimeSlot | null,
+  readyBy: TimeSlot | null
+  deliveryTime: TimeSlot | null
   orderComment: string
 }

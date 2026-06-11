@@ -7,10 +7,12 @@ import autoImportGlobals from "./.eslintrc-auto-import.json" with { type: "json"
 
 export default defineConfig([
   {
+    ignores: ["dist/**", "node_modules/**"],
+  },
+  {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts,vue}"],
     plugins: { js },
     extends: ["js/recommended"],
-    ignores: ["dist/**", "node_modules/**"],
     languageOptions: {
       globals: { ...globals.browser, ...autoImportGlobals.globals },
     },

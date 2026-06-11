@@ -1,4 +1,4 @@
-import type { TimeSlot } from '../model/types'
+import type { TimeSlot } from "../model/types"
 
 interface CreateDeliverySlotsParams {
   now?: Date
@@ -12,10 +12,7 @@ interface CreateDeliverySlotsParams {
   intervalMinutes?: number
 }
 
-const roundToNextInterval = (
-  date: Date,
-  intervalMinutes: number,
-): Date => {
+const roundToNextInterval = (date: Date, intervalMinutes: number): Date => {
   const result = new Date(date)
 
   result.setSeconds(0)
@@ -39,16 +36,16 @@ const formatTime = (date: Date): string => {
 }
 
 export const createDeliverySlots = ({
-                                      now = new Date(),
+  now = new Date(),
 
-                                      todayStartHour = 11,
-                                      todayEndHour = 21,
+  todayStartHour = 11,
+  todayEndHour = 21,
 
-                                      tomorrowStartHour = 11,
-                                      tomorrowEndHour = 21,
+  tomorrowStartHour = 11,
+  tomorrowEndHour = 21,
 
-                                      intervalMinutes = 30,
-                                    }: CreateDeliverySlotsParams = {}): TimeSlot[] => {
+  intervalMinutes = 30,
+}: CreateDeliverySlotsParams = {}): TimeSlot[] => {
   const slots: TimeSlot[] = []
 
   const currentDate = new Date(now)
@@ -62,9 +59,7 @@ export const createDeliverySlots = ({
   todayEnd.setHours(todayEndHour, 0, 0, 0)
 
   let currentTodaySlot = roundToNextInterval(
-    currentDate > todayStart
-      ? currentDate
-      : todayStart,
+    currentDate > todayStart ? currentDate : todayStart,
     intervalMinutes,
   )
 
@@ -79,9 +74,9 @@ export const createDeliverySlots = ({
     }
 
     slots.push({
-      id: from.toISOString(),
+      value: from.toISOString(),
 
-      name: `${formatTime(from)} - ${formatTime(to)}`,
+      label: `${formatTime(from)} - ${formatTime(to)}`,
 
       from,
       to,
@@ -116,9 +111,9 @@ export const createDeliverySlots = ({
     }
 
     slots.push({
-      id: from.toISOString(),
+      value: from.toISOString(),
 
-      name: `Завтра · ${formatTime(from)} - ${formatTime(to)}`,
+      label: `Завтра · ${formatTime(from)} - ${formatTime(to)}`,
 
       from,
       to,

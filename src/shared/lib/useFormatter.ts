@@ -21,5 +21,11 @@ export const useFormatter = () => {
     return value.replace(/\D/g, "")
   }
 
-  return { numberFormat, digitalFormat, normalizePhone }
+  const localeDateFromISO = (str: string | undefined) => {
+    if (!str) return ""
+
+    return new Date(str).toLocaleDateString()
+  }
+
+  return { numberFormat, localeDateFromISO, digitalFormat, normalizePhone }
 }
