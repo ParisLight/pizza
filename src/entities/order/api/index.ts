@@ -1,23 +1,36 @@
 import { supabase } from "@/shared/api"
-import type { IOrder, IOrderDraft } from "../model"
-import { mapOrderDraftToInsert, mappedOrder } from "../lib/mappers.ts"
+import type { IOrder, IOrderDraft, IOrderItemInput } from "../model"
+import type { OrderWithItemsDTO } from "./dto"
+import { mapOrderDraftToInsert, mapOrderItemsToOrderItemsDTO, mappedOrder } from "../lib/mappers"
 
-export const sendOrder = async (order: IOrderDraft): Promise<null | number> => {
+export const sendOrder = async (
+  order: IOrderDraft,
+  items: IOrderItemInput[],
+): Promise<null | number> => {
   const orderDTOData = mapOrderDraftToInsert(order)
+  const orderItemsDTOData = mapOrderItemsToOrderItemsDTO(items)
 
-  const { data, error } = await supabase.from("orders").insert(orderDTOData).select("id").single()
+  const { data: orderId, error } = await supabase.rpc("create_order", {
+    order_data: orderDTOData,
+    items_data: orderItemsDTOData,
+  })
 
-  if (!data || error) return null
+  if (!orderId || error) return null
 
-  return data.id
+  return orderId
 }
 
 export const fetchOrders = async (userId: number): Promise<IOrder[] | null> => {
   if (!userId) return null
 
-  const { data, error } = await supabase.from("orders").select("*").eq("user_id", userId)
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*, order_items (*)")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .overrideTypes<OrderWithItemsDTO[], { merge: false }>()
 
-  if (error) return null
+  if (error || !data) return null
 
   return data.map((order) => mappedOrder(order))
 }

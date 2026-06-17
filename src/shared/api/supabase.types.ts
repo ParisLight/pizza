@@ -50,19 +50,27 @@ export type Database = {
         Row: {
           created_at: string | null
           id: number
-          user_id: number | null
+          user_id: number
         }
         Insert: {
           created_at?: string | null
           id?: number
-          user_id?: number | null
+          user_id: number
         }
         Update: {
           created_at?: string | null
           id?: number
-          user_id?: number | null
+          user_id?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "carts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       categories: {
         Row: {
@@ -82,6 +90,57 @@ export type Database = {
         }
         Relationships: []
       }
+      order_items: {
+        Row: {
+          base_price: number
+          created_at: string
+          discount_amount: number | null
+          id: number
+          order_id: number
+          product_id: number
+          product_name: string | null
+          quantity: number
+          total_price: number | null
+        }
+        Insert: {
+          base_price: number
+          created_at?: string
+          discount_amount?: number | null
+          id?: number
+          order_id: number
+          product_id: number
+          product_name?: string | null
+          quantity: number
+          total_price?: number | null
+        }
+        Update: {
+          base_price?: number
+          created_at?: string
+          discount_amount?: number | null
+          id?: number
+          order_id?: number
+          product_id?: number
+          product_name?: string | null
+          quantity?: number
+          total_price?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           created_at: string
@@ -89,6 +148,7 @@ export type Database = {
           delivery_time_from: string | null
           delivery_time_to: string | null
           delivery_type: number
+          discount_amount: number | null
           dont_ring_intercom: boolean | null
           flat: number | null
           floor: number | null
@@ -99,6 +159,8 @@ export type Database = {
           payment_type: number
           ready_by_from: string | null
           ready_by_to: string | null
+          subtotal_amount: number | null
+          total_amount: number | null
           user_id: number
         }
         Insert: {
@@ -107,6 +169,7 @@ export type Database = {
           delivery_time_from?: string | null
           delivery_time_to?: string | null
           delivery_type: number
+          discount_amount?: number | null
           dont_ring_intercom?: boolean | null
           flat?: number | null
           floor?: number | null
@@ -117,6 +180,8 @@ export type Database = {
           payment_type: number
           ready_by_from?: string | null
           ready_by_to?: string | null
+          subtotal_amount?: number | null
+          total_amount?: number | null
           user_id: number
         }
         Update: {
@@ -125,6 +190,7 @@ export type Database = {
           delivery_time_from?: string | null
           delivery_time_to?: string | null
           delivery_type?: number
+          discount_amount?: number | null
           dont_ring_intercom?: boolean | null
           flat?: number | null
           floor?: number | null
@@ -135,9 +201,19 @@ export type Database = {
           payment_type?: number
           ready_by_from?: string | null
           ready_by_to?: string | null
+          subtotal_amount?: number | null
+          total_amount?: number | null
           user_id?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "orders_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       products: {
         Row: {
@@ -230,7 +306,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_order: {
+        Args: { items_data: Json; order_data: Json; p_discount_amount?: number }
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never

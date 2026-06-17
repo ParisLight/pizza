@@ -1,21 +1,15 @@
 import { defineStore } from "pinia"
-import type { IOrder, IOrderDraft } from "./types"
+import type { IOrder, IOrderDraft, IOrderItemInput } from "./types"
 import * as OrderApi from "../api"
 
 export const useOrderModel = defineStore("order", {
   state: () => ({
-    // currentOrder: <IOrder>{ todo: draft order
-    //   payerName: "",
-    //   payerNumber: "",
-    //   deliveryType: 1,
-    //   paymentType: 1,
-    // },
     ordersList: [] as IOrder[],
   }),
 
   actions: {
-    async sendOrder(order: IOrderDraft): Promise<number | null> {
-      return await OrderApi.sendOrder(order)
+    async sendOrder(order: IOrderDraft, orderItems: IOrderItemInput[]): Promise<number | null> {
+      return await OrderApi.sendOrder(order, orderItems)
     },
     async loadOrders(userId: number | undefined) {
       if (!userId) return

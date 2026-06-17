@@ -1,6 +1,6 @@
 import { useCartModel } from "@/entities/cart"
 import { useUserModel } from "@/entities/user"
-import { useOrderModel } from "@/entities/order"
+import { type IOrderItemInput, useOrderModel } from "@/entities/order"
 import { mapFormToOrderDraft, useOrderForm } from "@/features/order"
 
 export const useCheckout = () => {
@@ -37,16 +37,24 @@ export const useCheckout = () => {
 
     try {
       const order = mapFormToOrderDraft(form, userId)
-      console.log({ order }, "order_i_get___")
+      const orderItems: IOrderItemInput[] = cartModel.items.map((item) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+      }))
 
-      const orderId = await orderModel.sendOrder(order)
+      const orderId = await orderModel.sendOrder(order, orderItems)
 
       if (!orderId) {
-        console.error("ERROR")
+        ElNotification({
+          title: "Ошибка",
+          message: "Что-то пошло не так",
+          type: "error",
+        })
         return
       }
 
       cartModel.clearCart()
+      await Promise.allSettled([orderModel.loadOrders(userId), cartModel.syncCart()])
       await cartModel.syncCart()
     } catch {
       ElNotification({

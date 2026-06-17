@@ -43,4 +43,23 @@ export interface IOrderDraft {
 export interface IOrder extends IOrderDraft {
   orderId: number
   userId: number
+  createdAt: string
+  orderItems: IOrderLineItem[] | null
+  totalAmount: number
+  discountAmount: number
+}
+
+export interface IOrderLineItem {
+  orderId: number
+  createdAt: string
+  quantity: number
+  basePrice: number
+  productName: string
+  discountAmount: number
+  totalPrice: number
+}
+
+export interface IOrderItemInput {
+  productId: number
+  quantity: number
 }

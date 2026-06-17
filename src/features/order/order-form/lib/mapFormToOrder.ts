@@ -2,7 +2,7 @@ import { type IOrderDraft, normalizeOrderDraft } from "@/entities/order"
 import type { OrderFormValues } from "@/features/order"
 
 export const mapFormToOrderDraft = (form: OrderFormValues, userId: number): IOrderDraft => {
-  const toISO = (date: Date) => new Date(date).toISOString()
+  const toISO = (date: Date) => date.toISOString()
 
   const draft: IOrderDraft = {
     userId,

@@ -24,8 +24,13 @@
           <span class="opacity-text">Детали</span>
         </div>
         <div class="order-card__row-value">
-          <span>Пицца пепперони - 2шт,</span> <br />
-          <span>Напиток моча осла - 1шт</span>
+          <span
+            v-for="(position, index) in order.orderItems"
+            :key="`${position.orderId}-${index}`"
+            class="order-card__position"
+          >
+            {{ position.productName }} - {{ position.quantity }}шт <br />
+          </span>
         </div>
       </div>
     </div>
@@ -35,7 +40,7 @@
           <span class="opacity-text">Сумма</span>
         </div>
         <div class="order-card__row-value">
-          <span class="golden-text bold">1199Р</span>
+          <span class="golden-text bold">{{ order.totalAmount }} ₽</span>
         </div>
       </div>
     </div>

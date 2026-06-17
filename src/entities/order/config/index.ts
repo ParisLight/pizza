@@ -14,10 +14,10 @@ export const DELIVERY_OPTIONS = [
 export const PAYMENT_OPTIONS = [
   {
     id: PaymentType.CARD,
-    name: "Карта",
+    name: "карта",
   },
   {
     id: PaymentType.CASH,
-    name: "Наличные",
+    name: "наличные",
   },
 ]

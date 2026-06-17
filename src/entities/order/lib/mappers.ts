@@ -1,5 +1,5 @@
-import type { IOrder, IOrderDraft } from "../model"
-import type { OrderDTO, OrderInsertDTO } from "../api/dto"
+import type { IOrder, IOrderDraft, IOrderItemInput, IOrderLineItem } from "../model"
+import type { OrderInsertDTO, OrderItemsDTO, OrderLineDTO, OrderWithItemsDTO } from "../api/dto"
 import { normalizeOrderDraft } from "../lib"
 
 export const mapOrderDraftToInsert = (order: IOrderDraft): OrderInsertDTO => {
@@ -23,7 +23,30 @@ export const mapOrderDraftToInsert = (order: IOrderDraft): OrderInsertDTO => {
   }
 }
 
-export const mappedOrder = (order: OrderDTO): IOrder => {
+export const mapOrderItemsToOrderItemsDTO = (
+  orderItems: IOrderItemInput[] | undefined,
+): OrderItemsDTO[] => {
+  if (!orderItems) return []
+
+  return orderItems.map((item) => ({
+    quantity: item.quantity,
+    product_id: item.productId,
+  }))
+}
+
+export const mapOrderLineDTOToOrderLine = (orderLine: OrderLineDTO): IOrderLineItem => {
+  return {
+    createdAt: orderLine.created_at,
+    orderId: orderLine.order_id,
+    basePrice: orderLine.base_price,
+    quantity: orderLine.quantity,
+    discountAmount: orderLine.discount_amount ?? 0,
+    productName: orderLine.product_name ?? "",
+    totalPrice: orderLine.total_price ?? 0,
+  }
+}
+
+export const mappedOrder = (order: OrderWithItemsDTO): IOrder => {
   return {
     createdAt: order.created_at,
     userId: order.user_id,
@@ -41,5 +64,8 @@ export const mappedOrder = (order: OrderDTO): IOrder => {
     payerName: order.payer_name ?? "",
     flat: order.flat,
     floor: order.floor,
+    discountAmount: order.discount_amount || 0,
+    totalAmount: order.total_amount || 0,
+    orderItems: order.order_items.map((item) => mapOrderLineDTOToOrderLine(item)),
   }
 }
