@@ -12,7 +12,12 @@
       :time-slots="deliverySlots"
       :set-form-ref="setFormRef"
     />
-    <base-btn class="checkout-order" color="var(--color-purple)" @click.stop="checkoutOrder">
+    <base-btn
+      v-if="cartModel.totalQuantityCart"
+      class="checkout-order"
+      color="var(--color-purple)"
+      @click.stop="checkoutOrder"
+    >
       <div class="checkout-order__content">
         <span class="checkout-order__name">Заказать</span>
         <div class="checkout-order__total-price">
@@ -27,18 +32,20 @@
 import { CartList } from "@/widgets/cart-list"
 import { OrderForm, useCheckout } from "@/features/order"
 import { useCartModel } from "@/entities/cart"
-import { useUserModel } from "@/entities/user"
 import { BaseBtn } from "@/shared/ui/base-btn"
 import { useCartTotal } from "@/features/cart"
+import { useProductModel } from "@/entities/product"
 
-const userModel = useUserModel()
 const cartModel = useCartModel()
+const productModel = useProductModel()
 
 const { cartTotal } = useCartTotal()
 
 onMounted(async () => {
-  if (!cartModel.cartId && userModel.user?.userId) {
-    await cartModel.fetchCart(userModel.user.userId)
+  const cartProductIds = cartModel.items.map((item) => item.productId)
+
+  if (cartProductIds.length !== 0) {
+    await productModel.ensureProductsByIds(cartProductIds)
   }
 })
 

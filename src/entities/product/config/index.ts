@@ -1,0 +1,1 @@
+export const FETCH_PRODUCTS_LIMIT = 20

@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { DefaultLayout } from "@/shared/ui/layouts"
-import TheHeader from "@/widgets/header/ui/TheHeader.vue"
+import { TheHeader } from "@/widgets/header"
 import { PopupsSystem } from "@/widgets/popups-system"
 import { useUserModel } from "@/entities/user"
 import { useCartModel } from "@/entities/cart"
@@ -43,16 +43,16 @@ const productModel = useProductModel()
 const initializeApp = async () => {
   await userModel.fetchUserById(import.meta.env.VITE_USER_ID)
 
-  if(!userModel.user) return
+  if (!userModel.user) return
 
   await categoryModel.fetchCategories()
 
+  isLoadingApp.value = false
+
   await Promise.allSettled([
-    productModel.fetchAllProducts(),
+    productModel.fetchProductsByPage(categoryModel.idActiveCategory),
     cartModel.fetchCart(userModel.user.userId),
   ])
-
-  isLoadingApp.value = false
 }
 
 onBeforeMount(async () => {

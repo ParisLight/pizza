@@ -123,6 +123,5 @@ export const createDeliverySlots = ({
 
     currentTomorrowSlot = to
   }
-  console.log({ slots }, "get_slots___")
   return slots
 }

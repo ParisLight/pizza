@@ -1,12 +1,12 @@
-import { defineStore } from "pinia";
-import type { ICategory } from "./types";
+import { defineStore } from "pinia"
+import type { ICategory } from "./types"
 import * as CategoryApi from "../api"
 
-export const useCategoryModel = defineStore( 'category', {
+export const useCategoryModel = defineStore("category", {
   state: () => ({
-      idActiveCategory: 1,
-      categories: {} as Record<number, ICategory>
-    }),
+    idActiveCategory: 1,
+    categories: {} as Record<number, ICategory>,
+  }),
 
   actions: {
     async fetchCategories() {
@@ -15,5 +15,5 @@ export const useCategoryModel = defineStore( 'category', {
     setActiveCategory(categoryId: number) {
       this.idActiveCategory = categoryId ? categoryId : 1
     },
-  }
+  },
 })

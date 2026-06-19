@@ -22,11 +22,14 @@
 import { Card as CategoryCard, useCategoryModel } from "@/entities/category"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import "swiper/css"
+import { useProductModel } from "@/entities/product"
 
 const categoryModel = useCategoryModel()
+const productModel = useProductModel()
 
-const onClickCategory = (id: number) => {
+const onClickCategory = async (id: number) => {
   categoryModel.setActiveCategory(id)
+  await productModel.fetchProductsByPage(id)
 }
 </script>
 
