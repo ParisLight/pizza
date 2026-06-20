@@ -6,17 +6,25 @@
       </div>
     </div>
     <div class="orders-list mt-16">
-      <order-card v-for="order in orderModel.ordersList" :key="order.orderId" :order="order" />
+      <template v-if="isSkeleton(orderModel.loadingStatus)">
+        <order-card-skeleton v-for="item in 3" :key="item" />
+      </template>
+      <template v-else>
+        <order-card v-for="order in orderModel.ordersList" :key="order.orderId" :order="order" />
+      </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { OrderCard, useOrderModel } from "@/entities/order"
+import { OrderCard, OrderCardSkeleton, useOrderModel } from "@/entities/order"
 import { useUserModel } from "@/entities/user"
+import { useAsyncStatus } from "@/shared/lib"
 
 const orderModel = useOrderModel()
 const userModel = useUserModel()
+
+const { isSkeleton } = useAsyncStatus()
 
 onMounted(async () => {
   if (orderModel.ordersList.length === 0 && userModel.user?.userId) {
