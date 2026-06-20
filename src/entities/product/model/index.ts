@@ -1,59 +1,66 @@
 import { defineStore } from "pinia"
-import type { IProduct } from "./types"
+import type { CatalogCategoryMeta, IProduct } from "./types"
 import { ProductApi } from "../index"
 import { FETCH_PRODUCTS_LIMIT } from "../config"
-
-type CatalogCategoryMeta = {
-  page: number
-  hasMore: boolean
-}
+import { type PaginatedStatus } from "@/shared/config"
+import { useAsyncStatus } from "@/shared/lib"
 
 export const useProductModel = defineStore("product", {
   state: () => ({
     products: {} as Record<number, IProduct>,
+
     categoryProducts: [] as Record<number, number[]>,
     catalogMeta: {} as Record<number, CatalogCategoryMeta>,
-    loadingCategories: {} as Record<number, boolean>,
+
+    categoryStatus: {} as Record<number, PaginatedStatus>,
+
     searchQuery: "",
   }),
+  getters: {
+    getCategoryStatus:
+      (state) =>
+      (categoryId: number): PaginatedStatus | null => {
+        return state.categoryStatus?.[categoryId] ?? null
+      },
+  },
   actions: {
     async fetchProductsByPage(categoryId: number) {
-      if (this.loadingCategories[categoryId]) return
+      const { startFetch, finishFetch, canFetch } = useAsyncStatus()
 
-      if (!this.catalogMeta[categoryId]) {
-        this.catalogMeta[categoryId] = {
-          page: 1,
-          hasMore: true,
-        }
+      const status = this.categoryStatus[categoryId] ?? "idle"
+      const hasData = !!this.categoryProducts?.[categoryId]?.length
+
+      if (!canFetch(status)) return
+
+      const isFirstLoad = !hasData
+
+      this.categoryStatus[categoryId] = startFetch(status, hasData)
+
+      try {
+        this.catalogMeta[categoryId] ??= { page: 1, hasMore: true }
+
+        const currentCatalog = this.catalogMeta[categoryId]
+
+        const response = await ProductApi.fetchProducts(
+          categoryId,
+          currentCatalog.page,
+          FETCH_PRODUCTS_LIMIT,
+        )
+
+        currentCatalog.hasMore = response.length === FETCH_PRODUCTS_LIMIT
+        currentCatalog.page++
+
+        response.forEach((product: IProduct) => {
+          this.products[product.id] ??= product
+        })
+
+        this.categoryProducts[categoryId] ??= []
+        this.categoryProducts[categoryId].push(...response.map((product: IProduct) => product.id))
+
+        this.categoryStatus[categoryId] = finishFetch(response.length, isFirstLoad)
+      } catch {
+        this.categoryStatus[categoryId] = "error"
       }
-
-      const currentCatalog = this.catalogMeta[categoryId]
-
-      if (!currentCatalog.hasMore) return
-
-      this.loadingCategories[categoryId] = true
-
-      const response = await ProductApi.fetchProducts(
-        categoryId,
-        currentCatalog.page,
-        FETCH_PRODUCTS_LIMIT,
-      )
-
-      this.loadingCategories[categoryId] = false
-
-      currentCatalog.hasMore = response.length === FETCH_PRODUCTS_LIMIT
-
-      currentCatalog.page++
-
-      response.forEach((product: IProduct) => {
-        this.products[product.id] ??= product
-      })
-
-      this.categoryProducts[categoryId] ??= []
-
-      const newIds = response.map((product: IProduct) => product.id)
-
-      this.categoryProducts[categoryId].push(...newIds)
     },
 
     async ensureProductsByIds(ids: number[]) {

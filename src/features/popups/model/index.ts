@@ -10,7 +10,7 @@ export const usePopupModel = defineStore("popup", {
   }),
 
   actions: {
-    openPopup(name: string, props?: Record<string, any>) {
+    openPopup(name: string, props?: Record<string, unknown>) {
       const id = Math.random().toString(36).substring(2)
 
       if (!id) return

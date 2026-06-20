@@ -1,8 +1,8 @@
 export interface INutrition {
-    proteins: number
-    fats: number
-    carbs: number
-    kcal: number
+  proteins: number
+  fats: number
+  carbs: number
+  kcal: number
 }
 
 export interface IProduct {
@@ -14,4 +14,9 @@ export interface IProduct {
   price: number | null
   nutrition: INutrition
   categoryId: number
+}
+
+export type CatalogCategoryMeta = {
+  page: number
+  hasMore: boolean
 }

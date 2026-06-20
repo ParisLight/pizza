@@ -1,5 +1,5 @@
 export interface IPopupState {
-  id: string ;
-  name: string;
-  props: any;
+  id: string
+  name: string
+  props: any
 }

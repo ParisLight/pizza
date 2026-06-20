@@ -1,2 +1,3 @@
-export * from "./inputMasks.ts"
-export * from "./routes.ts"
+export * from "./inputMasks"
+export * from "./routes"
+export * from "./types"

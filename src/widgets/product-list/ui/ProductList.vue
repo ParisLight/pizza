@@ -3,7 +3,7 @@
     <transition-group name="fade-group">
       <el-col
         :span="12"
-        v-for="productId in productModel.categoryProducts[categoryModel.idActiveCategory]"
+        v-for="productId in productModel.categoryProducts?.[categoryModel.idActiveCategory] ?? []"
         :key="productId"
       >
         <ProductCard
@@ -44,13 +44,7 @@ const onImgClick = (id: number) => {
 const sentinelRef = ref<HTMLElement | undefined>()
 
 useInfinityScroll(sentinelRef, { root: null, rootMargin: "500px" }, async () => {
-  const categoryId = categoryModel.idActiveCategory
-
-  const meta = productModel.catalogMeta[categoryId]
-
-  if (!meta?.hasMore || productModel.loadingCategories[categoryId]) return
-
-  await productModel.fetchProductsByPage(categoryId)
+  await productModel.fetchProductsByPage(categoryModel.idActiveCategory)
 })
 </script>
 
