@@ -1,6 +1,6 @@
 <template>
   <el-row class="row products-list" :gutter="16">
-    <template v-if="isSkeleton(productModel.categoryStatus?.[categoryModel.idActiveCategory])">
+    <template v-if="isSkeleton(productModel.getCategoryStatus(categoryModel.idActiveCategory))">
       <el-col :span="12" v-for="n in FETCH_PRODUCTS_LIMIT" :key="n">
         <skeleton-product-card />
       </el-col>

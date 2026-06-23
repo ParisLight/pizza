@@ -3,14 +3,6 @@ import { mappedProducts } from "../lib"
 import type { IProduct } from "@/entities/product"
 import type { ProductDTO } from "@/entities/product/api/dto"
 
-export const fetchAllProducts = async (): Promise<IProduct[]> => {
-  const { data, error } = await supabase.from("products").select("*")
-
-  if (error || !data) return []
-
-  return mappedProducts(data as ProductDTO[])
-}
-
 export const fetchProducts = async (
   categoryId: number,
   page: number = 1,

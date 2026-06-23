@@ -29,8 +29,9 @@ export const useProductModel = defineStore("product", {
 
       const status = this.categoryStatus[categoryId] ?? "idle"
       const hasData = !!this.categoryProducts?.[categoryId]?.length
+      const hasMore = this.catalogMeta[categoryId]?.hasMore ?? true
 
-      if (!canFetch(status, hasData)) return
+      if (!canFetch(status, hasMore)) return
 
       if (this.catalogMeta?.[categoryId]?.hasMore === false) return
 

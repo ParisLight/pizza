@@ -2,7 +2,7 @@ import type { PaginatedStatus } from "../config"
 import { useAsyncStatus } from "./useAsyncStatus"
 
 export const useAsyncPaginatedStatus = () => {
-  const { finishFetch, isSkeleton } = useAsyncStatus()
+  const { finishFetch } = useAsyncStatus()
 
   const canFetch = (status: PaginatedStatus, hasMore = true) => {
     if (status === "loading" || status === "loadingMore") return false
@@ -13,6 +13,10 @@ export const useAsyncPaginatedStatus = () => {
   const startFetch = (status: PaginatedStatus, hasData: boolean): PaginatedStatus => {
     if (status === "idle" || (status === "error" && !hasData)) return "loading"
     return "loadingMore"
+  }
+
+  const isSkeleton = (status: PaginatedStatus) => {
+    return status === "loading"
   }
 
   const isLoadingMore = (status: PaginatedStatus) => {
