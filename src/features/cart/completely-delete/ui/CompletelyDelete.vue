@@ -2,7 +2,7 @@
   <div class="confirmation-window completely-delete__confirmation-window">
     <div class="confirmation-window__title">
       <span>
-        точно удалить <br>
+        точно удалить <br />
         позицию?
       </span>
     </div>
@@ -14,11 +14,7 @@
       >
         да
       </el-button>
-      <el-button
-        class="confirmation-window__btn"
-        color="var(--color-gray)"
-        @click="onCancelClick"
-      >
+      <el-button class="confirmation-window__btn" color="var(--color-gray)" @click="onCancelClick">
         отмена
       </el-button>
     </div>
@@ -26,18 +22,18 @@
 </template>
 
 <script setup lang="ts">
-import { useCompletelyDeleteActions } from "../model/useCompletelyDeleteActions"
+import { useCompletelyDeleteActions } from "@/features/cart"
 
 const props = defineProps<{
   productId: number
 }>()
 
 const emit = defineEmits<{
-  (e: 'cancel'): void
+  (e: "cancel"): void
 }>()
 
 const onCancelClick = () => {
-    emit('cancel')
+  emit("cancel")
 }
 
 const { completelyDelete } = useCompletelyDeleteActions()

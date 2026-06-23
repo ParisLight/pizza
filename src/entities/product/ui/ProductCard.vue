@@ -5,7 +5,13 @@
       @click="onClickImg"
       :class="{ 'product__img--clickable': direction === 'default' }"
     >
-      <img v-if="product.img" :src="product.img" :alt="product.name" />
+      <img
+        v-if="product.img"
+        :src="product.img"
+        :alt="product.name"
+        loading="lazy"
+        decoding="async"
+      />
     </div>
 
     <div class="product__content">

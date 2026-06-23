@@ -2,7 +2,7 @@
   <div class="cart-list">
     <div class="cart-list__list">
       <transition-group name="fade-group">
-        <CartItem
+        <cart-item
           class="cart-list__cart-item"
           v-for="cartItem in cartDetailedItems"
           :key="cartItem.product.id"
@@ -10,9 +10,9 @@
           @on-img-click="onImgCartItemClick"
         >
           <template #action>
-            <ChangeQuantity :product="cartItem.product" />
+            <change-quantity :product="cartItem.product" />
             <transition name="fade" mode="out-in">
-              <CompletelyDelete
+              <completely-delete
                 v-if="isDeleteVisible(cartItem.product.id)"
                 class="cart-list__completely-delete"
                 :product-id="cartItem.product.id"
@@ -26,7 +26,7 @@
               <img src="@/assets/images/delete-icon.svg" alt="delete" />
             </div>
           </template>
-        </CartItem>
+        </cart-item>
       </transition-group>
     </div>
   </div>

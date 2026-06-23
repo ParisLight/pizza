@@ -1,7 +1,7 @@
 <template>
   <el-row class="row products-list" :gutter="16">
     <template v-if="isSkeleton(productModel.categoryStatus?.[categoryModel.idActiveCategory])">
-      <el-col :span="12" v-for="n in 12" :key="n">
+      <el-col :span="12" v-for="n in FETCH_PRODUCTS_LIMIT" :key="n">
         <skeleton-product-card />
       </el-col>
     </template>
@@ -32,7 +32,12 @@
 </template>
 
 <script setup lang="ts">
-import { ProductCard, SkeletonProductCard, useProductModel } from "@/entities/product"
+import {
+  FETCH_PRODUCTS_LIMIT,
+  ProductCard,
+  SkeletonProductCard,
+  useProductModel,
+} from "@/entities/product"
 import { ChangeQuantity } from "@/features/cart"
 import { useCategoryModel } from "@/entities/category"
 import { usePopupModel } from "@/features/popups"

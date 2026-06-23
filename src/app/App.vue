@@ -20,7 +20,6 @@
 <script setup lang="ts">
 import { DefaultLayout } from "@/shared/ui/layouts"
 import { TheHeader } from "@/widgets/header"
-import { PopupsSystem } from "@/widgets/popups-system"
 import { useUserModel } from "@/entities/user"
 import { useCartModel } from "@/entities/cart"
 import { useProductModel } from "@/entities/product"
@@ -28,6 +27,10 @@ import { useCategoryModel } from "@/entities/category"
 import { BaseSpinner } from "@/shared/ui/base-spinner"
 
 const route = useRoute()
+
+const PopupsSystem = defineAsyncComponent(() =>
+  import("@/widgets/popups-system").then((m) => m.PopupsSystem),
+)
 
 const layout = computed(() => {
   return route.meta.layout || DefaultLayout
@@ -45,11 +48,10 @@ const initializeApp = async () => {
 
   if (!userModel.user) return
 
-  await categoryModel.fetchCategories()
-
   isLoadingApp.value = false
 
   await Promise.allSettled([
+    categoryModel.fetchCategories(),
     productModel.fetchProductsByPage(categoryModel.idActiveCategory),
     cartModel.fetchCart(userModel.user.userId),
   ])
