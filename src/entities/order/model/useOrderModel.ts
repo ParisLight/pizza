@@ -1,13 +1,13 @@
 import { defineStore } from "pinia"
 import type { IOrder, IOrderDraft, IOrderItemInput } from "./types"
 import * as OrderApi from "../api"
-import type { PaginatedStatus } from "@/shared/config"
+import type { LoadingStatus } from "@/shared/config"
 import { useAsyncStatus } from "@/shared/lib"
 
 export const useOrderModel = defineStore("order", {
   state: () => ({
     ordersList: [] as IOrder[],
-    loadingStatus: "idle" as PaginatedStatus,
+    loadingStatus: "idle" as LoadingStatus,
   }),
 
   actions: {
@@ -25,7 +25,7 @@ export const useOrderModel = defineStore("order", {
 
       const isFirstLoad = !hasData
 
-      this.loadingStatus = startFetch(this.loadingStatus, hasData)
+      this.loadingStatus = startFetch()
 
       try {
         const orders = await OrderApi.fetchOrders(userId)

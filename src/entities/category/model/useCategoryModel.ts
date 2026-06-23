@@ -1,14 +1,14 @@
 import { defineStore } from "pinia"
 import type { ICategory } from "./types.ts"
 import * as CategoryApi from "../api"
-import type { PaginatedStatus } from "@/shared/config"
+import type { LoadingStatus } from "@/shared/config"
 import { useAsyncStatus } from "@/shared/lib"
 
 export const useCategoryModel = defineStore("category", {
   state: () => ({
     idActiveCategory: 1,
     categories: {} as Record<number, ICategory>,
-    loadingStatus: "idle" as PaginatedStatus,
+    loadingStatus: "idle" as LoadingStatus,
   }),
 
   actions: {
@@ -20,7 +20,7 @@ export const useCategoryModel = defineStore("category", {
       const hasData = !!Object.keys(this.categories)?.length
       const isFirstLoad = !hasData
 
-      this.loadingStatus = startFetch(this.loadingStatus, hasData)
+      this.loadingStatus = startFetch()
 
       try {
         this.categories = await CategoryApi.fetchCategories()

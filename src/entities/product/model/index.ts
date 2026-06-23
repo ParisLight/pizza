@@ -3,7 +3,7 @@ import type { CatalogCategoryMeta, IProduct } from "./types"
 import { ProductApi } from "../index"
 import { FETCH_PRODUCTS_LIMIT } from "../config"
 import { type PaginatedStatus } from "@/shared/config"
-import { useAsyncStatus } from "@/shared/lib"
+import { useAsyncPaginatedStatus } from "@/shared/lib"
 
 export const useProductModel = defineStore("product", {
   state: () => ({
@@ -19,18 +19,18 @@ export const useProductModel = defineStore("product", {
   getters: {
     getCategoryStatus:
       (state) =>
-      (categoryId: number): PaginatedStatus | null => {
-        return state.categoryStatus?.[categoryId] ?? null
+      (categoryId: number): PaginatedStatus => {
+        return state.categoryStatus?.[categoryId] ?? "idle"
       },
   },
   actions: {
     async fetchProductsByPage(categoryId: number) {
-      const { startFetch, finishFetch, canFetch } = useAsyncStatus()
+      const { startFetch, finishFetch, canFetch } = useAsyncPaginatedStatus()
 
       const status = this.categoryStatus[categoryId] ?? "idle"
       const hasData = !!this.categoryProducts?.[categoryId]?.length
 
-      if (!canFetch(status)) return
+      if (!canFetch(status, hasData)) return
 
       if (this.catalogMeta?.[categoryId]?.hasMore === false) return
 

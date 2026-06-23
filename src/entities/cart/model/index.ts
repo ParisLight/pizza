@@ -1,14 +1,14 @@
 import { defineStore } from "pinia"
 import { CartApi } from "../index"
 import type { ICartItem } from "./types"
-import type { PaginatedStatus } from "@/shared/config"
+import type { LoadingStatus } from "@/shared/config"
 import { useAsyncStatus } from "@/shared/lib"
 
 export const useCartModel = defineStore("cart", {
   state: () => ({
     items: [] as ICartItem[],
     cartId: null as number | null,
-    loadingStatus: "idle" as PaginatedStatus,
+    loadingStatus: "idle" as LoadingStatus,
   }),
 
   actions: {
@@ -20,7 +20,7 @@ export const useCartModel = defineStore("cart", {
       const hasData = !!this.items.length
       const isFirstLoad = !hasData
 
-      this.loadingStatus = startFetch(this.loadingStatus, hasData)
+      this.loadingStatus = startFetch()
 
       try {
         const cartIdOutput = await CartApi.fetchCartId(userId)

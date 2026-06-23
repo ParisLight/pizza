@@ -41,7 +41,7 @@ import {
 import { ChangeQuantity } from "@/features/cart"
 import { useCategoryModel } from "@/entities/category"
 import { usePopupModel } from "@/features/popups"
-import { useAsyncStatus, useInfinityScroll } from "@/shared/lib"
+import { useAsyncPaginatedStatus, useInfinityScroll } from "@/shared/lib"
 
 const productModel = useProductModel()
 const categoryModel = useCategoryModel()
@@ -59,7 +59,7 @@ useInfinityScroll(sentinelRef, { root: null, rootMargin: "500px" }, async () => 
   await productModel.fetchProductsByPage(categoryModel.idActiveCategory)
 })
 
-const { isSkeleton } = useAsyncStatus()
+const { isSkeleton } = useAsyncPaginatedStatus()
 </script>
 
 <style lang="scss" scoped>
