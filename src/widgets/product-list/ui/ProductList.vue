@@ -1,10 +1,14 @@
 <template>
   <el-row class="row products-list" :gutter="16">
-    <template v-if="isSkeleton(productModel.getCategoryStatus(categoryModel.idActiveCategory))">
+    <template v-if="isSkeleton(loadingStatus)">
       <el-col :span="12" v-for="n in FETCH_PRODUCTS_LIMIT" :key="n">
         <skeleton-product-card />
       </el-col>
     </template>
+    <base-empty-plug
+      v-else-if="loadingStatus === 'empty'"
+      class="products-list__empty"
+    />
     <template v-else>
       <transition-group name="fade-group">
         <el-col
@@ -42,6 +46,7 @@ import { ChangeQuantity } from "@/features/cart"
 import { useCategoryModel } from "@/entities/category"
 import { usePopupModel } from "@/features/popups"
 import { useAsyncPaginatedStatus, useInfinityScroll } from "@/shared/lib"
+import { BaseEmptyPlug } from "@/shared/ui/base-empty-plug"
 
 const productModel = useProductModel()
 const categoryModel = useCategoryModel()
@@ -60,6 +65,8 @@ useInfinityScroll(sentinelRef, { root: null, rootMargin: "500px" }, async () => 
 })
 
 const { isSkeleton } = useAsyncPaginatedStatus()
+
+const loadingStatus = computed(() => productModel.getCategoryStatus(categoryModel.idActiveCategory))
 </script>
 
 <style lang="scss" scoped>
@@ -69,6 +76,9 @@ const { isSkeleton } = useAsyncPaginatedStatus()
 }
 
 .products-list {
+  &__empty {
+    margin: 24px auto;
+  }
   &__item {
     height: 100%;
   }

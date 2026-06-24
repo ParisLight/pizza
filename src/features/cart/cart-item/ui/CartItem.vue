@@ -1,5 +1,5 @@
 <template>
-  <ProductCard
+  <product-card-row
     class="cart-item__product-card"
     :product="product"
     :category-name="categoryModel.categories[product.categoryId]?.name || ''"
@@ -9,11 +9,11 @@
     <template #action>
       <slot name="action"></slot>
     </template>
-  </ProductCard>
+  </product-card-row>
 </template>
 
 <script setup lang="ts">
-import { type IProduct, ProductCard } from "@/entities/product"
+import { type IProduct, ProductCardRow } from "@/entities/product"
 import { useCategoryModel } from "@/entities/category"
 
 const categoryModel = useCategoryModel()

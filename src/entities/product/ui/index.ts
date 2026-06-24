@@ -1,2 +1,2 @@
-export { default as ProductCard } from "./ProductCard.vue"
-export { default as SkeletonProductCard } from "./SkeletonProductCard.vue"
+export * from "./ProductCard"
+export * from "./ProductCardRow"

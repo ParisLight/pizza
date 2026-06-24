@@ -1,6 +1,6 @@
 export type { IProduct, INutrition } from "./model/types"
 export { useProductModel } from "./model"
 export { mappedProducts } from "./lib"
-export { ProductCard, SkeletonProductCard } from "./ui"
+export * from "./ui"
 export * as ProductApi from "./api"
 export * from "./config"

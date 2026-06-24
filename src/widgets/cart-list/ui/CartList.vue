@@ -1,45 +1,56 @@
 <template>
   <div class="cart-list">
     <div class="cart-list__list">
-      <transition-group name="fade-group">
-        <cart-item
-          class="cart-list__cart-item"
-          v-for="cartItem in cartDetailedItems"
-          :key="cartItem.product.id"
-          :product="cartItem.product"
-          @on-img-click="onImgCartItemClick"
-        >
-          <template #action>
-            <change-quantity :product="cartItem.product" />
-            <transition name="fade" mode="out-in">
-              <completely-delete
-                v-if="isDeleteVisible(cartItem.product.id)"
-                class="cart-list__completely-delete"
-                :product-id="cartItem.product.id"
-                @cancel="toggleDeleteVisibility(cartItem.product.id)"
-              />
-            </transition>
-            <div
-              class="cart-list__cart-item-delete"
-              @click="toggleDeleteVisibility(cartItem.product.id)"
-            >
-              <img src="@/assets/images/delete-icon.svg" alt="delete" />
-            </div>
-          </template>
-        </cart-item>
-      </transition-group>
+      <template v-if="isSkeleton(cartModel.loadingStatus)">
+        <skeleton-product-card-row v-for="n in 2" :key="n" />
+      </template>
+      <template v-else>
+        <transition-group name="fade-group">
+          <cart-item
+            class="cart-list__cart-item"
+            v-for="cartItem in cartDetailedItems"
+            :key="cartItem.product.id"
+            :product="cartItem.product"
+            @img-click="onImgCartItemClick"
+          >
+            <template #action>
+              <change-quantity :product="cartItem.product" />
+              <transition name="fade" mode="out-in">
+                <completely-delete
+                  v-if="isDeleteVisible(cartItem.product.id)"
+                  class="cart-list__completely-delete"
+                  :product-id="cartItem.product.id"
+                  @cancel="toggleDeleteVisibility(cartItem.product.id)"
+                />
+              </transition>
+              <div
+                class="cart-list__cart-item-delete"
+                @click="toggleDeleteVisibility(cartItem.product.id)"
+              >
+                <img src="@/assets/images/delete-icon.svg" alt="delete" />
+              </div>
+            </template>
+          </cart-item>
+        </transition-group>
+      </template>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { type IProduct } from "@/entities/product"
+import { type IProduct, SkeletonProductCardRow } from "@/entities/product"
 import { useProductCartList } from "../model/useProductCartList"
 import { useConfirmationCompletelyDelete } from "../model/useConfirmationCompletelyDelete"
 import { CartItem, ChangeQuantity, CompletelyDelete } from "@/features/cart"
 import { usePopupModel } from "@/features/popups"
+import { useCartModel } from "@/entities/cart"
+import { useAsyncStatus } from "@/shared/lib"
 
 const popupModel = usePopupModel()
+
+const cartModel = useCartModel()
+
+const { isSkeleton } = useAsyncStatus()
 
 const { cartDetailedItems } = useProductCartList()
 
