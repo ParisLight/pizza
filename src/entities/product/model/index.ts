@@ -33,8 +33,6 @@ export const useProductModel = defineStore("product", {
 
       if (!canFetch(status, hasMore)) return
 
-      if (this.catalogMeta?.[categoryId]?.hasMore === false) return
-
       const isFirstLoad = !hasData
 
       this.categoryStatus[categoryId] = startFetch(status, hasData)

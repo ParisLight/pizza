@@ -35,6 +35,7 @@
     </template>
     <div ref="sentinelRef" class="sentinel"></div>
   </el-row>
+  <base-spinner v-if="isLoadingMore(loadingStatus)" class="products-list__spinner" />
 </template>
 
 <script setup lang="ts">
@@ -48,6 +49,7 @@ import { ChangeQuantity } from "@/features/cart"
 import { useCategoryModel } from "@/entities/category"
 import { usePopupModel } from "@/features/popups"
 import { useAsyncPaginatedStatus, useInfinityScroll } from "@/shared/lib"
+import { BaseSpinner } from "@/shared/ui/base-spinner"
 
 const productModel = useProductModel()
 const categoryModel = useCategoryModel()
@@ -65,7 +67,7 @@ useInfinityScroll(sentinelRef, { root: null, rootMargin: "500px" }, async () => 
   await productModel.fetchProductsByPage(categoryModel.idActiveCategory)
 })
 
-const { isSkeleton, isEmpty } = useAsyncPaginatedStatus()
+const { isSkeleton, isLoadingMore, isEmpty } = useAsyncPaginatedStatus()
 
 const loadingStatus = computed(() => productModel.getCategoryStatus(categoryModel.idActiveCategory))
 </script>
@@ -80,12 +82,17 @@ const loadingStatus = computed(() => productModel.getCategoryStatus(categoryMode
   &__empty {
     margin: 24px auto;
   }
+
   &__item {
     height: 100%;
   }
 
   &__quantity {
     margin-top: auto;
+  }
+
+  &__spinner {
+    margin: 0 auto;
   }
 }
 .row {

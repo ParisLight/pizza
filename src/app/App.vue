@@ -1,5 +1,5 @@
 <template>
-  <BaseSpinner v-if="isLoadingApp" :is-full-page="true" />
+  <app-spinner v-if="isLoadingApp" />
   <template v-else>
     <router-view v-slot="{ Component }">
       <component :is="layout">
@@ -24,7 +24,7 @@ import { useUserModel } from "@/entities/user"
 import { useCartModel } from "@/entities/cart"
 import { useProductModel } from "@/entities/product"
 import { useCategoryModel } from "@/entities/category"
-import { BaseSpinner } from "@/shared/ui/base-spinner"
+import { AppSpinner } from "@/shared/ui/app-spinner"
 
 const route = useRoute()
 

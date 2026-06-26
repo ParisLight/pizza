@@ -3,17 +3,19 @@ import { useUserModel } from "@/entities/user"
 import { type IOrderItemInput, useOrderModel } from "@/entities/order"
 import { mapFormToOrderDraft, useOrderForm } from "@/features/order"
 import { useValidateCart } from "@/features/cart"
+import { useProductModel } from "@/entities/product"
 
 export const useCheckout = () => {
   const cartModel = useCartModel()
   const orderModel = useOrderModel()
   const userModel = useUserModel()
+  const productModel = useProductModel()
 
   const isInProcess = ref(false)
 
   const { form, formRef, setFormRef, deliverySlots, formRules } = useOrderForm()
 
-  const { hasInvalidItems, deleteNotExistsItems } = useValidateCart()
+  const { hasInactiveItems, deleteNotExistsItems } = useValidateCart()
 
   const checkoutOrder = async () => {
     const userId = userModel.user?.userId
@@ -24,13 +26,15 @@ export const useCheckout = () => {
 
     if (!formRef.value) return
 
+    await productModel.ensureProductsByIds(cartModel.productIdsInCart)
+
     await deleteNotExistsItems()
 
-    if (hasInvalidItems.value) {
+    if (hasInactiveItems.value) {
       ElNotification({
         title: "Ошибка",
         message:
-          "В корзине присутствуют невалидные товары. Удалите их из корзины перед оформлением нового заказа",
+          "В корзине присутствуют товары, которые уже сняты с продажи. Удалите их перед оформлением нового заказа",
         type: "error",
       })
       return
@@ -69,7 +73,6 @@ export const useCheckout = () => {
 
       cartModel.clearCart()
       await Promise.allSettled([orderModel.loadOrders(userId), cartModel.syncCart()])
-      await cartModel.syncCart()
     } catch {
       ElNotification({
         title: "Ошибка",

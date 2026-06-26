@@ -5,23 +5,28 @@ export const useValidateCart = () => {
   const productModel = useProductModel()
   const cartModel = useCartModel()
 
-  const hasInvalidItems = computed(() => {
-    return cartModel.items.some((cartItem) => {
+  const inactiveItems = computed(() => {
+    return cartModel.items.filter((cartItem) => {
       const product = productModel.products?.[cartItem.productId]
 
-      if (!product) return false
-      return !product.isActive
+      return product?.isActive === false
     })
   })
 
+  const invalidItems = computed(() => {
+    return cartModel.items.filter((cartItem) => {
+      return !productModel.products?.[cartItem.productId]
+    })
+  })
+
+  const hasInvalidItems = computed(() => !!invalidItems.value.length)
+
+  const hasInactiveItems = computed(() => !!inactiveItems.value.length)
+
   const deleteNotExistsItems = async () => {
-    const notExistsProducts = cartModel.items.filter(
-      (cartItem) => !productModel.products?.[cartItem.productId],
-    )
+    if (!hasInvalidItems.value) return
 
-    if (!notExistsProducts.length) return
-
-    const ids = notExistsProducts.map((carItem) => carItem.productId)
+    const ids = invalidItems.value.map((carItem) => carItem.productId)
 
     ids.forEach((productId) => {
       cartModel.removeCompletelyFromCart(productId)
@@ -30,5 +35,5 @@ export const useValidateCart = () => {
     await cartModel.syncCart()
   }
 
-  return { hasInvalidItems, deleteNotExistsItems }
+  return { hasInactiveItems, deleteNotExistsItems }
 }

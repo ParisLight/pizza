@@ -1,3 +1,1 @@
-import BaseSpinner from './BaseSpinner.vue'
-
-export { BaseSpinner }
+export { default as BaseSpinner } from "./BaseSpinner.vue"

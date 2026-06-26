@@ -7,7 +7,11 @@ export const useCartTotal = () => {
 
   const cartTotal = computed(() => {
     return cartModel.items.reduce((acc, curr) => {
-      const productPrice = productModel.products?.[curr?.productId]?.price || 0
+      const product = productModel.products?.[curr?.productId]
+
+      if (!product || product.isActive === false) return acc
+
+      const productPrice = product.price || 0
 
       return acc + productPrice * curr.quantity
     }, 0)

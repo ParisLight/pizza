@@ -81,6 +81,9 @@ export const useCartModel = defineStore("cart", {
     },
   },
   getters: {
+    productIdsInCart(): number[] {
+      return this.items.map((item) => item.productId)
+    },
     totalQuantityCart(): number {
       if (!this.items.length) return 0
 
