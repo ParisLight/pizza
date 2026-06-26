@@ -5,7 +5,7 @@
         class="button-icon"
         color="var(--color-purple)"
         :disabled="disabled"
-        @click="remove"
+        @click="remove(productId)"
       >
         <slot name="icon">
           <img v-if="size === 'big'" :src="IconBigMinus" alt="minus" />
@@ -16,7 +16,12 @@
         <span>{{ quantity }}</span>
       </div>
     </template>
-    <el-button class="button-icon" color="var(--color-purple)" :disabled="disabled" @click="add">
+    <el-button
+      class="button-icon"
+      color="var(--color-purple)"
+      :disabled="disabled"
+      @click="add(productId)"
+    >
       <slot name="icon">
         <img v-if="size === 'big'" :src="IconBigPlus" alt="plus" />
         <img v-else :src="IconPlus" alt="plus" />
@@ -31,18 +36,18 @@ import IconMinus from "@/assets/images/minus-bold.svg"
 import IconBigPlus from "@/assets/images/plus-big-icon.svg"
 import IconBigMinus from "@/assets/images/minus-big-icon.svg"
 
-import type { IProduct } from "@/entities/product"
 import { useChangeQuantity } from "../model/useChangeQuantity"
+import { useCartItem } from "@/entities/cart"
 
 const props = defineProps<{
-  product: IProduct
+  productId: number
   size?: "big" | "small"
   disabled?: boolean
 }>()
 
-const { product } = toRefs(props)
+const { quantity, isInCart } = useCartItem(props.productId)
 
-const { quantity, isInCart, add, remove } = useChangeQuantity(product)
+const { add, remove } = useChangeQuantity()
 </script>
 
 <style lang="scss" scoped>

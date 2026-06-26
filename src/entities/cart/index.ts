@@ -1,4 +1,2 @@
-export { useCartModel } from "./model"
-export type { ICartItem } from "./model/types"
-
+export * from "./model"
 export * as CartApi from "./api"

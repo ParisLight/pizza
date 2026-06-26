@@ -1,14 +1,13 @@
-import { useCartModel } from "@/entities/cart";
+import { useCartModel } from "@/entities/cart"
+import { useUserModel } from "@/entities/user"
 
 export const useCompletelyDeleteActions = () => {
   const cartModel = useCartModel()
+  const userModel = useUserModel()
 
   const completelyDelete = async (productId: number) => {
-    cartModel.removeCompletelyFromCart(productId)
-    await cartModel.syncCart()
+    await cartModel.removeCompletelyFromCart(productId, userModel.user?.userId)
   }
 
   return { completelyDelete }
 }
-
-

@@ -16,7 +16,10 @@
             @img-click="cartItem.product.isActive ? onImgCartItemClick($event) : null"
           >
             <template #action>
-              <change-quantity :product="cartItem.product" :disabled="!cartItem.product.isActive" />
+              <change-quantity
+                :product-id="cartItem.product.id"
+                :disabled="!cartItem.product.isActive"
+              />
               <transition name="fade" mode="out-in">
                 <completely-delete
                   v-if="isDeleteVisible(cartItem.product.id)"

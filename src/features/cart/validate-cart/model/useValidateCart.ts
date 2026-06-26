@@ -1,9 +1,11 @@
 import { useProductModel } from "@/entities/product"
 import { useCartModel } from "@/entities/cart"
+import { useUserModel } from "@/entities/user"
 
 export const useValidateCart = () => {
   const productModel = useProductModel()
   const cartModel = useCartModel()
+  const userModel = useUserModel()
 
   const inactiveItems = computed(() => {
     return cartModel.items.filter((cartItem) => {
@@ -28,11 +30,7 @@ export const useValidateCart = () => {
 
     const ids = invalidItems.value.map((carItem) => carItem.productId)
 
-    ids.forEach((productId) => {
-      cartModel.removeCompletelyFromCart(productId)
-    })
-
-    await cartModel.syncCart()
+    await cartModel.removeManyFromCartAndPersist(ids, userModel.user?.userId)
   }
 
   return { hasInactiveItems, deleteNotExistsItems }

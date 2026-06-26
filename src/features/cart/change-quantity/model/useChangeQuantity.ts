@@ -1,36 +1,19 @@
-import { useCartModel } from '@/entities/cart'
-import { useDebounceFn } from '@vueuse/core'
-import type { IProduct } from '@/entities/product'
-import type { Ref } from 'vue'
+import { useCartModel } from "@/entities/cart"
+import { useUserModel } from "@/entities/user"
 
-export const useChangeQuantity = (product: Ref<IProduct>) => {
+export const useChangeQuantity = () => {
   const cartModel = useCartModel()
+  const userModel = useUserModel()
 
-  const debouncedSyncCart = useDebounceFn(() => {
-    return cartModel.syncCart()
-  }, 300)
-
-  const quantity = computed(() => {
-    const item = cartModel.items.find(i => i.productId === product.value.id)
-    return item?.quantity ?? 0
-  })
-
-  const isInCart = computed(() => quantity.value > 0)
-
-
-  const add = async () => {
-    cartModel.addToCart(product.value.id)
-    await debouncedSyncCart()
+  const add = async (productId: number | undefined) => {
+    await cartModel.addToCart(productId, userModel.user?.userId)
   }
 
-  const remove = async () => {
-    cartModel.removeFromCart(product.value.id)
-    await debouncedSyncCart()
+  const remove = async (productId: number | undefined) => {
+    await cartModel.removeFromCart(productId, userModel.user?.userId)
   }
 
   return {
-    quantity,
-    isInCart,
     add,
     remove,
   }

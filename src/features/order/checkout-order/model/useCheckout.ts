@@ -71,8 +71,7 @@ export const useCheckout = () => {
         return
       }
 
-      cartModel.clearCart()
-      await Promise.allSettled([orderModel.loadOrders(userId), cartModel.syncCart()])
+      await Promise.allSettled([orderModel.loadOrders(userId), cartModel.clearCart(userId)])
     } catch {
       ElNotification({
         title: "Ошибка",

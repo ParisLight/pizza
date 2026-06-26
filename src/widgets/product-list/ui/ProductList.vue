@@ -25,7 +25,7 @@
               <template #action>
                 <change-quantity
                   class="product-list__quantity"
-                  :product="productModel.products[productId]"
+                  :product-id="productModel.products[productId].id"
                 />
               </template>
             </product-card>

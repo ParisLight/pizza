@@ -1,43 +1,45 @@
-import type { CartItemsDTO } from "@/entities/cart/api/dto";
-import type { ICartItem } from "@/entities/cart/model/types";
-import { supabase } from "@/shared/api";
-import { mappedCartItems, mapCartItemsToInsert } from "@/entities/cart/lib/mappers";
+import type { CartItemsDTO } from "@/entities/cart/api/dto"
+import type { ICartItem } from "@/entities/cart/model/types"
+import { supabase } from "@/shared/api"
+import { mapCartItemsToInsert, mappedCartItems } from "@/entities/cart/lib/mappers"
 
 export const fetchCart = async (cartId: number): Promise<ICartItem[]> => {
-  const { data, error } = await supabase
-    .from('cart_items')
-    .select('*')
-    .eq('cart_id', cartId)
+  const { data, error } = await supabase.from("cart_items").select("*").eq("cart_id", cartId)
 
-  if(error || !data) return []
+  if (error || !data) return []
 
   return mappedCartItems(data as CartItemsDTO[])
 }
 
-export const fetchCartId = async (userId: number) => {
+export const fetchCartIdByUser = async (userId: number) => {
   const { data, error } = await supabase
-    .from('carts')
-    .select('id')
-    .eq('user_id', userId)
+    .from("carts")
+    .select("id")
+    .eq("user_id", userId)
+    .maybeSingle()
+  if (error || !data) return null
+  return data.id
+}
 
-  if(error) return []
-
-  return data
+export const createCart = async (userId: number): Promise<number | null> => {
+  const { data, error } = await supabase
+    .from("carts")
+    .insert({ user_id: userId })
+    .select("id")
+    .single()
+  if (error || !data) return null
+  return data.id
 }
 
 export const updateCart = async (cartId: number, items: ICartItem[]): Promise<ICartItem[]> => {
-  const { error: deleteError } = await supabase
-    .from('cart_items')
-    .delete()
-    .eq('cart_id', cartId);
-
+  const { error: deleteError } = await supabase.from("cart_items").delete().eq("cart_id", cartId)
 
   const newCartItems = mapCartItemsToInsert(cartId, items)
 
   const { data, error: insertError } = await supabase
-    .from('cart_items')
+    .from("cart_items")
     .insert(newCartItems)
-    .select('*')
+    .select("*")
 
   return mappedCartItems(data as CartItemsDTO[])
 }
