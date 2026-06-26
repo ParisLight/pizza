@@ -16,6 +16,8 @@
   --color-border: var(--vt-c-divider-light-2);
   --color-border-hover: var(--vt-c-divider-light-1);
 
+  --el-text-color-secondary: var(--color-golden) !important;
+
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--color-white);
 
@@ -91,6 +93,13 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+.el-empty__description {
+  p {
+    font-variant: all-small-caps;
+    font-size: 16px !important;
+  }
 }
 
 .is-locked-scroll {

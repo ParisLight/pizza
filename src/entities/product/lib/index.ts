@@ -1,5 +1,5 @@
-import type { IProduct } from "@/entities/product";
-import type { ProductDTO } from "@/entities/product/api/dto";
+import type { IProduct } from "@/entities/product"
+import type { ProductDTO } from "@/entities/product/api/dto"
 
 export const mappedProducts = (products: ProductDTO[]): IProduct[] => {
   if (!products?.length) return []
@@ -13,6 +13,7 @@ export const mappedProducts = (products: ProductDTO[]): IProduct[] => {
     weight: product.weight ?? null,
     description: product.description ?? null,
     price: product.price ?? null,
+    isActive: product.is_active ?? false,
 
     categoryId: product.categoryId ?? 0,
 
@@ -24,6 +25,3 @@ export const mappedProducts = (products: ProductDTO[]): IProduct[] => {
     },
   }))
 }
-
-
-

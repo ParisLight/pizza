@@ -1,6 +1,7 @@
 <template>
   <product-card-row
     class="cart-item__product-card"
+    :class="{ 'cart-item--disabled': disabled }"
     :product="product"
     :category-name="categoryModel.categories[product.categoryId]?.name || ''"
     direction="row"
@@ -20,6 +21,7 @@ const categoryModel = useCategoryModel()
 
 const props = defineProps<{
   product: IProduct
+  disabled?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -31,4 +33,15 @@ const onImgClick = (): void => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.cart-item {
+  &--disabled {
+    :deep(.product__img),
+    :deep(.product__info),
+    :deep(.product__price),
+    :deep(.change-quantity) {
+      opacity: 0.5;
+    }
+  }
+}
+</style>

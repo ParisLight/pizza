@@ -2,6 +2,7 @@ import { useCartModel } from "@/entities/cart"
 import { useUserModel } from "@/entities/user"
 import { type IOrderItemInput, useOrderModel } from "@/entities/order"
 import { mapFormToOrderDraft, useOrderForm } from "@/features/order"
+import { useValidateCart } from "@/features/cart"
 
 export const useCheckout = () => {
   const cartModel = useCartModel()
@@ -12,6 +13,8 @@ export const useCheckout = () => {
 
   const { form, formRef, setFormRef, deliverySlots, formRules } = useOrderForm()
 
+  const { hasInvalidItems, deleteNotExistsItems } = useValidateCart()
+
   const checkoutOrder = async () => {
     const userId = userModel.user?.userId
 
@@ -21,6 +24,17 @@ export const useCheckout = () => {
 
     if (!formRef.value) return
 
+    await deleteNotExistsItems()
+
+    if (hasInvalidItems.value) {
+      ElNotification({
+        title: "Ошибка",
+        message:
+          "В корзине присутствуют невалидные товары. Удалите их из корзины перед оформлением нового заказа",
+        type: "error",
+      })
+      return
+    }
     try {
       await formRef.value.validate()
     } catch {

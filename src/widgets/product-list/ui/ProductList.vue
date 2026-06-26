@@ -5,30 +5,32 @@
         <skeleton-product-card />
       </el-col>
     </template>
-    <base-empty-plug
-      v-else-if="loadingStatus === 'empty'"
+    <el-empty
+      v-else-if="isEmpty(loadingStatus)"
       class="products-list__empty"
+      description="Пока тут пусто"
     />
     <template v-else>
       <transition-group name="fade-group">
-        <el-col
-          :span="12"
+        <template
           v-for="productId in productModel.categoryProducts?.[categoryModel.idActiveCategory] ?? []"
           :key="productId"
         >
-          <product-card
-            class="product-list__item"
-            :product="productModel.products[productId]"
-            @img-click="onImgClick(productId)"
-          >
-            <template #action>
-              <change-quantity
-                class="product-list__quantity"
-                :product="productModel.products[productId]"
-              />
-            </template>
-          </product-card>
-        </el-col>
+          <el-col v-if="productModel.products[productId]?.isActive" :span="12">
+            <product-card
+              class="product-list__item"
+              :product="productModel.products[productId]"
+              @img-click="onImgClick(productId)"
+            >
+              <template #action>
+                <change-quantity
+                  class="product-list__quantity"
+                  :product="productModel.products[productId]"
+                />
+              </template>
+            </product-card>
+          </el-col>
+        </template>
       </transition-group>
     </template>
     <div ref="sentinelRef" class="sentinel"></div>
@@ -46,7 +48,6 @@ import { ChangeQuantity } from "@/features/cart"
 import { useCategoryModel } from "@/entities/category"
 import { usePopupModel } from "@/features/popups"
 import { useAsyncPaginatedStatus, useInfinityScroll } from "@/shared/lib"
-import { BaseEmptyPlug } from "@/shared/ui/base-empty-plug"
 
 const productModel = useProductModel()
 const categoryModel = useCategoryModel()
@@ -64,7 +65,7 @@ useInfinityScroll(sentinelRef, { root: null, rootMargin: "500px" }, async () => 
   await productModel.fetchProductsByPage(categoryModel.idActiveCategory)
 })
 
-const { isSkeleton } = useAsyncPaginatedStatus()
+const { isSkeleton, isEmpty } = useAsyncPaginatedStatus()
 
 const loadingStatus = computed(() => productModel.getCategoryStatus(categoryModel.idActiveCategory))
 </script>

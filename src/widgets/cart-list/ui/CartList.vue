@@ -4,6 +4,7 @@
       <template v-if="isSkeleton(cartModel.loadingStatus)">
         <skeleton-product-card-row v-for="n in 2" :key="n" />
       </template>
+      <el-empty v-else-if="isEmpty(cartModel.loadingStatus)" description="Корзина пуста" />
       <template v-else>
         <transition-group name="fade-group">
           <cart-item
@@ -11,10 +12,11 @@
             v-for="cartItem in cartDetailedItems"
             :key="cartItem.product.id"
             :product="cartItem.product"
-            @img-click="onImgCartItemClick"
+            :disabled="!cartItem.product.isActive"
+            @img-click="cartItem.product.isActive ? onImgCartItemClick($event) : null"
           >
             <template #action>
-              <change-quantity :product="cartItem.product" />
+              <change-quantity :product="cartItem.product" :disabled="!cartItem.product.isActive" />
               <transition name="fade" mode="out-in">
                 <completely-delete
                   v-if="isDeleteVisible(cartItem.product.id)"
@@ -50,7 +52,7 @@ const popupModel = usePopupModel()
 
 const cartModel = useCartModel()
 
-const { isSkeleton } = useAsyncStatus()
+const { isSkeleton, isEmpty } = useAsyncStatus()
 
 const { cartDetailedItems } = useProductCartList()
 

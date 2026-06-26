@@ -19,9 +19,13 @@ export const useAsyncPaginatedStatus = () => {
     return status === "loading"
   }
 
+  const isEmpty = (status: PaginatedStatus) => {
+    return status === "empty"
+  }
+
   const isLoadingMore = (status: PaginatedStatus) => {
     return status === "loadingMore"
   }
 
-  return { canFetch, startFetch, finishFetch, isSkeleton, isLoadingMore }
+  return { canFetch, startFetch, finishFetch, isEmpty, isSkeleton, isLoadingMore }
 }

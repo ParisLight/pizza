@@ -223,6 +223,7 @@ export type Database = {
           fats: number | null
           id: number
           img: string | null
+          is_active: boolean | null
           kcal: number | null
           name: string | null
           price: number | null
@@ -236,6 +237,7 @@ export type Database = {
           fats?: number | null
           id?: number
           img?: string | null
+          is_active?: boolean | null
           kcal?: number | null
           name?: string | null
           price?: number | null
@@ -249,6 +251,7 @@ export type Database = {
           fats?: number | null
           id?: number
           img?: string | null
+          is_active?: boolean | null
           kcal?: number | null
           name?: string | null
           price?: number | null

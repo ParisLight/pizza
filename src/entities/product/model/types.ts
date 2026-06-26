@@ -14,6 +14,7 @@ export interface IProduct {
   price: number | null
   nutrition: INutrition
   categoryId: number
+  isActive: boolean
 }
 
 export type CatalogCategoryMeta = {

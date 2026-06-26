@@ -14,14 +14,14 @@
     </swiper>
   </div>
   <div class="card__description popup__container">
-    <div class="card__name" v-if="activeProduct.name">
+    <div class="card__name" v-if="activeProduct?.name">
       <span>{{ activeProduct.name }}</span>
     </div>
     <div class="card__descr line-clamp" v-if="activeProduct.description">
       <span>{{ activeProduct.description }}</span>
     </div>
   </div>
-  <NutritionBar
+  <nutrition-bar
     class="card__nutrition-info"
     v-if="activeProduct.nutrition"
     :nutrition="activeProduct.nutrition"
@@ -53,7 +53,7 @@ const { productsArray, startProductIndex } = useProductsList(props.openingIdProd
 const swiperInstance = useSwiper(startProductIndex.value)
 
 const activeProduct = computed<IProduct>(() => {
-  return productsArray.value[swiperInstance.activeIndex.value] ?? null
+  return productsArray.value?.[swiperInstance.activeIndex.value] ?? null
 })
 </script>
 

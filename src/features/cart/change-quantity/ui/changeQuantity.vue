@@ -4,58 +4,40 @@
       <el-button
         class="button-icon"
         color="var(--color-purple)"
+        :disabled="disabled"
         @click="remove"
       >
         <slot name="icon">
-          <img
-            v-if="size === 'big'"
-            :src="IconBigMinus"
-            alt="minus"
-          >
-          <img
-            v-else
-            :src="IconMinus"
-            alt="minus">
+          <img v-if="size === 'big'" :src="IconBigMinus" alt="minus" />
+          <img v-else :src="IconMinus" alt="minus" />
         </slot>
       </el-button>
       <div class="change-quantity__quantity">
         <span>{{ quantity }}</span>
       </div>
     </template>
-    <el-button
-      class="button-icon"
-      color="var(--color-purple)"
-      @click="add"
-    >
+    <el-button class="button-icon" color="var(--color-purple)" :disabled="disabled" @click="add">
       <slot name="icon">
-        <img
-          v-if="size === 'big'"
-          :src="IconBigPlus"
-          alt="plus"
-        >
-        <img
-          v-else
-          :src="IconPlus"
-          alt="plus"
-        >
+        <img v-if="size === 'big'" :src="IconBigPlus" alt="plus" />
+        <img v-else :src="IconPlus" alt="plus" />
       </slot>
     </el-button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import IconPlus from "@/assets/images/plus-bold.svg";
-import IconMinus from "@/assets/images/minus-bold.svg";
-import IconBigPlus from "@/assets/images/plus-big-icon.svg";
+import IconPlus from "@/assets/images/plus-bold.svg"
+import IconMinus from "@/assets/images/minus-bold.svg"
+import IconBigPlus from "@/assets/images/plus-big-icon.svg"
 import IconBigMinus from "@/assets/images/minus-big-icon.svg"
 
-import type { IProduct } from "@/entities/product";
-import { useChangeQuantity } from '../model/useChangeQuantity'
-
+import type { IProduct } from "@/entities/product"
+import { useChangeQuantity } from "../model/useChangeQuantity"
 
 const props = defineProps<{
-  product: IProduct,
-  size?: 'big' | 'small'
+  product: IProduct
+  size?: "big" | "small"
+  disabled?: boolean
 }>()
 
 const { product } = toRefs(props)
@@ -98,7 +80,7 @@ const { quantity, isInCart, add, remove } = useChangeQuantity(product)
   padding: 0;
   width: 24px;
   height: 24px;
-  box-shadow: 0px 2px 8px 0px #0000008C;
+  box-shadow: 0px 2px 8px 0px #0000008c;
   border-radius: var(--radius-6);
   img {
     width: 10px;

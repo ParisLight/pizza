@@ -18,5 +18,9 @@ export const useAsyncStatus = () => {
     return status === "loading"
   }
 
-  return { canFetch, startFetch, finishFetch, isSkeleton }
+  const isEmpty = (status: LoadingStatus) => {
+    return status === "empty"
+  }
+
+  return { canFetch, startFetch, finishFetch, isSkeleton, isEmpty }
 }

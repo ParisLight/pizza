@@ -9,6 +9,11 @@
       <template v-if="isSkeleton(orderModel.loadingStatus)">
         <order-card-skeleton v-for="item in 3" :key="item" />
       </template>
+      <el-empty
+        v-else-if="isEmpty(orderModel.loadingStatus)"
+        class=""
+        :description="'Заказов нет'"
+      />
       <template v-else>
         <order-card v-for="order in orderModel.ordersList" :key="order.orderId" :order="order" />
       </template>
@@ -24,7 +29,7 @@ import { useAsyncStatus } from "@/shared/lib"
 const orderModel = useOrderModel()
 const userModel = useUserModel()
 
-const { isSkeleton } = useAsyncStatus()
+const { isSkeleton, isEmpty } = useAsyncStatus()
 
 onMounted(async () => {
   if (orderModel.ordersList.length === 0 && userModel.user?.userId) {
