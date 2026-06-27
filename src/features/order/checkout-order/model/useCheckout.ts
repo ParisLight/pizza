@@ -26,6 +26,7 @@ export const useCheckout = () => {
 
     if (!formRef.value) return
 
+    await cartModel.flushPersistCart(userId)
     await productModel.ensureProductsByIds(cartModel.productIdsInCart)
 
     await deleteNotExistsItems()

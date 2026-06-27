@@ -30,7 +30,7 @@
     <div v-if="activeProduct.price" class="card__price">
       <span>{{ activeProduct.price }} ₽</span>
     </div>
-    <ChangeQuantity :product="activeProduct" size="big" />
+    <change-quantity :product-id="activeProduct.id" size="big" />
   </div>
 </template>
 

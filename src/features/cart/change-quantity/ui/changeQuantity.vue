@@ -45,7 +45,8 @@ const props = defineProps<{
   disabled?: boolean
 }>()
 
-const { quantity, isInCart } = useCartItem(props.productId)
+const { productId } = toRefs(props)
+const { quantity, isInCart } = useCartItem(productId)
 
 const { add, remove } = useChangeQuantity()
 </script>

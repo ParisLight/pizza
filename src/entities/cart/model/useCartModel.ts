@@ -3,6 +3,12 @@ import { CartApi } from "../index"
 import type { ICartItem } from "./types"
 import type { LoadingStatus } from "@/shared/config"
 import { useAsyncStatus } from "@/shared/lib"
+import { createPersistDebouncer } from "@/entities/cart/model/createPersistDebouncer.ts"
+
+const cartPersist = createPersistDebouncer(async (userId: number) => {
+  const store = useCartModel()
+  await store.persistCart(userId)
+})
 
 export const useCartModel = defineStore("cart", {
   state: () => ({
@@ -37,6 +43,19 @@ export const useCartModel = defineStore("cart", {
       }
     },
 
+    schedulePersistCart(userId: number) {
+      cartPersist.schedule(userId)
+    },
+
+    async persistCartImmediate(userId: number) {
+      cartPersist.cancel()
+      await this.persistCart(userId)
+    },
+
+    async flushPersistCart(userId: number) {
+      await cartPersist.flush(userId)
+    },
+
     async addToCart(productId: number | undefined, userId: number | undefined) {
       if (!userId || !productId) {
         throw new Error("Failed to add item")
@@ -53,7 +72,7 @@ export const useCartModel = defineStore("cart", {
         })
       }
 
-      await this.persistCart(userId)
+      this.schedulePersistCart(userId)
     },
     async ensureCartId(userId: number) {
       if (this.cartId) return this.cartId
@@ -91,7 +110,7 @@ export const useCartModel = defineStore("cart", {
       }
 
       this.removeManyFromCart(productIds)
-      await this.persistCart(userId)
+      await this.persistCartImmediate(userId)
     },
 
     async removeFromCart(productId: number | undefined, userId: number | undefined) {
@@ -103,7 +122,7 @@ export const useCartModel = defineStore("cart", {
 
       if (item && item.quantity > 1) {
         item.quantity -= 1
-        await this.persistCart(userId)
+        this.schedulePersistCart(userId)
       } else {
         await this.removeCompletelyFromCart(productId, userId)
       }
@@ -115,7 +134,7 @@ export const useCartModel = defineStore("cart", {
       }
 
       this.items = [] as ICartItem[]
-      await this.persistCart(userId)
+      await this.persistCartImmediate(userId)
     },
 
     async removeCompletelyFromCart(productId: number | undefined, userId: number | undefined) {
@@ -129,7 +148,7 @@ export const useCartModel = defineStore("cart", {
         this.items = this.items.filter((item) => item.productId !== productId)
       }
 
-      await this.persistCart(userId)
+      this.schedulePersistCart(userId)
     },
   },
   getters: {
