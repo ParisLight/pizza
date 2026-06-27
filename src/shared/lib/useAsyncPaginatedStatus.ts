@@ -7,6 +7,7 @@ export const useAsyncPaginatedStatus = () => {
   const canFetch = (status: PaginatedStatus, hasMore = true) => {
     if (status === "loading" || status === "loadingMore") return false
     if (status === "success" && !hasMore) return false
+    if (status === "empty" && !hasMore) return false
     return status === "idle" || status === "success" || status === "error" || status === "empty"
   }
 
