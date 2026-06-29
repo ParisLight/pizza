@@ -1,41 +1,41 @@
 <template>
-  <el-row class="row products-list" :gutter="16">
+  <div class="products-list">
     <template v-if="isSkeleton(loadingStatus)">
-      <el-col :span="12" v-for="n in FETCH_PRODUCTS_LIMIT" :key="n">
-        <skeleton-product-card />
-      </el-col>
+      <el-row class="row products-list__grid" :gutter="16">
+        <el-col :span="12" v-for="n in FETCH_PRODUCTS_LIMIT" :key="n">
+          <skeleton-product-card />
+        </el-col>
+      </el-row>
     </template>
+
     <el-empty
       v-else-if="isEmpty(loadingStatus)"
       class="products-list__empty"
       description="Пока тут пусто"
     />
-    <template v-else>
-      <transition-group name="fade-group">
-        <template
-          v-for="productId in productModel.categoryProducts?.[categoryModel.idActiveCategory] ?? []"
-          :key="productId"
-        >
-          <el-col v-if="productModel.products[productId]?.isActive" :span="12">
-            <product-card
-              class="product-list__item"
-              :product="productModel.products[productId]"
-              @img-click="onImgClick(productId)"
-            >
-              <template #action>
-                <change-quantity
-                  class="product-list__quantity"
-                  :product-id="productModel.products[productId].id"
-                />
-              </template>
-            </product-card>
-          </el-col>
-        </template>
-      </transition-group>
-    </template>
+
+    <transition v-else name="fade" mode="out-in">
+      <el-row :key="activeCategoryId" class="row products-list__grid" :gutter="16">
+        <el-col v-for="productId in activeProductIds" :key="productId" :span="12">
+          <product-card
+            class="products-list__item"
+            :product="productModel.products[productId]"
+            @img-click="onProductClick(productId)"
+          >
+            <template #action>
+              <change-quantity
+                class="product-list__quantity"
+                :product-id="productModel.products[productId].id"
+              />
+            </template>
+          </product-card>
+        </el-col>
+      </el-row>
+    </transition>
+
     <div ref="sentinelRef" class="sentinel"></div>
-  </el-row>
-  <base-spinner v-if="isLoadingMore(loadingStatus)" class="products-list__spinner" />
+    <base-spinner v-if="isLoadingMore(loadingStatus)" class="products-list__spinner" />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -46,39 +46,31 @@ import {
   useProductModel,
 } from "@/entities/product"
 import { ChangeQuantity } from "@/features/cart"
-import { useCategoryModel } from "@/entities/category"
-import { usePopupModel } from "@/features/popups"
 import { useAsyncPaginatedStatus, useInfinityScroll } from "@/shared/lib"
+import { useProductList } from "@/widgets/product-list/model"
 import { BaseSpinner } from "@/shared/ui/base-spinner"
 
 const productModel = useProductModel()
-const categoryModel = useCategoryModel()
-const popupModel = usePopupModel()
-
-const onImgClick = (id: number) => {
-  popupModel.openPopup("ProductCardPopup", {
-    openingIdProduct: id,
-  })
-}
 
 const sentinelRef = ref<HTMLElement | undefined>()
 
-useInfinityScroll(sentinelRef, { root: null, rootMargin: "500px" }, async () => {
-  await productModel.fetchProductsByPage(categoryModel.idActiveCategory)
-})
+const { loadingStatus, activeCategoryId, activeProductIds, onProductClick } = useProductList()
 
 const { isSkeleton, isLoadingMore, isEmpty } = useAsyncPaginatedStatus()
 
-const loadingStatus = computed(() => productModel.getCategoryStatus(categoryModel.idActiveCategory))
+useInfinityScroll(sentinelRef, { root: null, rootMargin: "500px" }, async () => {
+  await productModel.fetchProductsByPage(activeCategoryId.value)
+})
 </script>
 
 <style lang="scss" scoped>
-.sentinel {
-  height: 1px;
-  width: 100%;
-}
-
 .products-list {
+  width: 100%;
+
+  &__grid {
+    width: 100%;
+  }
+
   &__empty {
     margin: 24px auto;
   }
@@ -95,6 +87,12 @@ const loadingStatus = computed(() => productModel.getCategoryStatus(categoryMode
     margin: 0 auto;
   }
 }
+
+.sentinel {
+  height: 1px;
+  width: 100%;
+}
+
 .row {
   row-gap: 16px;
 }
