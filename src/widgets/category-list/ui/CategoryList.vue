@@ -37,6 +37,13 @@ const productModel = useProductModel()
 const { isSkeleton } = useAsyncStatus()
 
 const onClickCategory = async (id: number) => {
+  const previousId = categoryModel.idActiveCategory
+
+  if (productModel.searchQuery.trim()) {
+    productModel.clearSearchQuery()
+    productModel.clearPaginationData(previousId)
+  }
+
   categoryModel.setActiveCategory(id)
   await productModel.fetchProductsByPage(id)
 }

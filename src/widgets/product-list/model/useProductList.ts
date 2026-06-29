@@ -18,10 +18,8 @@ export const useProductList = () => {
 
     return ids.filter((id) => {
       const product = productModel.products[id]
-      return (
-        product?.isActive &&
-        product.name.toLowerCase().includes(productModel.searchQuery.toLowerCase().trim())
-      )
+
+      return product?.isActive
     })
   })
 

@@ -24,6 +24,9 @@ export const useProductModel = defineStore("product", {
       },
   },
   actions: {
+    clearSearchQuery() {
+      this.searchQuery = ""
+    },
     async fetchProductsByPage(categoryId: number) {
       const { startFetch, finishFetch, canFetch } = useAsyncPaginatedStatus()
 
@@ -38,7 +41,7 @@ export const useProductModel = defineStore("product", {
       this.categoryStatus[categoryId] = startFetch(status, hasData)
 
       try {
-        this.catalogMeta[categoryId] ??= { page: 1, hasMore: true }
+        this.catalogMeta[categoryId] ??= { page: 1, hasMore: true, appliedQuery: "" }
 
         const currentCatalog = this.catalogMeta[categoryId]
 
@@ -46,7 +49,12 @@ export const useProductModel = defineStore("product", {
           categoryId,
           currentCatalog.page,
           FETCH_PRODUCTS_LIMIT,
+          this.searchQuery,
         )
+
+        if (this.searchQuery.trim()) {
+          currentCatalog.appliedQuery = this.searchQuery.trim()
+        }
 
         currentCatalog.hasMore = response.length === FETCH_PRODUCTS_LIMIT
         currentCatalog.page++
@@ -62,6 +70,17 @@ export const useProductModel = defineStore("product", {
       } catch {
         this.categoryStatus[categoryId] = "error"
       }
+    },
+
+    clearPaginationData(categoryId: number) {
+      delete this.categoryProducts[categoryId]
+      delete this.catalogMeta[categoryId]
+      this.categoryStatus[categoryId] = "idle"
+    },
+
+    async searchInCategory(categoryId: number) {
+      this.clearPaginationData(categoryId)
+      await this.fetchProductsByPage(categoryId)
     },
 
     async ensureProductsByIds(ids: number[]) {

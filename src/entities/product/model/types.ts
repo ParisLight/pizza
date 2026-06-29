@@ -20,4 +20,5 @@ export interface IProduct {
 export type CatalogCategoryMeta = {
   page: number
   hasMore: boolean
+  appliedQuery: string
 }
