@@ -29,11 +29,11 @@
 </template>
 
 <script setup lang="ts">
+import { BaseBtn } from "@/shared/ui/base-btn"
 import { CartList } from "@/widgets/cart-list"
 import { OrderForm, useCheckout } from "@/features/order"
-import { useCartModel } from "@/entities/cart"
-import { BaseBtn } from "@/shared/ui/base-btn"
 import { useCartTotal } from "@/features/cart"
+import { useCartModel } from "@/entities/cart"
 import { useProductModel } from "@/entities/product"
 
 const cartModel = useCartModel()
@@ -43,10 +43,7 @@ const { cartTotal } = useCartTotal()
 
 onMounted(async () => {
   const cartProductIds = cartModel.items.map((item) => item.productId)
-
-  if (cartProductIds.length !== 0) {
-    await productModel.ensureProductsByIds(cartProductIds)
-  }
+  await productModel.ensureProductsByIds(cartProductIds)
 })
 
 const { form, formRules, setFormRef, deliverySlots, checkoutOrder } = useCheckout()

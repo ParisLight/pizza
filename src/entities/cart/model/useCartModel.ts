@@ -18,7 +18,11 @@ export const useCartModel = defineStore("cart", {
   }),
 
   actions: {
-    async fetchCart(userId: number) {
+    async fetchCart(userId: number | undefined) {
+      if (!userId) {
+        throw new Error("Cannot fetch cart user_id is not valid")
+      }
+
       const { startFetch, canFetch, finishFetch } = useAsyncStatus()
 
       if (!canFetch(this.loadingStatus)) return
@@ -74,7 +78,11 @@ export const useCartModel = defineStore("cart", {
 
       this.schedulePersistCart(userId)
     },
-    async ensureCartId(userId: number) {
+    async ensureCartId(userId: number | undefined) {
+      if (!userId) {
+        throw new Error("Failed to resolve user_id for cart")
+      }
+
       if (this.cartId) return this.cartId
 
       const existingId = await CartApi.fetchCartIdByUser(userId)
