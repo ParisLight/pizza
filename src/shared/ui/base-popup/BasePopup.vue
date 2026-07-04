@@ -1,13 +1,9 @@
 <template>
   <div class="popup-wrapper" @click="closePopup">
-    <div class="popup" @click.stop>
-      <el-button
-        class="popup__exit"
-        color="var(--color-main)"
-        @click="closePopup"
-      >
+    <div class="popup" :style="{ 'max-width': maxWidth }" @click.stop>
+      <el-button class="popup__exit" color="var(--color-main)" @click="closePopup">
         <slot name="icon">
-          <img :src="IconCross" alt="plus">
+          <img :src="IconCross" alt="plus" />
         </slot>
       </el-button>
       <div class="popup__content">
@@ -18,14 +14,17 @@
 </template>
 
 <script setup lang="ts">
-import IconCross from '@/assets/images/cross-icon.svg';
+import IconCross from "@/assets/images/cross-icon.svg"
 
-const emit = defineEmits(['close'])
+defineProps<{
+  maxWidth?: string
+}>()
+
+const emit = defineEmits(["close"])
 
 const closePopup = () => {
-  emit('close')
+  emit("close")
 }
-
 </script>
 
 <style lang="scss" scoped>
@@ -43,20 +42,23 @@ const closePopup = () => {
   display: flex;
   flex-direction: column;
   background-color: var(--color-main);
-  width: calc(100% - 40px);
+  width: calc(100% - var(--popup-side-gap) * 2);
+  max-width: var(--popup-max-width);
   border-radius: 16px;
   padding-bottom: 16px;
   overflow: hidden;
+
   &__content {
     display: flex;
     flex-direction: column;
     align-items: center;
     flex: 1;
   }
+
   &__exit {
     position: absolute;
     z-index: 10;
-    box-shadow: 0px 2px 8px 0px #0000008C;
+    box-shadow: 0px 2px 8px 0px #0000008c;
     top: 0;
     right: 0;
     width: 42px;

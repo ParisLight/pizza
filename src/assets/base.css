@@ -33,6 +33,9 @@
   --radius-6: 6px;
   --radius-8: 8px;
   --radius-12: 12px;
+
+  --popup-max-width: 420px;
+  --popup-side-gap: 20px;
 }
 
 *,

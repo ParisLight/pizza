@@ -1,10 +1,7 @@
 <template>
   <div class="cart-list">
     <div class="cart-list__list">
-      <template v-if="isSkeleton(cartModel.loadingStatus)">
-        <skeleton-product-card-row v-for="n in 2" :key="n" />
-      </template>
-      <el-empty v-else-if="showCartEmpty" description="Корзина пуста" />
+      <el-empty v-if="showCartEmpty" description="Корзина пуста" />
       <template v-else>
         <transition-group name="fade-group">
           <cart-item
@@ -43,23 +40,19 @@
 </template>
 
 <script lang="ts" setup>
-import { type IProduct, SkeletonProductCardRow } from "@/entities/product"
+import { type IProduct } from "@/entities/product"
 import { useProductCartList } from "../model/useProductCartList"
 import { useConfirmationCompletelyDelete } from "../model/useConfirmationCompletelyDelete"
 import { CartItem, ChangeQuantity, CompletelyDelete } from "@/features/cart"
 import { usePopupModel } from "@/features/popups"
 import { useCartModel } from "@/entities/cart"
-import { useAsyncStatus } from "@/shared/lib"
 
 const popupModel = usePopupModel()
 
 const cartModel = useCartModel()
 
-const { isSkeleton } = useAsyncStatus()
+const showCartEmpty = computed(() => cartModel.items.length === 0)
 
-const showCartEmpty = computed(
-  () => !isSkeleton(cartModel.loadingStatus) && cartModel.items.length === 0,
-)
 const { cartDetailedItems } = useProductCartList()
 
 const { toggleDeleteVisibility, isDeleteVisible } = useConfirmationCompletelyDelete()

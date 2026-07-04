@@ -1,23 +1,31 @@
-import { useDebounceFn } from "@vueuse/core"
-
 type PersistFn = (userId: number) => Promise<void>
-type DebouncedPersist = PersistFn & {
-  cancel: () => void
-}
 
 export function createPersistDebouncer(persist: PersistFn, ms = 300) {
-  const debounced = useDebounceFn(persist, ms) as unknown as DebouncedPersist
+  let timer: ReturnType<typeof setTimeout> | undefined
+
+  const clear = () => {
+    if (timer !== undefined) {
+      clearTimeout(timer)
+      timer = undefined
+    }
+  }
 
   return {
-    schedule: (userId: number) => {
-      debounced(userId)
+    schedule(userId: number) {
+      clear()
+      timer = setTimeout(() => {
+        timer = undefined
+        void persist(userId)
+      }, ms)
     },
+
     async flush(userId: number) {
-      debounced.cancel()
+      clear()
       await persist(userId)
     },
+
     cancel() {
-      debounced.cancel()
+      clear()
     },
   }
 }

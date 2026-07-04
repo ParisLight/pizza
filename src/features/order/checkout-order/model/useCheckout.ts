@@ -4,29 +4,28 @@ import { type IOrderItemInput, useOrderModel } from "@/entities/order"
 import { mapFormToOrderDraft, useOrderForm } from "@/features/order"
 import { useValidateCart } from "@/features/cart"
 import { useProductModel } from "@/entities/product"
+import { ROUTES } from "@/shared/config"
 
 export const useCheckout = () => {
   const cartModel = useCartModel()
   const orderModel = useOrderModel()
   const userModel = useUserModel()
   const productModel = useProductModel()
+  const router = useRouter()
 
   const isInProcess = ref(false)
 
-  const { form, formRef, setFormRef, deliverySlots, formRules } = useOrderForm()
+  const { form, formRef, setFormRef, clearForm, deliverySlots, formRules } = useOrderForm()
 
   const { hasInactiveItems, deleteNotExistsItems } = useValidateCart()
 
   const checkoutOrder = async () => {
     const userId = userModel.user?.userId
 
-    if (!userId) return
-
-    if (!cartModel.items.length) return
-
-    if (!formRef.value) return
+    if (!userId || !cartModel.productIdsInCart.length || !formRef.value) return
 
     await cartModel.flushPersistCart(userId)
+
     await productModel.ensureProductsByIds(cartModel.productIdsInCart)
 
     await deleteNotExistsItems()
@@ -40,6 +39,7 @@ export const useCheckout = () => {
       })
       return
     }
+
     try {
       await formRef.value.validate()
     } catch {
@@ -61,18 +61,18 @@ export const useCheckout = () => {
         quantity: item.quantity,
       }))
 
-      const orderId = await orderModel.sendOrder(order, orderItems)
+      await orderModel.sendOrder(order, orderItems)
 
-      if (!orderId) {
-        ElNotification({
-          title: "Ошибка",
-          message: "Что-то пошло не так",
-          type: "error",
-        })
-        return
-      }
+      ElNotification({
+        title: "Успех",
+        message: "Заказ успешно создан",
+        type: "success",
+      })
+
+      await router.push(ROUTES.myOrders)
 
       await Promise.allSettled([orderModel.loadOrders(userId), cartModel.clearCart(userId)])
+      clearForm()
     } catch {
       ElNotification({
         title: "Ошибка",
@@ -90,5 +90,6 @@ export const useCheckout = () => {
     deliverySlots,
     formRules,
     setFormRef,
+    isInProcess,
   }
 }

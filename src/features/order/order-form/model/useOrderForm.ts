@@ -28,6 +28,10 @@ export function useOrderForm() {
 
   const form = reactive<OrderFormValues>(createOrderFormValues())
 
+  const clearForm = () => {
+    Object.assign(form, createOrderFormValues())
+  }
+
   const now = useNow({
     interval: 1000 * 60,
   })
@@ -40,5 +44,5 @@ export function useOrderForm() {
 
   const formRules = CURRENT_ORDER_FORM_RULES
 
-  return { form, formRef, setFormRef, deliverySlots, formRules }
+  return { form, formRef, setFormRef, clearForm, deliverySlots, formRules }
 }

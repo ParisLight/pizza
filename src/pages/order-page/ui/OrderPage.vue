@@ -16,6 +16,7 @@
       v-if="cartModel.totalQuantityCart"
       class="checkout-order"
       color="var(--color-purple)"
+      :loading="isInProcess"
       @click.stop="checkoutOrder"
     >
       <div class="checkout-order__content">
@@ -46,7 +47,7 @@ onMounted(async () => {
   await productModel.ensureProductsByIds(cartProductIds)
 })
 
-const { form, formRules, setFormRef, deliverySlots, checkoutOrder } = useCheckout()
+const { form, formRules, setFormRef, deliverySlots, isInProcess, checkoutOrder } = useCheckout()
 </script>
 
 <style lang="scss" scoped>

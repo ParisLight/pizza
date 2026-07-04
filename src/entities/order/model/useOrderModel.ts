@@ -11,8 +11,14 @@ export const useOrderModel = defineStore("order", {
   }),
 
   actions: {
-    async sendOrder(order: IOrderDraft, orderItems: IOrderItemInput[]): Promise<number | null> {
-      return await OrderApi.sendOrder(order, orderItems)
+    async sendOrder(order: IOrderDraft, orderItems: IOrderItemInput[]): Promise<number> {
+      const orderId = await OrderApi.sendOrder(order, orderItems)
+
+      if (!orderId) {
+        throw new Error("Cant create the order")
+      }
+
+      return orderId
     },
     async loadOrders(userId: number | undefined) {
       const { startFetch, canFetch, finishFetch } = useAsyncStatus()
