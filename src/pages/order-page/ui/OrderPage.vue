@@ -12,6 +12,7 @@
       :time-slots="deliverySlots"
       :set-form-ref="setFormRef"
     />
+
     <base-btn
       v-if="cartModel.totalQuantityCart"
       class="checkout-order"
@@ -31,21 +32,14 @@
 
 <script setup lang="ts">
 import { BaseBtn } from "@/shared/ui/base-btn"
-import { CartList } from "@/widgets/cart-list"
-import { OrderForm, useCheckout } from "@/features/order"
 import { useCartTotal } from "@/features/cart"
+import { OrderForm, useCheckout } from "@/features/order"
+import { CartList } from "@/widgets/cart-list"
 import { useCartModel } from "@/entities/cart"
-import { useProductModel } from "@/entities/product"
 
 const cartModel = useCartModel()
-const productModel = useProductModel()
 
 const { cartTotal } = useCartTotal()
-
-onMounted(async () => {
-  const cartProductIds = cartModel.items.map((item) => item.productId)
-  await productModel.ensureProductsByIds(cartProductIds)
-})
 
 const { form, formRules, setFormRef, deliverySlots, isInProcess, checkoutOrder } = useCheckout()
 </script>

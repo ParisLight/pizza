@@ -1,4 +1,4 @@
-import { supabase } from "@/shared/api"
+import { ApiError, supabase } from "@/shared/api"
 import { mappedProducts } from "../lib"
 import type { IProduct } from "@/entities/product"
 import type { ProductDTO } from "@/entities/product/api/dto"
@@ -19,7 +19,11 @@ export const fetchProducts = async (
 
   const { data, error } = await filtered.range(from, to).order("id", { ascending: true })
 
-  if (error || !data) return []
+  if (error) {
+    throw new ApiError("Failed to fetch products", error.code, error)
+  }
+
+  if (!data) return []
 
   return mappedProducts(data as ProductDTO[])
 }
@@ -27,7 +31,11 @@ export const fetchProducts = async (
 export const fetchProductsByProductIds = async (productIds: number[]): Promise<IProduct[]> => {
   const { data, error } = await supabase.from("products").select("*").in("id", productIds)
 
-  if (error || !data) return []
+  if (error) {
+    throw new ApiError("Failed to fetch products by ids", error.code, error)
+  }
+
+  if (!data) return []
 
   return mappedProducts(data as ProductDTO[])
 }

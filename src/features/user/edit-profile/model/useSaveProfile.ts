@@ -2,6 +2,7 @@ import type { UserProfileForm } from "./types.ts"
 import { mapFormToUser } from "@/features/user/edit-profile/lib"
 import { useUserModel } from "@/entities/user"
 import type { FormInstance } from "element-plus"
+import { useNotifications } from "@/shared/lib"
 
 interface Params {
   formData: MaybeRefOrGetter<UserProfileForm>
@@ -15,6 +16,8 @@ export const useSaveProfile = ({ formRef, formData, hasChanges, saveFormData }: 
 
   const isSavingProfile = ref(false)
 
+  const { notifyError } = useNotifications()
+
   const saveProfile = async () => {
     if (!hasChanges.value) return
 
@@ -25,11 +28,7 @@ export const useSaveProfile = ({ formRef, formData, hasChanges, saveFormData }: 
     try {
       await formRef.value.validate()
     } catch {
-      ElNotification({
-        title: "Ошибка",
-        message: "Проверьте правильность заполненных полей",
-        type: "error",
-      })
+      notifyError("Проверьте правильность заполненных полей")
       return
     }
 

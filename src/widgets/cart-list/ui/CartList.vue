@@ -1,7 +1,23 @@
 <template>
   <div class="cart-list">
     <div class="cart-list__list">
-      <el-empty v-if="showCartEmpty" description="Корзина пуста" />
+      <template v-if="isLoadingProducts && !cartIsEmpty">
+        <skeleton-product-card-row v-for="n in 2" :key="n" />
+      </template>
+      <div v-else-if="loadError" class="cart-list__error">
+        <div class="cart-list__error-text">
+          <span>Что-то пошло не так</span>
+        </div>
+        <base-btn
+          class="cart-list__retry"
+          color="var(--color-purple)"
+          :loading="isLoadingProducts"
+          @click.stop="loadCartProducts"
+        >
+          Повторить
+        </base-btn>
+      </div>
+      <el-empty v-else-if="cartIsEmpty" description="Корзина пуста" />
       <template v-else>
         <transition-group name="fade-group">
           <cart-item
@@ -40,20 +56,16 @@
 </template>
 
 <script lang="ts" setup>
-import { type IProduct } from "@/entities/product"
-import { useProductCartList } from "../model/useProductCartList"
-import { useConfirmationCompletelyDelete } from "../model/useConfirmationCompletelyDelete"
+import { type IProduct, SkeletonProductCardRow } from "@/entities/product"
+import { useCartList, useConfirmationCompletelyDelete } from "../model"
 import { CartItem, ChangeQuantity, CompletelyDelete } from "@/features/cart"
 import { usePopupModel } from "@/features/popups"
-import { useCartModel } from "@/entities/cart"
+import { BaseBtn } from "@/shared/ui/base-btn"
 
 const popupModel = usePopupModel()
 
-const cartModel = useCartModel()
-
-const showCartEmpty = computed(() => cartModel.items.length === 0)
-
-const { cartDetailedItems } = useProductCartList()
+const { cartDetailedItems, loadCartProducts, cartIsEmpty, isLoadingProducts, loadError } =
+  useCartList()
 
 const { toggleDeleteVisibility, isDeleteVisible } = useConfirmationCompletelyDelete()
 
@@ -62,6 +74,10 @@ const onImgCartItemClick = (product: IProduct): void => {
     openingIdProduct: product.id,
   })
 }
+
+onMounted(async () => {
+  await loadCartProducts()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -72,9 +88,26 @@ const onImgCartItemClick = (product: IProduct): void => {
     row-gap: 16px;
     margin-top: 20px;
   }
+
+  &__error {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    align-items: center;
+  }
+
+  &__error-text {
+    span {
+      color: var(--color-red);
+      font-variant: all-small-caps;
+      font-size: 16px;
+    }
+  }
+
   &__cart-item {
     position: relative;
   }
+
   &__completely-delete {
     position: absolute;
     width: fit-content;
@@ -82,12 +115,14 @@ const onImgCartItemClick = (product: IProduct): void => {
     right: unset;
     top: 1px;
   }
+
   &__cart-item-delete {
     cursor: pointer;
     align-self: flex-end;
     margin-left: auto;
     font-size: 0;
   }
+
   :deep(.product__action) {
     justify-content: space-between;
     width: 100%;

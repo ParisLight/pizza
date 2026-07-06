@@ -1,9 +1,10 @@
 import { useCartModel } from "@/entities/cart"
 import { useUserModel } from "@/entities/user"
+import { useProductModel } from "@/entities/product"
 import { type IOrderItemInput, useOrderModel } from "@/entities/order"
 import { mapFormToOrderDraft, useOrderForm } from "@/features/order"
 import { useValidateCart } from "@/features/cart"
-import { useProductModel } from "@/entities/product"
+import { useNotifications } from "@/shared/lib"
 import { ROUTES } from "@/shared/config"
 
 export const useCheckout = () => {
@@ -12,6 +13,8 @@ export const useCheckout = () => {
   const userModel = useUserModel()
   const productModel = useProductModel()
   const router = useRouter()
+
+  const { notifyError, notifySuccess } = useNotifications()
 
   const isInProcess = ref(false)
 
@@ -24,31 +27,30 @@ export const useCheckout = () => {
 
     if (!userId || !cartModel.productIdsInCart.length || !formRef.value) return
 
-    await cartModel.flushPersistCart(userId)
+    try {
+      await cartModel.flushPersistCart(userId)
+    } catch {
+      notifyError("Не удалось сохранить корзину")
+      return
+    }
 
-    await productModel.ensureProductsByIds(cartModel.productIdsInCart)
-
-    await deleteNotExistsItems()
+    try {
+      await productModel.ensureProductsByIds(cartModel.productIdsInCart)
+      await deleteNotExistsItems()
+    } catch {
+      notifyError("Не удалось загрузить данные о товарах")
+      return
+    }
 
     if (hasInactiveItems.value) {
-      ElNotification({
-        title: "Ошибка",
-        message:
-          "В корзине присутствуют товары, которые уже сняты с продажи. Удалите их перед оформлением нового заказа",
-        type: "error",
-      })
+      notifyError("В корзине есть товары, снятые с продажи. Удалите их перед заказом")
       return
     }
 
     try {
       await formRef.value.validate()
     } catch {
-      ElNotification({
-        title: "Ошибка",
-        message: "Проверьте правильность заполненных полей",
-        type: "error",
-      })
-
+      notifyError("Проверьте правильность заполненных полей")
       return
     }
 
@@ -63,22 +65,13 @@ export const useCheckout = () => {
 
       await orderModel.sendOrder(order, orderItems)
 
-      ElNotification({
-        title: "Успех",
-        message: "Заказ успешно создан",
-        type: "success",
-      })
+      notifySuccess("Заказ успешно создан")
 
       await router.push(ROUTES.myOrders)
-
       await Promise.allSettled([orderModel.loadOrders(userId), cartModel.clearCart(userId)])
       clearForm()
     } catch {
-      ElNotification({
-        title: "Ошибка",
-        message: "Что-то пошло не так",
-        type: "error",
-      })
+      notifyError("Не удалось оформить заказ")
     } finally {
       isInProcess.value = false
     }
