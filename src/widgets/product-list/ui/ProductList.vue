@@ -46,7 +46,12 @@ import {
   useProductModel,
 } from "@/entities/product"
 import { ChangeQuantity } from "@/features/cart"
-import { useAsyncPaginatedStatus, useInfinityScroll } from "@/shared/lib"
+import {
+  isLoadingMore,
+  isPaginatedEmpty as isEmpty,
+  isPaginatedSkeleton as isSkeleton,
+  useInfinityScroll,
+} from "@/shared/lib"
 import { useProductList } from "@/widgets/product-list/model"
 import { BaseSpinner } from "@/shared/ui/base-spinner"
 
@@ -55,8 +60,6 @@ const productModel = useProductModel()
 const sentinelRef = ref<HTMLElement | undefined>()
 
 const { loadingStatus, activeCategoryId, activeProductIds, onProductClick } = useProductList()
-
-const { isSkeleton, isLoadingMore, isEmpty } = useAsyncPaginatedStatus()
 
 useInfinityScroll(sentinelRef, { root: null, rootMargin: "500px" }, async () => {
   await productModel.fetchProductsByPage(activeCategoryId.value)

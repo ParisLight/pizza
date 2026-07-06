@@ -2,7 +2,7 @@ import type { UserProfileForm } from "./types.ts"
 import { mapFormToUser } from "@/features/user/edit-profile/lib"
 import { useUserModel } from "@/entities/user"
 import type { FormInstance } from "element-plus"
-import { useNotifications } from "@/shared/lib"
+import { notifyError, notifySuccess } from "@/shared/lib"
 
 interface Params {
   formData: MaybeRefOrGetter<UserProfileForm>
@@ -15,8 +15,6 @@ export const useSaveProfile = ({ formRef, formData, hasChanges, saveFormData }: 
   const userModel = useUserModel()
 
   const isSavingProfile = ref(false)
-
-  const { notifyError } = useNotifications()
 
   const saveProfile = async () => {
     if (!hasChanges.value) return
@@ -40,27 +38,15 @@ export const useSaveProfile = ({ formRef, formData, hasChanges, saveFormData }: 
       const isUpdated = await userModel.updateUser(updatingUserData)
 
       if (!isUpdated) {
-        ElNotification({
-          title: "Ошибка",
-          message: "Не удалось сохранить данные. Попробуйте позже",
-          type: "error",
-        })
+        notifyError("Не удалось сохранить данные. Попробуйте позже")
         return
       }
 
-      ElNotification({
-        title: "Успешно",
-        message: "Информация сохранена",
-        type: "success",
-      })
+      notifySuccess("Информация сохранена")
 
       saveFormData()
     } catch {
-      ElNotification({
-        title: "Ошибка",
-        message: "Что-то пошло не так",
-        type: "error",
-      })
+      notifyError("Что-то пошло не так")
     } finally {
       isSavingProfile.value = false
     }

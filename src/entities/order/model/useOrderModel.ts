@@ -2,7 +2,7 @@ import { defineStore } from "pinia"
 import type { IOrder, IOrderDraft, IOrderItemInput } from "./types"
 import * as OrderApi from "../api"
 import type { LoadingStatus } from "@/shared/config"
-import { useAsyncStatus } from "@/shared/lib"
+import { canFetch, finishFetch, startFetch } from "@/shared/lib"
 
 export const useOrderModel = defineStore("order", {
   state: () => ({
@@ -21,8 +21,6 @@ export const useOrderModel = defineStore("order", {
       return orderId
     },
     async loadOrders(userId: number | undefined) {
-      const { startFetch, canFetch, finishFetch } = useAsyncStatus()
-
       const hasData = !!this.ordersList?.length
 
       if (!userId) return

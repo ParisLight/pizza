@@ -3,7 +3,7 @@ import type { CatalogCategoryMeta, IProduct } from "./types"
 import { ProductApi } from "../index"
 import { FETCH_PRODUCTS_LIMIT } from "../config"
 import { type PaginatedStatus } from "@/shared/config"
-import { useAsyncPaginatedStatus } from "@/shared/lib"
+import { canFetchPaginated, finishPaginatedFetch, startPaginatedFetch } from "@/shared/lib"
 
 export const useProductModel = defineStore("product", {
   state: () => ({
@@ -28,17 +28,16 @@ export const useProductModel = defineStore("product", {
       this.searchQuery = ""
     },
     async fetchProductsByPage(categoryId: number) {
-      const { startFetch, finishFetch, canFetch } = useAsyncPaginatedStatus()
 
       const status = this.categoryStatus[categoryId] ?? "idle"
       const hasData = !!this.categoryProducts?.[categoryId]?.length
       const hasMore = this.catalogMeta[categoryId]?.hasMore ?? true
 
-      if (!canFetch(status, hasMore)) return
+      if (!canFetchPaginated(status, hasMore)) return
 
       const isFirstLoad = !hasData
 
-      this.categoryStatus[categoryId] = startFetch(status, hasData)
+      this.categoryStatus[categoryId] = startPaginatedFetch(status, hasData)
 
       try {
         this.catalogMeta[categoryId] ??= { page: 1, hasMore: true, appliedQuery: "" }
@@ -66,7 +65,7 @@ export const useProductModel = defineStore("product", {
         this.categoryProducts[categoryId] ??= []
         this.categoryProducts[categoryId].push(...response.map((product: IProduct) => product.id))
 
-        this.categoryStatus[categoryId] = finishFetch(response.length, isFirstLoad)
+        this.categoryStatus[categoryId] = finishPaginatedFetch(response.length, isFirstLoad)
       } catch {
         this.categoryStatus[categoryId] = "error"
       }

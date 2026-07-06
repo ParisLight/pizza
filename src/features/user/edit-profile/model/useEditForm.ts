@@ -2,11 +2,10 @@ import type { UserProfileForm } from "./types.ts"
 import { EDIT_PROFILE_FORM_RULES } from "../config"
 import { mapUserToForm } from "../lib"
 import { useUserModel } from "@/entities/user"
-import { useFormatter, useFormChanges } from "@/shared/lib"
+import { normalizePhone, useFormChanges } from "@/shared/lib"
 
 export const useEditForm = () => {
   const userModel = useUserModel()
-  const { normalizePhone } = useFormatter()
 
   const form = reactive<UserProfileForm>({
     name: "",

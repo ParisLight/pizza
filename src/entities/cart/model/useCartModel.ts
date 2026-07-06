@@ -2,7 +2,7 @@ import { defineStore } from "pinia"
 import { CartApi } from "../index"
 import type { ICartItem } from "./types"
 import type { LoadingStatus } from "@/shared/config"
-import { useAsyncStatus } from "@/shared/lib"
+import { canFetch, finishFetch, startFetch } from "@/shared/lib"
 import { createPersistDebouncer } from "@/entities/cart/model/createPersistDebouncer.ts"
 
 const cartPersist = createPersistDebouncer(async (userId: number) => {
@@ -22,8 +22,6 @@ export const useCartModel = defineStore("cart", {
       if (!userId) {
         throw new Error("Cannot fetch cart user_id is not valid")
       }
-
-      const { startFetch, canFetch, finishFetch } = useAsyncStatus()
 
       if (!canFetch(this.loadingStatus)) return
 

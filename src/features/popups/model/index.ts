@@ -1,8 +1,6 @@
 import { defineStore } from "pinia"
 import type { IPopupState } from "./types"
-import { useBodyScrollLock } from "@/shared/lib"
-
-const { lockScroll, unlockScroll } = useBodyScrollLock()
+import { lockScroll, unlockScroll } from "@/shared/lib"
 
 export const usePopupModel = defineStore("popup", {
   state: () => ({

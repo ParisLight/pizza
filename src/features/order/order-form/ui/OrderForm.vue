@@ -105,7 +105,7 @@ import { BaseDropdown } from "@/shared/ui/base-dropdown"
 import { BaseCheckbox } from "@/shared/ui/base-checkbox"
 import { BaseTextarea } from "@/shared/ui/base-textarea"
 import { BaseRadioGroup } from "@/shared/ui/base-radio-group"
-import { useFormatter } from "@/shared/lib"
+import { digitalFormat, numberFormat } from "@/shared/lib"
 import { INPUT_MASK } from "@/shared/config"
 import { type OrderFormValues } from "@/features/order"
 import { DELIVERY_OPTIONS, DeliveryType, PAYMENT_OPTIONS, type TimeSlot } from "@/entities/order"
@@ -120,8 +120,6 @@ const props = defineProps<{
 }>()
 
 const { form, timeSlots, formRules } = toRefs(props)
-
-const { digitalFormat, numberFormat } = useFormatter()
 </script>
 
 <style lang="scss" scoped>

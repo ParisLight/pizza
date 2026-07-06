@@ -2,7 +2,7 @@ import { defineStore } from "pinia"
 import type { ICategory } from "./types.ts"
 import * as CategoryApi from "../api"
 import type { LoadingStatus } from "@/shared/config"
-import { useAsyncStatus } from "@/shared/lib"
+import { canFetch, finishFetch, startFetch } from "@/shared/lib"
 
 export const useCategoryModel = defineStore("category", {
   state: () => ({
@@ -13,8 +13,6 @@ export const useCategoryModel = defineStore("category", {
 
   actions: {
     async fetchCategories() {
-      const { startFetch, canFetch, finishFetch } = useAsyncStatus()
-
       if (!canFetch(this.loadingStatus)) return
 
       const hasData = !!Object.keys(this.categories)?.length

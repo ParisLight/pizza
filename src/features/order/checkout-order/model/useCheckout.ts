@@ -4,7 +4,7 @@ import { useProductModel } from "@/entities/product"
 import { type IOrderItemInput, useOrderModel } from "@/entities/order"
 import { mapFormToOrderDraft, useOrderForm } from "@/features/order"
 import { useValidateCart } from "@/features/cart"
-import { useNotifications } from "@/shared/lib"
+import { notifyError, notifySuccess } from "@/shared/lib"
 import { ROUTES } from "@/shared/config"
 
 export const useCheckout = () => {
@@ -13,8 +13,6 @@ export const useCheckout = () => {
   const userModel = useUserModel()
   const productModel = useProductModel()
   const router = useRouter()
-
-  const { notifyError, notifySuccess } = useNotifications()
 
   const isInProcess = ref(false)
 

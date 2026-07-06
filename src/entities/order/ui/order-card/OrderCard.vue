@@ -49,13 +49,11 @@
 
 <script setup lang="ts">
 import type { IOrder } from "@/entities/order"
-import { useFormatter } from "@/shared/lib"
+import { localeDateFromISO } from "@/shared/lib"
 
 defineProps<{
   order: IOrder
 }>()
-
-const { localeDateFromISO } = useFormatter()
 </script>
 
 <style lang="scss" scoped>

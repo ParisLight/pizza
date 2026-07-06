@@ -1,13 +1,11 @@
 import { useCartModel } from "@/entities/cart"
 import { useProductModel } from "@/entities/product"
 import { type CartItem } from "./types"
-import { useNotifications } from "@/shared/lib"
+import { notifyError } from "@/shared/lib"
 
 export const useCartList = () => {
   const cartModel = useCartModel()
   const productModel = useProductModel()
-
-  const { notifyError } = useNotifications()
 
   const cartDetailedItems = computed<CartItem[]>(() => {
     return cartModel.items.flatMap((item) => {

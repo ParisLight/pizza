@@ -24,12 +24,10 @@
 <script setup lang="ts">
 import { OrderCard, OrderCardSkeleton, useOrderModel } from "@/entities/order"
 import { useUserModel } from "@/entities/user"
-import { useAsyncStatus } from "@/shared/lib"
+import { isEmpty, isSkeleton } from "@/shared/lib"
 
 const orderModel = useOrderModel()
 const userModel = useUserModel()
-
-const { isSkeleton, isEmpty } = useAsyncStatus()
 
 onMounted(async () => {
   if (orderModel.ordersList.length === 0 && userModel.user?.userId) {

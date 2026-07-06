@@ -30,11 +30,10 @@ import { CategoryCard, CategoryCardSkeleton, useCategoryModel } from "@/entities
 import { Swiper, SwiperSlide } from "swiper/vue"
 import "swiper/css"
 import { useProductModel } from "@/entities/product"
-import { useAsyncStatus } from "@/shared/lib"
+import { isSkeleton } from "@/shared/lib"
 
 const categoryModel = useCategoryModel()
 const productModel = useProductModel()
-const { isSkeleton } = useAsyncStatus()
 
 const onClickCategory = async (id: number) => {
   const previousId = categoryModel.idActiveCategory

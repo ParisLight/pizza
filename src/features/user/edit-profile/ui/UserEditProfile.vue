@@ -60,7 +60,7 @@
 
 <script lang="ts" setup>
 import { BaseInput } from "@/shared/ui/base-input"
-import { useFormatter } from "@/shared/lib"
+import { digitalFormat, numberFormat } from "@/shared/lib"
 import { useEditProfile } from "../model"
 import { INPUT_MASK } from "@/shared/config"
 import { BaseBtn } from "@/shared/ui/base-btn"
@@ -69,8 +69,6 @@ import type { FormInstance } from "element-plus"
 const formRef = ref<FormInstance | undefined>()
 
 const { form, formRules, hasChanges, isSavingProfile, saveProfile } = useEditProfile(formRef)
-
-const { numberFormat, digitalFormat } = useFormatter()
 </script>
 
 <style lang="scss" scoped>
