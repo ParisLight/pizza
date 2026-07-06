@@ -25,6 +25,7 @@ import { useCartModel } from "@/entities/cart"
 import { useProductModel } from "@/entities/product"
 import { useCategoryModel } from "@/entities/category"
 import { AppSpinner } from "@/shared/ui/app-spinner"
+import { notifyError } from "@/shared/lib"
 
 const route = useRoute()
 
@@ -44,18 +45,22 @@ const categoryModel = useCategoryModel()
 const productModel = useProductModel()
 
 const initializeApp = async () => {
-  await userModel.fetchUserById(import.meta.env.VITE_USER_ID)
+  try {
+    await userModel.fetchUserById(import.meta.env.VITE_USER_ID)
 
-  if (!userModel.user) return
+    if (!userModel.user) return
 
-  await cartModel.fetchCart(userModel.user?.userId)
+    await cartModel.fetchCart(userModel.user?.userId)
 
-  isLoadingApp.value = false
-
-  await Promise.allSettled([
-    categoryModel.fetchCategories(),
-    productModel.fetchProductsByPage(categoryModel.idActiveCategory),
-  ])
+    await Promise.allSettled([
+      categoryModel.fetchCategories(),
+      productModel.fetchProductsByPage(categoryModel.idActiveCategory),
+    ])
+  } catch {
+    notifyError("Ошибка при загрузке")
+  } finally {
+    isLoadingApp.value = false
+  }
 }
 
 onBeforeMount(async () => {

@@ -7,7 +7,7 @@ import { createPersistDebouncer } from "@/entities/cart/model/createPersistDebou
 
 const cartPersist = createPersistDebouncer(async (userId: number) => {
   const store = useCartModel()
-  await store.persistCart(userId)
+  await store.persistCartSilent(userId)
 })
 
 export const useCartModel = defineStore("cart", {
@@ -19,9 +19,7 @@ export const useCartModel = defineStore("cart", {
 
   actions: {
     async fetchCart(userId: number | undefined) {
-      if (!userId) {
-        throw new Error("Cannot fetch cart user_id is not valid")
-      }
+      if (!userId) return
 
       if (!canFetch(this.loadingStatus)) return
 
@@ -33,7 +31,10 @@ export const useCartModel = defineStore("cart", {
       try {
         await this.ensureCartId(userId)
 
-        if (!this.cartId) return
+        if (!this.cartId) {
+          this.loadingStatus = "error"
+          return
+        }
 
         const output = await CartApi.fetchCart(this.cartId)
 
@@ -55,7 +56,8 @@ export const useCartModel = defineStore("cart", {
     },
 
     async flushPersistCart(userId: number) {
-      await cartPersist.flush(userId)
+      cartPersist.cancel()
+      await this.persistCart(userId)
     },
 
     async addToCart(productId: number | undefined, userId: number | undefined) {
@@ -76,11 +78,7 @@ export const useCartModel = defineStore("cart", {
 
       this.schedulePersistCart(userId)
     },
-    async ensureCartId(userId: number | undefined) {
-      if (!userId) {
-        throw new Error("Failed to resolve user_id for cart")
-      }
-
+    async ensureCartId(userId: number) {
       if (this.cartId) return this.cartId
 
       const existingId = await CartApi.fetchCartIdByUser(userId)
@@ -89,11 +87,7 @@ export const useCartModel = defineStore("cart", {
         return this.cartId
       }
 
-      const createdId = await CartApi.createCart(userId)
-      if (!createdId) {
-        throw new Error("Failed to create cart")
-      }
-      this.cartId = createdId
+      this.cartId = await CartApi.createCart(userId)
       return this.cartId
     },
 
@@ -103,6 +97,16 @@ export const useCartModel = defineStore("cart", {
       if (!this.cartId) return
 
       this.items = await CartApi.updateCart(this.cartId, this.items)
+    },
+
+    async persistCartSilent(userId: number) {
+      try {
+        await this.persistCart(userId)
+      } catch (error) {
+        if (import.meta.env.DEV) {
+          console.error("[cart] persist failed:", error)
+        }
+      }
     },
 
     removeManyFromCart(productIds: number[]) {
