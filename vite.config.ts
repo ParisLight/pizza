@@ -1,36 +1,4 @@
-import { fileURLToPath, URL } from 'node:url'
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueDevTools from 'vite-plugin-vue-devtools'
+import { defineConfig } from "vite"
+import { buildViteConfig } from "./src/app/config/build"
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [
-    vue(),
-    vueDevTools(),
-      Components({
-        resolvers: [ElementPlusResolver()],
-        dts: 'components.d.ts',
-      }),
-    AutoImport({
-      resolvers: [ElementPlusResolver()],
-      imports: [
-        'vue',
-        'vue-router',
-        'pinia',
-      ],
-      dts: 'auto-imports.d.ts',
-      eslintrc: {
-        enabled: true,
-      },
-    })
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    },
-  },
-})
+export default defineConfig((env) => buildViteConfig(env))

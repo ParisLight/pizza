@@ -18,13 +18,7 @@ export const useUserModel = defineStore("user", {
 
     async updateUser(userData: IUser) {
       if (!this.user) return
-      console.log(
-        {
-          currentUse: this.user,
-          userData: userData,
-        },
-        "update_user_get__",
-      )
+
       const updatedData = await UserApi.updateUser(this.user.userId, userData)
 
       if (!updatedData) return false

@@ -1,0 +1,8 @@
+import type { ConfigEnv, UserConfig } from "vite"
+import { buildPlugins } from "./buildPlugins"
+import { buildResolve } from "./buildResolve"
+
+export const buildViteConfig = (env: ConfigEnv): UserConfig => ({
+  plugins: buildPlugins(env),
+  resolve: buildResolve(),
+})
