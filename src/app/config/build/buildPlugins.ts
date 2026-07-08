@@ -11,12 +11,12 @@ export const buildPlugins = ({ command }: ConfigEnv): UserConfig["plugins"] => {
   const autoResolvers = [
     Components({
       resolvers: [ElementPlusResolver()],
-      dts: "components.d.ts",
+      dts: isDev ? "components.d.ts" : false,
     }),
     AutoImport({
       resolvers: [ElementPlusResolver()],
       imports: ["vue", "vue-router", "pinia"],
-      dts: "auto-imports.d.ts",
+      dts: isDev ? "auto-imports.d.ts" : false,
       eslintrc: {
         enabled: true,
       },
