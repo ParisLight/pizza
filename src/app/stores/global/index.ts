@@ -1,3 +1,0 @@
-export { useGlobalStore } from './model'
-
-
