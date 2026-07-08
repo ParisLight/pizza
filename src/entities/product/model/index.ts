@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import type { CatalogCategoryMeta, IProduct } from "./types"
-import { ProductApi } from "../index"
+import * as ProductApi from "../api"
 import { FETCH_PRODUCTS_LIMIT } from "../config"
 import { type PaginatedStatus } from "@/shared/config"
 import { canFetchPaginated, finishPaginatedFetch, startPaginatedFetch } from "@/shared/lib"

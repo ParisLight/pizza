@@ -1,5 +1,5 @@
-import type { UserDTO, UserInsertDTO } from "@/entities/user/api/dto"
-import type { IUser } from "@/entities/user"
+import type { UserDTO, UserInsertDTO } from "../api/dto"
+import type { IUser } from "../model/types"
 
 export const mappedUser = (userData: UserDTO): IUser => ({
   id: userData.id,

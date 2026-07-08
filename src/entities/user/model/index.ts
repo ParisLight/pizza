@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { UserApi } from "../index.ts"
+import * as UserApi from "../api"
 import type { IUser } from "./types"
 
 export const useUserModel = defineStore("user", {

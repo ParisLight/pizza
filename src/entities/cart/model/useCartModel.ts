@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { CartApi } from "../index"
+import * as CartApi from "../api"
 import type { ICartItem } from "./types"
 import type { LoadingStatus } from "@/shared/config"
 import { canFetch, finishFetch, startFetch } from "@/shared/lib"

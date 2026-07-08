@@ -1,4 +1,4 @@
-import { useCartModel } from "./index"
+import { useCartModel } from "./useCartModel"
 
 export const useCartItem = (productId: MaybeRefOrGetter<number>) => {
   const cartModel = useCartModel()

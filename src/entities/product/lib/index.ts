@@ -1,4 +1,4 @@
-import type { IProduct } from "@/entities/product"
+import type { IProduct } from "../model/types"
 import type { ProductDTO } from "@/entities/product/api/dto"
 
 export const mappedProducts = (products: ProductDTO[]): IProduct[] => {

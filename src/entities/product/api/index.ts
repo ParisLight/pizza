@@ -1,6 +1,6 @@
 import { ApiError, supabase } from "@/shared/api"
 import { mappedProducts } from "../lib"
-import type { IProduct } from "@/entities/product"
+import type { IProduct } from "../model/types"
 import type { ProductDTO } from "@/entities/product/api/dto"
 
 export const fetchProducts = async (

@@ -1,5 +1,5 @@
 import { supabase } from '@/shared/api'
-import type { IUser } from '@/entities/user'
+import type { IUser } from "../model/types"
 import type { UserDTO } from "@/entities/user/api/dto";
 import { mappedUser, mapUserToInsert } from "../lib/mappers"
 
