@@ -4,6 +4,7 @@ import Components from "unplugin-vue-components/vite"
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 import AutoImport from "unplugin-auto-import/vite"
 import type { ConfigEnv, UserConfig } from "vite"
+import { spa404Fallback } from "./spa404Fallback"
 
 export const buildPlugins = ({ command }: ConfigEnv): UserConfig["plugins"] => {
   const isDev = command === "serve"
@@ -23,5 +24,10 @@ export const buildPlugins = ({ command }: ConfigEnv): UserConfig["plugins"] => {
     }),
   ]
 
-  return [vue(), ...(isDev ? [vueDevTools()] : []), ...autoResolvers]
+  return [
+    vue(),
+    ...(isDev ? [vueDevTools()] : []),
+    ...autoResolvers,
+    ...(isDev ? [] : [spa404Fallback()]),
+  ]
 }
