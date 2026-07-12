@@ -25,7 +25,7 @@ import { useCartModel } from "@/entities/cart"
 import { useProductModel } from "@/entities/product"
 import { useCategoryModel } from "@/entities/category"
 import { AppSpinner } from "@/shared/ui/app-spinner"
-import { notifyError } from "@/shared/lib"
+import { initTelegram, notifyError } from "@/shared/lib"
 
 const route = useRoute()
 
@@ -45,17 +45,22 @@ const categoryModel = useCategoryModel()
 const productModel = useProductModel()
 
 const initializeApp = async () => {
+  const { isTelegram, initData } = initTelegram()
+
   try {
-    await userModel.fetchUserById(import.meta.env.VITE_USER_ID)
+    if (isTelegram && initData) {
+      // todo: go to tg screen
+      await userModel.authUser(initData)
 
-    if (!userModel.user) return
+      if (!userModel.user) return
 
-    await cartModel.fetchCart(userModel.user?.userId)
+      await cartModel.fetchCart(userModel.user?.userId)
 
-    await Promise.allSettled([
-      categoryModel.fetchCategories(),
-      productModel.fetchProductsByPage(categoryModel.idActiveCategory),
-    ])
+      await Promise.allSettled([
+        categoryModel.fetchCategories(),
+        productModel.fetchProductsByPage(categoryModel.idActiveCategory),
+      ])
+    }
   } catch {
     notifyError("Ошибка при загрузке")
   } finally {

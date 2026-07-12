@@ -1,28 +1,29 @@
-import { supabase } from '@/shared/api'
+import { ApiError, supabase } from "@/shared/api"
 import type { IUser } from "../model/types"
-import type { UserDTO } from "@/entities/user/api/dto";
+import type { TelegramAuthResponse, UserDTO } from "@/entities/user/api/dto"
 import { mappedUser, mapUserToInsert } from "../lib/mappers"
 
+export const authWithTelegram = async (initData: string): Promise<IUser | null> => {
+  const { data, error } = await supabase.functions.invoke<TelegramAuthResponse>("telegram-auth", {
+    body: { initData },
+  })
 
-export const fetchUserById = async (userId: number): Promise<IUser | null> => {
-  const { data: userData, error } = await supabase
-    .from('users')
-    .select('*')
-    .eq('user_id', userId)
-    .single()
+  if (error) {
+    throw new ApiError(error.message, undefined, error)
+  }
 
-  if(error || !userData) return null
+  if (!data?.user) return null
 
-  return mappedUser(userData as UserDTO)
+  return mappedUser(data.user)
 }
 
 export const updateUser = async (userId: number, userData: IUser): Promise<IUser | null> => {
   const updatingData = mapUserToInsert(userData)
 
   const { data: updatedUser, error } = await supabase
-    .from('users')
+    .from("users")
     .update(updatingData)
-    .eq('user_id', userId)
+    .eq("user_id", userId)
     .select()
     .single()
 

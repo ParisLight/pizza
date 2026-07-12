@@ -70,10 +70,6 @@ useInfinityScroll(sentinelRef, { root: null, rootMargin: "500px" }, async () => 
 .products-list {
   width: 100%;
 
-  &__grid {
-    width: 100%;
-  }
-
   &__empty {
     margin: 24px auto;
   }

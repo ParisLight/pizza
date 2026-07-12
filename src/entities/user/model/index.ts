@@ -8,12 +8,12 @@ export const useUserModel = defineStore("user", {
   }),
 
   actions: {
-    async fetchUserById(userId: number) {
-      const userData = await UserApi.fetchUserById(userId)
+    async authUser(initData: string) {
+      const user = await UserApi.authWithTelegram(initData)
 
-      if (!userData) return
+      if (!user) return
 
-      this.user = userData
+      this.user = user
     },
 
     async updateUser(userData: IUser) {
