@@ -12,13 +12,13 @@ export const initTelegram = (): TelegramEntity => {
   const isTelegram = !!telegram
 
   if (!isTelegram) {
-    return { telegram: null, isTelegram: isTelegram, initData: null }
+    return { telegram: null, isTelegram, initData: null }
   }
 
   telegram.ready()
   telegram.expand()
 
-  const initData = telegram.initData
+  const initData = telegram.initData || null
 
   return { telegram, isTelegram, initData }
 }

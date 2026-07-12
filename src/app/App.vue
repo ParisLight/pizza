@@ -1,5 +1,6 @@
 <template>
-  <app-spinner v-if="isLoadingApp" />
+  <go-to-telegram v-if="!canUseApp" />
+  <app-spinner v-else-if="isLoadingApp" />
   <template v-else>
     <router-view v-slot="{ Component }">
       <component :is="layout">
@@ -25,6 +26,7 @@ import { useCartModel } from "@/entities/cart"
 import { useProductModel } from "@/entities/product"
 import { useCategoryModel } from "@/entities/category"
 import { AppSpinner } from "@/shared/ui/app-spinner"
+import { GoToTelegram } from "@/shared/ui/go-to-telegram"
 import { initTelegram, notifyError } from "@/shared/lib"
 
 const route = useRoute()
@@ -44,23 +46,26 @@ const cartModel = useCartModel()
 const categoryModel = useCategoryModel()
 const productModel = useProductModel()
 
+const { isTelegram, initData } = initTelegram()
+const canUseApp = isTelegram && !!initData
+
 const initializeApp = async () => {
-  const { isTelegram, initData } = initTelegram()
+  if (!canUseApp) {
+    isLoadingApp.value = false
+    return
+  }
 
   try {
-    if (isTelegram && initData) {
-      // todo: go to tg screen
-      await userModel.authUser(initData)
+    await userModel.authUser(initData!)
 
-      if (!userModel.user) return
+    if (!userModel.user) return
 
-      await cartModel.fetchCart(userModel.user?.userId)
+    await cartModel.fetchCart(userModel.user.userId)
 
-      await Promise.allSettled([
-        categoryModel.fetchCategories(),
-        productModel.fetchProductsByPage(categoryModel.idActiveCategory),
-      ])
-    }
+    await Promise.allSettled([
+      categoryModel.fetchCategories(),
+      productModel.fetchProductsByPage(categoryModel.idActiveCategory),
+    ])
   } catch {
     notifyError("Ошибка при загрузке")
   } finally {
