@@ -1,10 +1,10 @@
 import { ApiError, supabase } from "@/shared/api"
 import type { IUser } from "../model/types"
-import type { TelegramAuthResponse, UserDTO } from "@/entities/user/api/dto"
+import type { TelegramAuthDTO, UserDTO } from "@/entities/user/api/dto"
 import { mappedUser, mapUserToInsert } from "../lib/mappers"
 
 export const authWithTelegram = async (initData: string): Promise<IUser | null> => {
-  const { data, error } = await supabase.functions.invoke<TelegramAuthResponse>("telegram-auth", {
+  const { data, error } = await supabase.functions.invoke<TelegramAuthDTO>("telegram-auth", {
     body: { initData },
   })
 
@@ -13,6 +13,15 @@ export const authWithTelegram = async (initData: string): Promise<IUser | null> 
   }
 
   if (!data?.user) return null
+
+  if (!data?.session) {
+    throw new Error("Session not found")
+  }
+
+  await supabase.auth.setSession({
+    access_token: data.session.access_token,
+    refresh_token: data.session.refresh_token,
+  })
 
   return mappedUser(data.user)
 }

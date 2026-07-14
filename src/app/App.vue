@@ -28,6 +28,7 @@ import { useCategoryModel } from "@/entities/category"
 import { AppSpinner } from "@/shared/ui/app-spinner"
 import { GoToTelegram } from "@/shared/ui/go-to-telegram"
 import { initTelegram, notifyError } from "@/shared/lib"
+import { supabase } from "@/shared/api"
 
 const route = useRoute()
 
@@ -59,7 +60,8 @@ const initializeApp = async () => {
     await userModel.authUser(initData!)
 
     if (!userModel.user) return
-
+    const { data } = await supabase.auth.getSession()
+    console.log({ data }, "data_get_ssesssion_")
     await cartModel.fetchCart(userModel.user.userId)
 
     await Promise.allSettled([

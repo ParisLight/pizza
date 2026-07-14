@@ -8,12 +8,7 @@
         Приложение работает только внутри Telegram. Откройте бота и запустите Mini App оттуда.
       </p>
 
-      <a
-        class="go-to-telegram__link"
-        :href="botUrl"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a class="go-to-telegram__link" :href="botUrl" target="_blank" rel="noopener noreferrer">
         Открыть @{{ botUsername }}
       </a>
     </div>

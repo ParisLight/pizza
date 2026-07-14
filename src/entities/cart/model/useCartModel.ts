@@ -82,13 +82,13 @@ export const useCartModel = defineStore("cart", {
       if (this.cartId) return this.cartId
 
       const existingId = await CartApi.fetchCartIdByUser(userId)
+
       if (existingId) {
         this.cartId = existingId
         return this.cartId
       }
 
-      this.cartId = await CartApi.createCart(userId)
-      return this.cartId
+      return null
     },
 
     async persistCart(userId: number) {

@@ -21,30 +21,12 @@ export const fetchCartIdByUser = async (userId: number) => {
     .select("id")
     .eq("user_id", userId)
     .maybeSingle()
-
+  console.log({ userId, data }, "get_this_")
   if (error) {
     throw new ApiError("Failed to fetch user cart", error.code, error)
   }
 
   return data?.id ?? null
-}
-
-export const createCart = async (userId: number): Promise<number> => {
-  const { data, error } = await supabase
-    .from("carts")
-    .insert({ user_id: userId })
-    .select("id")
-    .single()
-
-  if (error) {
-    throw new ApiError("Failed to create cart", error.code, error)
-  }
-
-  if (!data) {
-    throw new ApiError("Failed to create cart: empty response")
-  }
-
-  return data.id
 }
 
 export const updateCart = async (cartId: number, items: ICartItem[]): Promise<ICartItem[]> => {
