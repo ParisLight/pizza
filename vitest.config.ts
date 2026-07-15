@@ -10,6 +10,12 @@ export default defineConfig((env) =>
         environment: 'jsdom',
         exclude: [...configDefaults.exclude, 'e2e/**'],
         root: fileURLToPath(new URL('./', import.meta.url)),
+        css: true,
+        server: {
+          deps: {
+            inline: [/element-plus/],
+          },
+        },
       },
     },
   ),
