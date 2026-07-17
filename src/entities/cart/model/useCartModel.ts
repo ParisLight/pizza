@@ -4,6 +4,9 @@ import type { ICartItem } from "./types"
 import type { LoadingStatus } from "@/shared/config"
 import { canFetch, finishFetch, startFetch } from "@/shared/lib"
 
+const cloneCartItems = (items: Record<number, ICartItem>): Record<number, ICartItem> =>
+  Object.fromEntries(Object.entries(items).map(([id, item]) => [Number(id), { ...item }]))
+
 export const useCartModel = defineStore("cart", {
   state: () => ({
     items: {} as Record<number, ICartItem>,
@@ -45,7 +48,7 @@ export const useCartModel = defineStore("cart", {
         throw new Error("Failed to add item")
       }
 
-      const snapshot = Object.assign({}, this.items)
+      const snapshot = cloneCartItems(this.items)
 
       const item = this.items[productId]
 
@@ -95,26 +98,34 @@ export const useCartModel = defineStore("cart", {
       const item = this.items[productId]
 
       if (item && item.quantity > 1) {
+        const snapshot = cloneCartItems(this.items)
+
         item.quantity -= 1
-        await this.persistCart(userId)
+
+        try {
+          await this.persistCart(userId)
+        } catch (e) {
+          this.items = snapshot
+          throw e
+        }
       } else {
         await this.removeCompletelyFromCart([productId], userId)
       }
     },
 
     async clearCart(userId: number | undefined) {
-      if (!userId) {
+      if (!userId || !this.cartId) {
         throw new Error("Failed to clear cart")
       }
 
-      const cartSnapshot = Object.assign({}, this.items)
+      const snapshot = cloneCartItems(this.items)
 
       this.items = {}
 
       try {
-        await CartApi.clearCart(userId)
+        await CartApi.clearCart(this.cartId)
       } catch (e) {
-        this.items = cartSnapshot
+        this.items = snapshot
         throw e
       }
     },
@@ -124,13 +135,20 @@ export const useCartModel = defineStore("cart", {
         throw new Error("Failed to remove item")
       }
 
+      const snapshot = cloneCartItems(this.items)
+
       productIds.forEach((productId) => {
         if (this.items?.[productId]) {
           delete this.items[productId]
         }
       })
 
-      await CartApi.deletePositionsFromCart(this.cartId, productIds)
+      try {
+        await CartApi.deletePositionsFromCart(this.cartId, productIds)
+      } catch (e) {
+        this.items = snapshot
+        throw e
+      }
     },
   },
   getters: {
