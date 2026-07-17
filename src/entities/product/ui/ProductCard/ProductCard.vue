@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-import { type IProduct } from "@/entities/product"
+import type { IProduct } from "@/entities/product"
 
 const emit = defineEmits(["img-click"])
 

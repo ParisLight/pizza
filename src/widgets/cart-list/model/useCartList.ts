@@ -8,7 +8,7 @@ export const useCartList = () => {
   const productModel = useProductModel()
 
   const cartDetailedItems = computed<CartItem[]>(() => {
-    return cartModel.items.flatMap((item) => {
+    return Object.values(cartModel.items).flatMap((item) => {
       const product = productModel.products[item.productId]
 
       if (!product) {
@@ -24,7 +24,7 @@ export const useCartList = () => {
     })
   })
 
-  const cartIsEmpty = computed(() => cartModel.items.length === 0)
+  const cartIsEmpty = computed(() => cartModel.productIdsInCart.length === 0)
 
   const loadError = ref(false)
   const isLoadingProducts = ref(false)
@@ -34,8 +34,7 @@ export const useCartList = () => {
     isLoadingProducts.value = true
 
     try {
-      const cartProductIds = cartModel.items.map((item) => item.productId)
-      await productModel.ensureProductsByIds(cartProductIds)
+      await productModel.ensureProductsByIds(cartModel.productIdsInCart)
     } catch {
       loadError.value = true
       notifyError("Не удалось загрузить товары")

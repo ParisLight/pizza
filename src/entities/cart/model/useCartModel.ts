@@ -12,7 +12,7 @@ const cartPersist = createPersistDebouncer(async (userId: number) => {
 
 export const useCartModel = defineStore("cart", {
   state: () => ({
-    items: [] as ICartItem[],
+    items: {} as Record<number, ICartItem>,
     cartId: null as number | null,
     loadingStatus: "idle" as LoadingStatus,
   }),
@@ -23,7 +23,7 @@ export const useCartModel = defineStore("cart", {
 
       if (!canFetch(this.loadingStatus)) return
 
-      const hasData = !!this.items.length
+      const hasData = !!Object.keys(this.items).length
       const isFirstLoad = !hasData
 
       this.loadingStatus = startFetch()
@@ -38,9 +38,9 @@ export const useCartModel = defineStore("cart", {
 
         const output = await CartApi.fetchCart(this.cartId)
 
-        this.items = output ?? []
+        this.items = output ?? {}
 
-        this.loadingStatus = finishFetch(this.items?.length, isFirstLoad)
+        this.loadingStatus = finishFetch(Object.keys(this.items).length, isFirstLoad)
       } catch {
         this.loadingStatus = "error"
       }
@@ -56,8 +56,7 @@ export const useCartModel = defineStore("cart", {
     },
 
     async flushPersistCart(userId: number) {
-      cartPersist.cancel()
-      await this.persistCart(userId)
+      await cartPersist.flush(userId)
     },
 
     async addToCart(productId: number | undefined, userId: number | undefined) {
@@ -65,19 +64,20 @@ export const useCartModel = defineStore("cart", {
         throw new Error("Failed to add item")
       }
 
-      const item = this.items.find((item) => item.productId === productId)
+      const item = this.items[productId]
 
       if (item) {
         item.quantity += 1
       } else {
-        this.items.push({
-          productId: productId,
+        this.items[productId] = {
+          productId,
           quantity: 1,
-        })
+        }
       }
 
       this.schedulePersistCart(userId)
     },
+
     async ensureCartId(userId: number) {
       if (this.cartId) return this.cartId
 
@@ -110,8 +110,9 @@ export const useCartModel = defineStore("cart", {
     },
 
     removeManyFromCart(productIds: number[]) {
-      const ids = new Set(productIds)
-      this.items = this.items.filter((item) => !ids.has(item.productId))
+      for (const id of productIds) {
+        delete this.items[id]
+      }
     },
 
     async removeManyFromCartAndPersist(productIds: number[], userId: number | undefined) {
@@ -128,7 +129,7 @@ export const useCartModel = defineStore("cart", {
         throw new Error("Failed to remove item")
       }
 
-      const item = this.items.find((item) => item.productId === productId)
+      const item = this.items[productId]
 
       if (item && item.quantity > 1) {
         item.quantity -= 1
@@ -143,7 +144,7 @@ export const useCartModel = defineStore("cart", {
         throw new Error("Failed to clear cart")
       }
 
-      this.items = [] as ICartItem[]
+      this.items = {}
       await this.persistCartImmediate(userId)
     },
 
@@ -152,10 +153,8 @@ export const useCartModel = defineStore("cart", {
         throw new Error("Failed to remove item")
       }
 
-      const item = this.items.find((item) => item.productId === productId)
-
-      if (item) {
-        this.items = this.items.filter((item) => item.productId !== productId)
+      if (this.items[productId]) {
+        delete this.items[productId]
       }
 
       this.schedulePersistCart(userId)
@@ -163,18 +162,16 @@ export const useCartModel = defineStore("cart", {
   },
   getters: {
     getProductQuantity: (state) => (productId: number) => {
-      return state.items.find((item) => item.productId === productId)?.quantity ?? 0
+      return state.items[productId]?.quantity ?? 0
     },
     isProductInCart: (state) => (productId: number) => {
-      return (state.items.find((item) => item.productId === productId)?.quantity ?? 0) > 0
+      return (state.items[productId]?.quantity ?? 0) > 0
     },
     productIdsInCart(): number[] {
-      return this.items.map((item) => item.productId)
+      return Object.keys(this.items).map(Number)
     },
     totalQuantityCart(): number {
-      if (!this.items.length) return 0
-
-      return this.items.reduce((acc, curr) => acc + curr.quantity, 0)
+      return Object.values(this.items).reduce((acc, curr) => acc + curr.quantity, 0)
     },
   },
 })

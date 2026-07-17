@@ -56,7 +56,7 @@ export const useCheckout = () => {
 
     try {
       const order = mapFormToOrderDraft(form, userId)
-      const orderItems: IOrderItemInput[] = cartModel.items.map((item) => ({
+      const orderItems: IOrderItemInput[] = Object.values(cartModel.items).map((item) => ({
         productId: item.productId,
         quantity: item.quantity,
       }))

@@ -61,7 +61,6 @@ const initializeApp = async () => {
 
     if (!userModel.user) return
     const { data } = await supabase.auth.getSession()
-    console.log({ data }, "data_get_ssesssion_")
     await cartModel.fetchCart(userModel.user.userId)
 
     await Promise.allSettled([

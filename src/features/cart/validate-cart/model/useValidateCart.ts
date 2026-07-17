@@ -8,7 +8,7 @@ export const useValidateCart = () => {
   const userModel = useUserModel()
 
   const inactiveItems = computed(() => {
-    return cartModel.items.filter((cartItem) => {
+    return Object.values(cartModel.items).filter((cartItem) => {
       const product = productModel.products?.[cartItem.productId]
 
       return product?.isActive === false
@@ -16,7 +16,7 @@ export const useValidateCart = () => {
   })
 
   const invalidItems = computed(() => {
-    return cartModel.items.filter((cartItem) => {
+    return Object.values(cartModel.items).filter((cartItem) => {
       return !productModel.products?.[cartItem.productId]
     })
   })
@@ -28,7 +28,7 @@ export const useValidateCart = () => {
   const deleteNotExistsItems = async () => {
     if (!hasInvalidItems.value) return
 
-    const ids = invalidItems.value.map((carItem) => carItem.productId)
+    const ids = invalidItems.value.map((cartItem) => cartItem.productId)
 
     await cartModel.removeManyFromCartAndPersist(ids, userModel.user?.userId)
   }
