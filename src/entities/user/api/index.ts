@@ -36,7 +36,11 @@ export const updateUser = async (userId: number, userData: IUser): Promise<IUser
     .select()
     .single()
 
-  if (error || !updatedUser) {
+  if (error) {
+    throw new ApiError("Error updating user", error.code, error)
+  }
+
+  if (!updatedUser) {
     return null
   }
 
