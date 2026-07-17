@@ -118,7 +118,8 @@ export const useCartModel = defineStore("cart", {
       }
 
       this.items = {}
-      await this.persistCart(userId)
+
+      await CartApi.clearCart(userId)
     },
 
     async removeCompletelyFromCart(productId: number | undefined, userId: number | undefined) {
