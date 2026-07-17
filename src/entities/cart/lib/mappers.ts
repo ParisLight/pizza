@@ -3,18 +3,20 @@ import type { ICartItem } from "@/entities/cart/model/types"
 
 export type CartItemsMap = Record<number, ICartItem>
 
+export const mapCartItem = (cartItemDTO: CartItemsDTO): ICartItem => {
+  return {
+    productId: cartItemDTO?.product_id || 0,
+    quantity: cartItemDTO.quantity || 0,
+  }
+}
+
 export const mappedCartItems = (cartItems: CartItemsDTO[]): CartItemsMap => {
   if (!cartItems?.length) return {}
 
   return cartItems.reduce<CartItemsMap>((acc, item) => {
     if (item.product_id == null || item.quantity == null) return acc
 
-    const existing = acc[item.product_id]
-
-    acc[item.product_id] = {
-      productId: item.product_id,
-      quantity: existing ? Math.max(existing.quantity, item.quantity) : item.quantity,
-    }
+    acc[item.product_id] = mapCartItem(item)
 
     return acc
   }, {})

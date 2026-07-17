@@ -26,7 +26,7 @@ export const useCheckout = () => {
     if (!userId || !cartModel.productIdsInCart.length || !formRef.value) return
 
     try {
-      await cartModel.flushPersistCart(userId)
+      await cartModel.persistCart(userId)
     } catch {
       notifyError("Не удалось сохранить корзину")
       return

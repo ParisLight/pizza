@@ -3,12 +3,6 @@ import * as CartApi from "../api"
 import type { ICartItem } from "./types"
 import type { LoadingStatus } from "@/shared/config"
 import { canFetch, finishFetch, startFetch } from "@/shared/lib"
-import { createPersistDebouncer } from "@/entities/cart/model/createPersistDebouncer.ts"
-
-const cartPersist = createPersistDebouncer(async (userId: number) => {
-  const store = useCartModel()
-  await store.persistCartSilent(userId)
-})
 
 export const useCartModel = defineStore("cart", {
   state: () => ({
@@ -46,19 +40,6 @@ export const useCartModel = defineStore("cart", {
       }
     },
 
-    schedulePersistCart(userId: number) {
-      cartPersist.schedule(userId)
-    },
-
-    async persistCartImmediate(userId: number) {
-      cartPersist.cancel()
-      await this.persistCart(userId)
-    },
-
-    async flushPersistCart(userId: number) {
-      await cartPersist.flush(userId)
-    },
-
     async addToCart(productId: number | undefined, userId: number | undefined) {
       if (!userId || !productId) {
         throw new Error("Failed to add item")
@@ -75,7 +56,7 @@ export const useCartModel = defineStore("cart", {
         }
       }
 
-      this.schedulePersistCart(userId)
+      await this.persistCart(userId)
     },
 
     async ensureCartId(userId: number) {
@@ -96,17 +77,9 @@ export const useCartModel = defineStore("cart", {
 
       if (!this.cartId) return
 
-      this.items = await CartApi.updateCart(this.cartId, this.items)
-    },
+      const items = await CartApi.updateCart(this.cartId, this.items)
 
-    async persistCartSilent(userId: number) {
-      try {
-        await this.persistCart(userId)
-      } catch (error) {
-        if (import.meta.env.DEV) {
-          console.error("[cart] persist failed:", error)
-        }
-      }
+      this.items = items
     },
 
     removeManyFromCart(productIds: number[]) {
@@ -121,7 +94,7 @@ export const useCartModel = defineStore("cart", {
       }
 
       this.removeManyFromCart(productIds)
-      await this.persistCartImmediate(userId)
+      await this.persistCart(userId)
     },
 
     async removeFromCart(productId: number | undefined, userId: number | undefined) {
@@ -133,7 +106,7 @@ export const useCartModel = defineStore("cart", {
 
       if (item && item.quantity > 1) {
         item.quantity -= 1
-        this.schedulePersistCart(userId)
+        await this.persistCart(userId)
       } else {
         await this.removeCompletelyFromCart(productId, userId)
       }
@@ -145,11 +118,11 @@ export const useCartModel = defineStore("cart", {
       }
 
       this.items = {}
-      await this.persistCartImmediate(userId)
+      await this.persistCart(userId)
     },
 
     async removeCompletelyFromCart(productId: number | undefined, userId: number | undefined) {
-      if (!productId || !userId) {
+      if (!productId || !userId || !this.cartId) {
         throw new Error("Failed to remove item")
       }
 
@@ -157,7 +130,7 @@ export const useCartModel = defineStore("cart", {
         delete this.items[productId]
       }
 
-      this.schedulePersistCart(userId)
+      await CartApi.deletePosFromCart(this.cartId, productId)
     },
   },
   getters: {

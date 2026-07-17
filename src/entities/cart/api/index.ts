@@ -28,23 +28,46 @@ export const fetchCartIdByUser = async (userId: number) => {
   return data?.id ?? null
 }
 
+export const deletePosFromCart = async (
+  cartId: number,
+  productId: number,
+): Promise<boolean | null> => {
+  const { data, error } = await supabase
+    .from("cart_items")
+    .delete()
+    .eq("cart_id", cartId)
+    .eq("product_id", productId)
+
+  if (error) {
+    throw new ApiError("Failed to delete product from cart", error.code, error)
+  }
+
+  if (!data) return null
+
+  return true
+}
+
+export const clearCart = async (cartId: number): Promise<boolean> => {
+  const { error } = await supabase.from("cart_items").delete().eq("cart_id", cartId)
+
+  if (error) {
+    throw new ApiError("Failed to delete product from cart", error.code, error)
+  }
+
+  return true
+}
+
 export const updateCart = async (
   cartId: number,
   items: Record<number, ICartItem>,
 ): Promise<Record<number, ICartItem>> => {
-  const { error: deleteError } = await supabase.from("cart_items").delete().eq("cart_id", cartId)
-
-  if (deleteError) {
-    throw new ApiError("Failed to delete cart", deleteError.code, deleteError)
-  }
-
   if (!Object.keys(items).length) return {}
 
   const newCartItems = mapCartItemsToInsert(cartId, items)
 
   const { data, error: insertError } = await supabase
     .from("cart_items")
-    .insert(newCartItems)
+    .upsert(newCartItems, { onConflict: "cart_id,product_id" })
     .select("*")
 
   if (insertError) {
