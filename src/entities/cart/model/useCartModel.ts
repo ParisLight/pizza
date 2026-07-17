@@ -45,6 +45,8 @@ export const useCartModel = defineStore("cart", {
         throw new Error("Failed to add item")
       }
 
+      const snapshot = Object.assign({}, this.items)
+
       const item = this.items[productId]
 
       if (item) {
@@ -56,7 +58,12 @@ export const useCartModel = defineStore("cart", {
         }
       }
 
-      await this.persistCart(userId)
+      try {
+        await this.persistCart(userId)
+      } catch (e) {
+        this.items = snapshot
+        throw e
+      }
     },
 
     async ensureCartId(userId: number) {
@@ -77,24 +84,7 @@ export const useCartModel = defineStore("cart", {
 
       if (!this.cartId) return
 
-      const items = await CartApi.updateCart(this.cartId, this.items)
-
-      this.items = items
-    },
-
-    removeManyFromCart(productIds: number[]) {
-      for (const id of productIds) {
-        delete this.items[id]
-      }
-    },
-
-    async removeManyFromCartAndPersist(productIds: number[], userId: number | undefined) {
-      if (!userId) {
-        throw new Error("Failed to remove items")
-      }
-
-      this.removeManyFromCart(productIds)
-      await this.persistCart(userId)
+      this.items = await CartApi.updateCart(this.cartId, this.items)
     },
 
     async removeFromCart(productId: number | undefined, userId: number | undefined) {
@@ -108,7 +98,7 @@ export const useCartModel = defineStore("cart", {
         item.quantity -= 1
         await this.persistCart(userId)
       } else {
-        await this.removeCompletelyFromCart(productId, userId)
+        await this.removeCompletelyFromCart([productId], userId)
       }
     },
 
@@ -117,21 +107,30 @@ export const useCartModel = defineStore("cart", {
         throw new Error("Failed to clear cart")
       }
 
+      const cartSnapshot = Object.assign({}, this.items)
+
       this.items = {}
 
-      await CartApi.clearCart(userId)
+      try {
+        await CartApi.clearCart(userId)
+      } catch (e) {
+        this.items = cartSnapshot
+        throw e
+      }
     },
 
-    async removeCompletelyFromCart(productId: number | undefined, userId: number | undefined) {
-      if (!productId || !userId || !this.cartId) {
+    async removeCompletelyFromCart(productIds: number[] | undefined, userId: number | undefined) {
+      if (!productIds?.length || !userId || !this.cartId) {
         throw new Error("Failed to remove item")
       }
 
-      if (this.items[productId]) {
-        delete this.items[productId]
-      }
+      productIds.forEach((productId) => {
+        if (this.items?.[productId]) {
+          delete this.items[productId]
+        }
+      })
 
-      await CartApi.deletePosFromCart(this.cartId, productId)
+      await CartApi.deletePositionsFromCart(this.cartId, productIds)
     },
   },
   getters: {

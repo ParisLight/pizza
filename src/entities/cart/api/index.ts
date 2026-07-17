@@ -28,15 +28,15 @@ export const fetchCartIdByUser = async (userId: number) => {
   return data?.id ?? null
 }
 
-export const deletePosFromCart = async (
+export const deletePositionsFromCart = async (
   cartId: number,
-  productId: number,
+  productIds: number[],
 ): Promise<boolean | null> => {
   const { data, error } = await supabase
     .from("cart_items")
     .delete()
     .eq("cart_id", cartId)
-    .eq("product_id", productId)
+    .in("product_id", productIds)
 
   if (error) {
     throw new ApiError("Failed to delete product from cart", error.code, error)

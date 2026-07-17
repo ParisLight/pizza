@@ -30,7 +30,7 @@ export const useValidateCart = () => {
 
     const ids = invalidItems.value.map((cartItem) => cartItem.productId)
 
-    await cartModel.removeManyFromCartAndPersist(ids, userModel.user?.userId)
+    await cartModel.removeCompletelyFromCart(ids, userModel.user?.userId)
   }
 
   return { hasInactiveItems, deleteNotExistsItems }

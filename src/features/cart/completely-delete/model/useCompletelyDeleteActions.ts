@@ -6,7 +6,7 @@ export const useCompletelyDeleteActions = () => {
   const userModel = useUserModel()
 
   const completelyDelete = async (productId: number) => {
-    await cartModel.removeCompletelyFromCart(productId, userModel.user?.userId)
+    await cartModel.removeCompletelyFromCart([productId], userModel.user?.userId)
   }
 
   return { completelyDelete }
