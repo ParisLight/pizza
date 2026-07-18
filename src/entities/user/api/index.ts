@@ -1,5 +1,5 @@
 import { ApiError, supabase } from "@/shared/api"
-import type { IUser } from "../model/types"
+import type { IUser } from "../model/types.ts"
 import type { TelegramAuthDTO, UserDTO } from "@/entities/user/api/dto"
 import { mappedUser, mapUserToInsert } from "../lib/mappers"
 
