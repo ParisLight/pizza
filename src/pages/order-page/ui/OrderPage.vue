@@ -7,7 +7,7 @@
     </div>
     <cart-list />
     <order-form
-      :form="form"
+      :form="formModel.form"
       :form-rules="formRules"
       :time-slots="deliverySlots"
       :set-form-ref="setFormRef"
@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { BaseBtn } from "@/shared/ui/base-btn"
 import { useCartTotal } from "@/features/cart"
-import { OrderForm, useCheckout, useOrderForm } from "@/features/order"
+import { OrderForm, useCheckout, useFormState, useOrderForm } from "@/features/order"
 import { CartList } from "@/widgets/cart-list"
 import { useCartModel } from "@/entities/cart"
 
@@ -41,9 +41,15 @@ const cartModel = useCartModel()
 
 const { cartTotal } = useCartTotal()
 
-const { form, formRef, formRules, deliverySlots, setFormRef, prefillForm } = useOrderForm()
+const formModel = useFormState()
 
-const { isInProcess, checkoutOrder } = useCheckout({ form, formRef, prefillForm })
+const { formRef, formRules, deliverySlots, setFormRef } = useOrderForm()
+
+const { isInProcess, checkoutOrder } = useCheckout({
+  form: formModel.form,
+  formRef,
+  prefillForm: formModel.prefillForm,
+})
 </script>
 
 <style lang="scss" scoped>

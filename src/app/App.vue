@@ -29,6 +29,7 @@ import { AppSpinner } from "@/shared/ui/app-spinner"
 import { GoToTelegram } from "@/shared/ui/go-to-telegram"
 import { initTelegram, notifyError } from "@/shared/lib"
 import { supabase } from "@/shared/api"
+import { useFormState } from "@/features/order"
 
 const route = useRoute()
 
@@ -46,6 +47,7 @@ const userModel = useUserModel()
 const cartModel = useCartModel()
 const categoryModel = useCategoryModel()
 const productModel = useProductModel()
+const formModel = useFormState()
 
 const { isTelegram, initData } = initTelegram()
 const canUseApp = isTelegram && !!initData
@@ -60,13 +62,15 @@ const initializeApp = async () => {
     await userModel.authUser(initData!)
 
     if (!userModel.user) return
-    const { data } = await supabase.auth.getSession()
+    await supabase.auth.getSession()
     await cartModel.fetchCart(userModel.user.userId)
 
     await Promise.allSettled([
       categoryModel.fetchCategories(),
       productModel.fetchProductsByPage(categoryModel.idActiveCategory),
     ])
+
+    formModel.prefillForm()
   } catch {
     notifyError("Ошибка при загрузке")
   } finally {

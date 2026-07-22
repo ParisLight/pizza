@@ -1,47 +1,36 @@
 import { useUserModel } from "@/entities/user"
 import { type OrderFormValues } from "./types"
-import { DeliveryType, PaymentType } from "@/entities/order"
+import { getEmptyOrderForm } from "../lib"
 
-export const useFormState = () => {
-  const userModel = useUserModel()
+import { defineStore } from "pinia"
 
-  const getEmptyOrderForm = (): OrderFormValues => ({
-    payerName: "",
-    payerNumber: "",
-    deliveryType: DeliveryType.DELIVERY,
-    paymentType: PaymentType.CARD,
-    deliveryAddress: "",
-    dontRingIntercom: false,
-    floor: "",
-    flat: "",
-    orderComment: "",
-    readyBy: null,
-    deliveryTime: null,
-  })
+export const useFormState = defineStore("orderForm", {
+  state: () => ({
+    form: getEmptyOrderForm() as OrderFormValues,
+  }),
+  actions: {
+    getFormValuesFromUserData(): OrderFormValues {
+      const emptyForm = getEmptyOrderForm()
 
-  const getFormValuesFromUserData = (): OrderFormValues => {
-    const emptyForm = getEmptyOrderForm()
+      const userModel = useUserModel()
 
-    if (!userModel.user) {
+      if (!userModel.user) {
+        return emptyForm
+      }
+
+      const user = userModel.user
+
+      emptyForm.flat = user.flat ? String(user.flat) : ""
+      emptyForm.floor = user.floor ? String(user.floor) : ""
+      emptyForm.deliveryAddress = user.address
+      emptyForm.payerName = user.name
+      emptyForm.payerNumber = user.number
+
       return emptyForm
-    }
+    },
 
-    const user = userModel.user
-
-    emptyForm.flat = user.flat ? String(user.flat) : ""
-    emptyForm.floor = user.floor ? String(user.floor) : ""
-    emptyForm.deliveryAddress = user.address
-    emptyForm.payerName = user.name
-    emptyForm.payerNumber = user.number
-
-    return emptyForm
-  }
-
-  const form = reactive<OrderFormValues>(getFormValuesFromUserData())
-
-  const prefillForm = () => {
-    Object.assign(form, getFormValuesFromUserData())
-  }
-
-  return { form, prefillForm }
-}
+    prefillForm() {
+      Object.assign(this.form, this.getFormValuesFromUserData())
+    },
+  },
+})

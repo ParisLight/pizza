@@ -1,5 +1,5 @@
-import { useEditForm } from "@/features/user/edit-profile/model/useEditForm.ts"
-import { useSaveProfile } from "@/features/user/edit-profile/model/useSaveProfile.ts"
+import { useSaveProfile } from "./useSaveProfile"
+import { useEditForm } from "./useEditForm"
 import type { FormInstance } from "element-plus"
 
 export const useEditProfile = (formRef: Ref<FormInstance | undefined>) => {
