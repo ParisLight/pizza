@@ -1,6 +1,6 @@
 import { useProductModel } from "@/entities/product"
 import { useCategoryModel } from "@/entities/category"
-import { usePopupModel } from "@/features/popups"
+import { usePopupModel } from "@/widgets/popups-system"
 
 export const useProductList = () => {
   const productModel = useProductModel()

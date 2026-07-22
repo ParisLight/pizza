@@ -59,7 +59,7 @@
 import { type IProduct, SkeletonProductCardRow } from "@/entities/product"
 import { useCartList, useConfirmationCompletelyDelete } from "../model"
 import { CartItem, ChangeQuantity, CompletelyDelete } from "@/features/cart"
-import { usePopupModel } from "@/features/popups"
+import { usePopupModel } from "@/widgets/popups-system"
 import { BaseBtn } from "@/shared/ui/base-btn"
 
 const popupModel = usePopupModel()

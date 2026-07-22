@@ -1,1 +1,0 @@
-export { usePopupModel } from "./model";
