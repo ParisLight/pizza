@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { BaseBtn } from "@/shared/ui/base-btn"
 import { useCartTotal } from "@/features/cart"
-import { OrderForm, useCheckout } from "@/features/order"
+import { OrderForm, useCheckout, useOrderForm } from "@/features/order"
 import { CartList } from "@/widgets/cart-list"
 import { useCartModel } from "@/entities/cart"
 
@@ -41,7 +41,9 @@ const cartModel = useCartModel()
 
 const { cartTotal } = useCartTotal()
 
-const { form, formRules, setFormRef, deliverySlots, isInProcess, checkoutOrder } = useCheckout()
+const { form, formRef, formRules, deliverySlots, setFormRef, prefillForm } = useOrderForm()
+
+const { isInProcess, checkoutOrder } = useCheckout({ form, formRef, prefillForm })
 </script>
 
 <style lang="scss" scoped>

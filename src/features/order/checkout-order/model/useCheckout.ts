@@ -2,12 +2,19 @@ import { useCartModel } from "@/entities/cart"
 import { useUserModel } from "@/entities/user"
 import { useProductModel } from "@/entities/product"
 import { type IOrderItemInput, useOrderModel } from "@/entities/order"
-import { mapFormToOrderDraft, useOrderForm } from "@/features/order"
+import { mapFormToOrderDraft, type OrderFormValues } from "@/features/order"
 import { useValidateCart } from "@/features/cart"
 import { notifyError, notifySuccess } from "@/shared/lib"
 import { ROUTES } from "@/shared/config"
+import type { FormInstance } from "element-plus"
 
-export const useCheckout = () => {
+type Params = {
+  form: OrderFormValues
+  formRef: Ref<FormInstance | undefined>
+  prefillForm: () => void
+}
+
+export const useCheckout = ({ form, formRef, prefillForm }: Params) => {
   const cartModel = useCartModel()
   const orderModel = useOrderModel()
   const userModel = useUserModel()
@@ -15,8 +22,6 @@ export const useCheckout = () => {
   const router = useRouter()
 
   const isInProcess = ref(false)
-
-  const { form, formRef, setFormRef, clearForm, deliverySlots, formRules } = useOrderForm()
 
   const { hasInactiveItems, deleteNotExistsItems } = useValidateCart()
 
@@ -67,7 +72,7 @@ export const useCheckout = () => {
 
       await router.push(ROUTES.myOrders)
       await Promise.allSettled([orderModel.loadOrders(userId), cartModel.clearCart(userId)])
-      clearForm()
+      prefillForm()
     } catch {
       notifyError("Не удалось оформить заказ")
     } finally {
@@ -77,10 +82,6 @@ export const useCheckout = () => {
 
   return {
     checkoutOrder,
-    form,
-    deliverySlots,
-    formRules,
-    setFormRef,
     isInProcess,
   }
 }

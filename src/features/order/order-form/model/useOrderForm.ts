@@ -1,6 +1,6 @@
-import type { OrderFormValues } from "./types"
 import { useNow } from "@vueuse/core"
-import { createDeliverySlots, DeliveryType, PaymentType } from "@/entities/order"
+import { useFormState } from "./useFormState.ts"
+import { createDeliverySlots } from "@/entities/order"
 import { CURRENT_ORDER_FORM_RULES } from "../config/validation.ts"
 import type { FormInstance } from "element-plus"
 import type { VNodeRef } from "vue"
@@ -8,28 +8,10 @@ import type { VNodeRef } from "vue"
 export function useOrderForm() {
   const formRef = ref<FormInstance | undefined>()
 
+  const { form, prefillForm } = useFormState()
+
   const setFormRef: VNodeRef = (el) => {
     formRef.value = (el as FormInstance | null) ?? undefined
-  }
-
-  const createOrderFormValues = (): OrderFormValues => ({
-    payerName: "",
-    payerNumber: "",
-    deliveryType: DeliveryType.DELIVERY,
-    paymentType: PaymentType.CARD,
-    deliveryAddress: "",
-    dontRingIntercom: false,
-    floor: "",
-    flat: "",
-    orderComment: "",
-    readyBy: null,
-    deliveryTime: null,
-  })
-
-  const form = reactive<OrderFormValues>(createOrderFormValues())
-
-  const clearForm = () => {
-    Object.assign(form, createOrderFormValues())
   }
 
   const now = useNow({
@@ -44,5 +26,5 @@ export function useOrderForm() {
 
   const formRules = CURRENT_ORDER_FORM_RULES
 
-  return { form, formRef, setFormRef, clearForm, deliverySlots, formRules }
+  return { form, formRef, setFormRef, prefillForm, deliverySlots, formRules }
 }
