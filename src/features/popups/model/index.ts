@@ -23,7 +23,7 @@ export const usePopupModel = defineStore("popup", {
 
       if (!currentPopup) return
 
-      if (typeof currentPopup.props.closeCallback === "function") {
+      if (typeof currentPopup.props?.closeCallback === "function") {
         currentPopup.props.closeCallback()
       }
 
