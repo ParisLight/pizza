@@ -14,7 +14,7 @@
 
 <script setup>
 import { BasketButton } from "@/shared/ui/basket-button"
-import { NavigationSwitcher } from "@/features/navigation-switcher"
+import NavigationSwitcher from "./NavigationSwitcher.vue"
 import { useCartModel } from "@/entities/cart"
 import { useRouter } from "vue-router"
 import { ROUTES } from "@/shared/config"

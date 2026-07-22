@@ -1,23 +1,26 @@
 <template>
   <div class="navigation-switcher">
-    <burger-button
-      v-model="navigationModel.isOpenNavigation"
-    />
+    <burger-button v-model="isOpen" />
     <transition name="fade">
       <menu-navigation
+        v-if="isOpen"
         class="navigation-switcher__menu-navigation"
-        v-if="navigationModel.isOpenNavigation"
+        @navigate="isOpen = false"
       />
     </transition>
   </div>
 </template>
 
-<script setup>
-import { BurgerButton } from "@/shared/ui/burger-button";
-import { MenuNavigation } from "@/shared/ui/menu-navigation";
-import { useNavigationModel } from '@/features/navigation-switcher'
+<script setup lang="ts">
+import { BurgerButton } from "@/shared/ui/burger-button"
+import { MenuNavigation } from "@/shared/ui/menu-navigation"
+import { useEventListener } from "@vueuse/core"
 
-const navigationModel = useNavigationModel()
+const isOpen = ref(false)
+
+useEventListener("scroll", () => {
+  isOpen.value = false
+})
 </script>
 
 <style lang="scss" scoped>

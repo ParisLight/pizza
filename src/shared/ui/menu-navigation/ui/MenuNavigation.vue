@@ -6,7 +6,7 @@
         v-for="route in links"
         :key="route.name"
         :to="route.to"
-        @click.stop="route.onClick"
+        @click="emit('navigate')"
       >
         <span>{{ route.name }}</span>
       </router-link>
@@ -29,36 +29,32 @@
 
 <script setup lang="ts">
 import { type ROUTE_TYPE, ROUTES } from "@/shared/config"
-import { useNavigationModel } from "@/features/navigation-switcher"
-//todo: feature_?
-const navigationModel = useNavigationModel()
+
+const emit = defineEmits<{
+  navigate: []
+}>()
 
 interface IMenuLink {
   name: string
   to: ROUTE_TYPE
-  onClick: () => void
 }
 
 const links: IMenuLink[] = [
   {
     name: "Меню",
     to: ROUTES.mainPage,
-    onClick: () => navigationModel.closeNavigation(),
   },
   {
     name: "Корзина",
     to: ROUTES.order,
-    onClick: () => navigationModel.closeNavigation(),
   },
   {
     name: "Профиль",
     to: ROUTES.profile,
-    onClick: () => navigationModel.closeNavigation(),
   },
   {
     name: "История заказов",
     to: ROUTES.myOrders,
-    onClick: () => navigationModel.closeNavigation(),
   },
 ]
 </script>
