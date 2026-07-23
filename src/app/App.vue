@@ -1,6 +1,13 @@
 <template>
   <go-to-telegram v-if="!canUseApp" />
   <app-spinner v-else-if="isLoadingApp" />
+  <div v-else-if="isErrorApp" class="app-error">
+    <base-error-plug>
+      <template #action>
+        <base-btn color="var(--color-purple)" @click="initializeApp">Повторить</base-btn>
+      </template>
+    </base-error-plug>
+  </div>
   <template v-else>
     <router-view v-slot="{ Component }">
       <component :is="layout">
@@ -30,6 +37,8 @@ import { GoToTelegram } from "@/shared/ui/go-to-telegram"
 import { initTelegram, notifyError } from "@/shared/lib"
 import { supabase } from "@/shared/api"
 import { useFormState } from "@/features/order"
+import { BaseErrorPlug } from "@/shared/ui/base-error-plug"
+import { BaseBtn } from "@/shared/ui/base-btn"
 
 const route = useRoute()
 
@@ -42,6 +51,7 @@ const layout = computed(() => {
 })
 
 const isLoadingApp = ref(true)
+const isErrorApp = ref(false)
 
 const userModel = useUserModel()
 const cartModel = useCartModel()
@@ -53,13 +63,15 @@ const { isTelegram, initData } = initTelegram()
 const canUseApp = isTelegram && !!initData
 
 const initializeApp = async () => {
-  if (!canUseApp) {
-    isLoadingApp.value = false
-    return
-  }
+  if (!canUseApp) return
+
+  isErrorApp.value = false
+  isLoadingApp.value = true
 
   try {
-    await userModel.authUser(initData!)
+    if (!initData) throw new Error("Telegram initData is missing")
+
+    await userModel.authUser(initData)
 
     if (!userModel.user) return
     await supabase.auth.getSession()
@@ -73,6 +85,7 @@ const initializeApp = async () => {
     formModel.prefillForm()
   } catch {
     notifyError("Не удалось загрузить приложение")
+    isErrorApp.value = true
   } finally {
     isLoadingApp.value = false
   }
@@ -83,4 +96,12 @@ onBeforeMount(async () => {
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.app-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+</style>

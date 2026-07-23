@@ -9,6 +9,7 @@ export const useUserModel = defineStore("user", {
 
   actions: {
     async authUser(initData: string) {
+      console.log("authUser", initData)
       const user = await UserApi.authWithTelegram(initData)
 
       if (!user) return
