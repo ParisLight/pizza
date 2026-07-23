@@ -9,10 +9,15 @@
       <template v-if="isSkeleton(orderModel.loadingStatus)">
         <order-card-skeleton v-for="item in 3" :key="item" />
       </template>
-      <el-empty
+      <base-error-plug v-else-if="isError(orderModel.loadingStatus)">
+        <template #action>
+          <base-btn color="var(--color-purple)" @click="retryLoad">Повторить</base-btn>
+        </template>
+      </base-error-plug>
+      <base-empty-plug
         v-else-if="isEmpty(orderModel.loadingStatus)"
-        class=""
-        :description="'Заказов нет'"
+        title="Заказов нет"
+        description="Как только оформите первый — он появится в этой ленте."
       />
       <template v-else>
         <order-card v-for="order in orderModel.ordersList" :key="order.orderId" :order="order" />
@@ -24,10 +29,19 @@
 <script setup lang="ts">
 import { OrderCard, OrderCardSkeleton, useOrderModel } from "@/entities/order"
 import { useUserModel } from "@/entities/user"
-import { isEmpty, isSkeleton } from "@/shared/lib"
+import { isEmpty, isError, isSkeleton } from "@/shared/lib"
+import { BaseBtn } from "@/shared/ui/base-btn"
+import { BaseEmptyPlug } from "@/shared/ui/base-empty-plug"
+import { BaseErrorPlug } from "@/shared/ui/base-error-plug"
 
 const orderModel = useOrderModel()
 const userModel = useUserModel()
+
+const retryLoad = async () => {
+  if (userModel.user?.userId) {
+    await orderModel.loadOrders(userModel.user.userId)
+  }
+}
 
 onMounted(async () => {
   if (orderModel.ordersList.length === 0 && userModel.user?.userId) {

@@ -72,7 +72,7 @@ const initializeApp = async () => {
 
     formModel.prefillForm()
   } catch {
-    notifyError("Ошибка при загрузке")
+    notifyError("Не удалось загрузить приложение")
   } finally {
     isLoadingApp.value = false
   }

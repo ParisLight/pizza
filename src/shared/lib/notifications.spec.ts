@@ -18,7 +18,7 @@ test("notifyError calls ElNotification with error type", () => {
   notifyError("Не удалось сохранить")
 
   expect(ElNotification).toHaveBeenCalledWith({
-    title: "Ошибка",
+    title: "Не вышло",
     message: "Не удалось сохранить",
     type: "error",
   })
@@ -28,7 +28,7 @@ test("notifySuccess calls ElNotification with success type", () => {
   notifySuccess("Сохранено")
 
   expect(ElNotification).toHaveBeenCalledWith({
-    title: "Успех",
+    title: "Готово",
     message: "Сохранено",
     type: "success",
   })

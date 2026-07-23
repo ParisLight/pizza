@@ -4,6 +4,7 @@ import {
   finishPaginatedFetch,
   isLoadingMore,
   isPaginatedEmpty,
+  isPaginatedError,
   isPaginatedSkeleton,
   startPaginatedFetch,
 } from "./async-paginated-status"
@@ -50,6 +51,11 @@ test("isPaginatedSkeleton returns true only for loading", () => {
 test("isPaginatedEmpty returns true only for empty", () => {
   expect(isPaginatedEmpty("empty")).toBe(true)
   expect(isPaginatedEmpty("success")).toBe(false)
+})
+
+test("isPaginatedError returns true only for error", () => {
+  expect(isPaginatedError("error")).toBe(true)
+  expect(isPaginatedError("success")).toBe(false)
 })
 
 test("isLoadingMore returns true only for loadingMore", () => {

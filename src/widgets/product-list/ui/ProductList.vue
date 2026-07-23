@@ -8,10 +8,16 @@
       </el-row>
     </template>
 
-    <el-empty
+    <base-error-plug v-else-if="isError(loadingStatus)">
+      <template #action>
+        <base-btn color="var(--color-purple)" @click="retryLoad">Повторить</base-btn>
+      </template>
+    </base-error-plug>
+
+    <base-empty-plug
       v-else-if="isEmpty(loadingStatus)"
-      class="products-list__empty"
-      description="Пока тут пусто"
+      title="Пока пусто"
+      description="В этой категории сейчас нет активных позиций."
     />
 
     <transition v-else name="fade" mode="out-in">
@@ -49,17 +55,25 @@ import { ChangeQuantity } from "@/features/cart"
 import {
   isLoadingMore,
   isPaginatedEmpty as isEmpty,
+  isPaginatedError as isError,
   isPaginatedSkeleton as isSkeleton,
   useInfinityScroll,
 } from "@/shared/lib"
 import { useProductList } from "@/widgets/product-list/model"
 import { BaseSpinner } from "@/shared/ui/base-spinner"
+import { BaseBtn } from "@/shared/ui/base-btn"
+import { BaseEmptyPlug } from "@/shared/ui/base-empty-plug"
+import { BaseErrorPlug } from "@/shared/ui/base-error-plug"
 
 const productModel = useProductModel()
 
 const sentinelRef = ref<HTMLElement | undefined>()
 
 const { loadingStatus, activeCategoryId, activeProductIds, onProductClick } = useProductList()
+
+const retryLoad = async () => {
+  await productModel.fetchProductsByPage(activeCategoryId.value)
+}
 
 useInfinityScroll(sentinelRef, { root: null, rootMargin: "500px" }, async () => {
   await productModel.fetchProductsByPage(activeCategoryId.value)
@@ -69,10 +83,6 @@ useInfinityScroll(sentinelRef, { root: null, rootMargin: "500px" }, async () => 
 <style lang="scss" scoped>
 .products-list {
   width: 100%;
-
-  &__empty {
-    margin: 24px auto;
-  }
 
   &__item {
     height: 100%;

@@ -20,3 +20,7 @@ export const isSkeleton = (status: LoadingStatus) => {
 export const isEmpty = (status: LoadingStatus) => {
   return status === "empty"
 }
+
+export const isError = (status: LoadingStatus) => {
+  return status === "error"
+}

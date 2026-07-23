@@ -1,20 +1,21 @@
 <template>
   <div class="page">
-    <div class="page__text">Такой страницы не существует :(</div>
+    <base-empty-plug
+      title="Страница потерялась"
+      description="Такого адреса у нас нет. Вернитесь в меню — там точно есть пицца."
+    />
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { BaseEmptyPlug } from "@/shared/ui/base-empty-plug"
+</script>
 
 <style lang="scss" scoped>
 .page {
+  display: flex;
   align-items: center;
   justify-content: center;
-
-  &__text {
-    color: var(--color-golden);
-    font-variant: all-small-caps;
-    font-size: var(--font-size-3xl);
-  }
+  min-height: 60vh;
 }
 </style>

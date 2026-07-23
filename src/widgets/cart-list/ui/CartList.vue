@@ -4,20 +4,22 @@
       <template v-if="isLoadingProducts && !cartIsEmpty">
         <skeleton-product-card-row v-for="n in 2" :key="n" />
       </template>
-      <div v-else-if="loadError" class="cart-list__error">
-        <div class="cart-list__error-text">
-          <span>Что-то пошло не так</span>
-        </div>
-        <base-btn
-          class="cart-list__retry"
-          color="var(--color-purple)"
-          :loading="isLoadingProducts"
-          @click.stop="loadCartProducts"
-        >
-          Повторить
-        </base-btn>
-      </div>
-      <el-empty v-else-if="cartIsEmpty" description="Корзина пуста" />
+      <base-error-plug v-else-if="loadError">
+        <template #action>
+          <base-btn
+            color="var(--color-purple)"
+            :loading="isLoadingProducts"
+            @click.stop="loadCartProducts"
+          >
+            Повторить
+          </base-btn>
+        </template>
+      </base-error-plug>
+      <base-empty-plug
+        v-else-if="cartIsEmpty"
+        title="Корзина пуста"
+        description="Добавьте что-нибудь вкусное из меню — и оно окажется здесь."
+      />
       <template v-else>
         <transition-group name="fade-group">
           <cart-item
@@ -61,6 +63,8 @@ import { useCartList, useConfirmationCompletelyDelete } from "../model"
 import { CartItem, ChangeQuantity, CompletelyDelete } from "@/features/cart"
 import { usePopupModel } from "@/widgets/popups-system"
 import { BaseBtn } from "@/shared/ui/base-btn"
+import { BaseEmptyPlug } from "@/shared/ui/base-empty-plug"
+import { BaseErrorPlug } from "@/shared/ui/base-error-plug"
 
 const popupModel = usePopupModel()
 
@@ -87,21 +91,6 @@ onMounted(async () => {
     flex-direction: column;
     row-gap: 16px;
     margin-top: 20px;
-  }
-
-  &__error {
-    display: flex;
-    flex-direction: column;
-    row-gap: 16px;
-    align-items: center;
-  }
-
-  &__error-text {
-    span {
-      color: var(--color-red);
-      font-variant: all-small-caps;
-      font-size: var(--font-size-lg);
-    }
   }
 
   &__cart-item {

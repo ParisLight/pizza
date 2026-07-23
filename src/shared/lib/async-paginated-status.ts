@@ -24,6 +24,10 @@ export const isPaginatedEmpty = (status: PaginatedStatus) => {
   return status === "empty"
 }
 
+export const isPaginatedError = (status: PaginatedStatus) => {
+  return status === "error"
+}
+
 export const isLoadingMore = (status: PaginatedStatus) => {
   return status === "loadingMore"
 }

@@ -1,5 +1,12 @@
 import { expect, test } from "vitest"
-import { canFetch, finishFetch, isEmpty, isSkeleton, startFetch } from "@/shared/lib/async-status"
+import {
+  canFetch,
+  finishFetch,
+  isEmpty,
+  isError,
+  isSkeleton,
+  startFetch,
+} from "@/shared/lib/async-status"
 
 test("canFetch returns true for fetchable statuses", () => {
   expect(canFetch("idle")).toBe(true)
@@ -28,4 +35,9 @@ test("isSkeleton return loading status", () => {
 test("isEmpty returns empty status", () => {
   expect(isEmpty("empty")).toBe(true)
   expect(isEmpty("loading")).toBe(false)
+})
+
+test("isError returns error status", () => {
+  expect(isError("error")).toBe(true)
+  expect(isError("success")).toBe(false)
 })
