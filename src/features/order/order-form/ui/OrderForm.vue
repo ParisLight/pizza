@@ -69,7 +69,7 @@
       </template>
       <template v-if="form.deliveryType === DeliveryType.PICKUP">
         <div class="current-order__row">
-          <el-form-item prop="deliveryTime" class="current-order__field">
+          <el-form-item prop="readyBy" class="current-order__field">
             <base-dropdown
               v-model="form.readyBy"
               title="Приготовить ко времени"

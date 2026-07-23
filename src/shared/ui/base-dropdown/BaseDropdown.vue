@@ -32,6 +32,8 @@
 </template>
 
 <script lang="ts" setup>
+import { useFormItem } from "element-plus"
+
 interface DropdownItem {
   readonly label: string
   readonly value: string | number
@@ -46,6 +48,8 @@ const model = defineModel<DropdownItem | null>({
   required: true,
 })
 
+const { formItem } = useFormItem()
+
 const isVisible = ref(false)
 
 const onVisible = (event: boolean) => {
@@ -54,6 +58,7 @@ const onVisible = (event: boolean) => {
 
 const onCommand = (item: DropdownItem) => {
   model.value = item
+  formItem?.validate?.("change").catch(() => undefined)
 }
 
 const selectedItem = computed(() => props.list.find((item) => item.value === model.value?.value))

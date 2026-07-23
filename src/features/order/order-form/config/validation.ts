@@ -1,7 +1,30 @@
-import type { FormRules } from "element-plus"
+import type { FormItemRule, FormRules } from "element-plus"
 import type { OrderFormValues } from "@/features/order"
 import { DeliveryType } from "@/entities/order"
 import { validatePhone } from "@/shared/lib"
+
+const requireWhen = (
+  deliveryType: DeliveryType,
+  message: string,
+  trigger: FormItemRule["trigger"] = "change",
+): FormItemRule => ({
+  trigger,
+  validator: (_rule, value, callback, source) => {
+    if (source.deliveryType !== deliveryType) {
+      callback()
+      return
+    }
+
+    const isEmpty = value == null || (typeof value === "string" && !value.trim())
+
+    if (isEmpty) {
+      callback(new Error(message))
+      return
+    }
+
+    callback()
+  },
+})
 
 export const CURRENT_ORDER_FORM_RULES: FormRules<OrderFormValues> = {
   payerName: {
@@ -16,20 +39,17 @@ export const CURRENT_ORDER_FORM_RULES: FormRules<OrderFormValues> = {
     trigger: "blur",
     validator: validatePhone,
   },
-  deliveryAddress: {
-    trigger: "blur",
-    validator: (_, value, callback, source) => {
-      if (source.deliveryType === DeliveryType.PICKUP) {
-        callback()
-        return
-      }
-
-      if (!value.trim()) {
-        callback(new Error("Укажите адрес доставки"))
-        return
-      }
-
-      callback()
-    },
+  deliveryAddress: requireWhen(DeliveryType.DELIVERY, "Укажите адрес доставки", "blur"),
+  deliveryTime: requireWhen(DeliveryType.DELIVERY, "Выберите время доставки"),
+  readyBy: requireWhen(DeliveryType.PICKUP, "Выберите время приготовления"),
+  paymentType: {
+    required: true,
+    message: "Выберите способ оплаты",
+    trigger: "change",
+  },
+  deliveryType: {
+    required: true,
+    message: "Выберите тип получения",
+    trigger: "change",
   },
 }
