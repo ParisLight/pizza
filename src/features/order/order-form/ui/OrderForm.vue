@@ -136,9 +136,9 @@ const { form, timeSlots, formRules } = toRefs(props)
 
   &__row-title {
     span {
-      font-weight: 400;
-      font-size: 12px;
-      line-height: 14px;
+      font-weight: var(--font-weight-regular);
+      font-size: var(--font-size-sm);
+      line-height: var(--font-size-md);
       font-variant: all-small-caps;
       opacity: 0.5;
     }

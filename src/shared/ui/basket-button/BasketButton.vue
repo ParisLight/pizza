@@ -41,7 +41,7 @@ withDefaults(defineProps<IProps>(), {
     top: -6px;
     left: 50%;
     span {
-      font-size: 8px;
+      font-size: var(--font-size-2xs);
       line-height: 12px;
       color: var(--color-white);
     }

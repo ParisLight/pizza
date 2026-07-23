@@ -8,8 +8,13 @@
       @swiper="swiperInstance.onSwiper"
       @slide-change="swiperInstance.onSlideChange"
     >
-      <swiper-slide v-for="product in productsArray" :key="product.id" class="popup__swiper-slide">
-        <img v-if="product.img" class="card__img" :src="product.img" :alt="activeProduct.name" />
+      <swiper-slide v-for="productId in productIds" :key="productId" class="popup__swiper-slide">
+        <img
+          v-if="productModel.products[productId]?.img"
+          class="card__img"
+          :src="productModel.products[productId]?.img ?? undefined"
+          :alt="productModel.products[productId]?.name"
+        />
       </swiper-slide>
     </swiper>
   </div>
@@ -17,20 +22,24 @@
     <div class="card__name" v-if="activeProduct?.name">
       <span>{{ activeProduct.name }}</span>
     </div>
-    <div class="card__descr line-clamp" v-if="activeProduct.description">
+    <div class="card__descr line-clamp" v-if="activeProduct?.description">
       <span>{{ activeProduct.description }}</span>
     </div>
   </div>
   <nutrition-bar
     class="card__nutrition-info"
-    v-if="activeProduct.nutrition"
+    v-if="activeProduct"
     :nutrition="activeProduct.nutrition"
   />
   <div class="card__footer popup__container">
-    <div v-if="activeProduct.price" class="card__price">
+    <div v-if="activeProduct?.price" class="card__price">
       <span>{{ activeProduct.price }} ₽</span>
     </div>
-    <change-quantity :product-id="activeProduct.id" size="big" />
+    <change-quantity
+      v-if="activeProduct"
+      :product-id="activeProduct.id"
+      size="big"
+    />
   </div>
 </template>
 
@@ -41,19 +50,25 @@ import { NutritionBar } from "@/features/product"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { useProductsList } from "../model/useProductsList"
 import { useSwiper } from "../model/useSwiper"
-import { type IProduct } from "@/entities/product"
+import { type IProduct, useProductModel } from "@/entities/product"
+
+const productModel = useProductModel()
 
 const props = defineProps<{
   openingIdProduct?: number
-  closeCallback?: (args: unknown[]) => void
 }>()
 
-const { productsArray, startProductIndex } = useProductsList(props.openingIdProduct)
+const { productIds, startProductIndex } = useProductsList(props.openingIdProduct)
 
-const swiperInstance = useSwiper(startProductIndex.value)
+const swiperInstance = useSwiper(startProductIndex)
 
-const activeProduct = computed<IProduct>(() => {
-  return productsArray.value?.[swiperInstance.activeIndex.value] ?? null
+const activeProductId = computed<number | null>(() => {
+  return productIds.value[swiperInstance.activeIndex.value] ?? null
+})
+
+const activeProduct = computed<IProduct | null>(() => {
+  if (activeProductId.value == null) return null
+  return productModel.products[activeProductId.value] ?? null
 })
 </script>
 
@@ -78,18 +93,18 @@ const activeProduct = computed<IProduct>(() => {
   }
   &__name {
     span {
-      font-size: 24px;
+      font-size: var(--font-size-3xl);
       line-height: 14px;
-      font-weight: 700;
+      font-weight: var(--font-weight-bold);
       color: var(--color-golden);
     }
   }
   &__descr {
     height: 32px;
     span {
-      font-size: 16px;
+      font-size: var(--font-size-lg);
       line-height: 14px;
-      font-weight: 200;
+      font-weight: var(--font-weight-extralight);
       color: var(--color-white);
     }
   }
@@ -100,8 +115,8 @@ const activeProduct = computed<IProduct>(() => {
   }
   &__price {
     span {
-      font-size: 32px;
-      font-weight: 700;
+      font-size: var(--font-size-5xl);
+      font-weight: var(--font-weight-bold);
       line-height: 48px;
       color: var(--color-golden);
     }

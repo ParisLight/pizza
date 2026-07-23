@@ -31,7 +31,7 @@ defineProps({
     background-color: transparent;
     border: 1px solid var(--color-purple);
     color: rgba(255, 255, 255, 0.5);
-    font-size: 14px;
+    font-size: var(--font-size-md);
     line-height: 14px;
   }
 }

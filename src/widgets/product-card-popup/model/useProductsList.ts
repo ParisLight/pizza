@@ -1,27 +1,24 @@
-import { type IProduct, useProductModel } from "@/entities/product"
+import { useProductModel } from "@/entities/product"
 
 export const useProductsList = (openingIdProduct: number | undefined) => {
   const productModel = useProductModel()
 
-  const productsArray = computed<IProduct[]>(() => {
-    const productCategoryId = Object.values(productModel.products).find(
-      (product) => product.id === openingIdProduct,
-    )?.categoryId
+  const productCategoryId = computed(
+    () =>
+      Object.values(productModel.products).find((product) => product.id === openingIdProduct)
+        ?.categoryId,
+  )
 
-    if (!productCategoryId) return []
-
-    return Object.values(productModel.products).filter(
-      (product: IProduct) => product.categoryId === productCategoryId,
-    )
+  const productIds = computed(() => {
+    if (!productCategoryId.value) return []
+    return productModel.categoryProducts[productCategoryId.value] ?? []
   })
 
   const startProductIndex = computed(() => {
-    const index = Object.values(productModel.products).findIndex(
-      (product) => product.id === openingIdProduct,
-    )
+    const index = productIds.value.findIndex((productId) => productId === openingIdProduct)
 
     return index < 0 ? 0 : index
   })
 
-  return { productsArray, startProductIndex }
+  return { productIds, startProductIndex }
 }

@@ -49,14 +49,14 @@ const botUrl = `https://t.me/${botUsername}`
   }
 
   &__title {
-    font-size: 28px;
+    font-size: var(--font-size-4xl);
     line-height: 1.2;
     color: var(--color-golden);
-    font-weight: 700;
+    font-weight: var(--font-weight-bold);
   }
 
   &__text {
-    font-size: 16px;
+    font-size: var(--font-size-lg);
     line-height: 1.4;
     color: var(--color-white);
   }
@@ -70,8 +70,8 @@ const botUrl = `https://t.me/${botUsername}`
     border-radius: var(--radius-8);
     background: var(--color-purple);
     color: var(--color-white);
-    font-size: 16px;
-    font-weight: 600;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
     text-decoration: none;
     transition: background 0.2s ease;
 

@@ -60,8 +60,8 @@ const { isInProcess, checkoutOrder } = useCheckout({
 
   &__title span {
     font-variant: all-small-caps;
-    font-size: 24px;
-    font-weight: 700;
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
     line-height: 14px;
     color: var(--color-golden);
   }

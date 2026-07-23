@@ -29,8 +29,8 @@ const userModel = useUserModel()
   }
   &__title {
     span {
-      font-size: 24px;
-      font-weight: 700;
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-bold);
       line-height: 14px;
       color: var(--color-golden);
       font-variant: all-small-caps;
@@ -48,7 +48,7 @@ const userModel = useUserModel()
 }
 .user-id {
   span {
-    font-size: 16px;
+    font-size: var(--font-size-lg);
     line-height: 14px;
     color: var(--color-golden);
     font-variant: all-small-caps;

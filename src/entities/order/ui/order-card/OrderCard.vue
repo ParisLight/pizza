@@ -80,7 +80,7 @@ defineProps<{
 
   &__row-value {
     span {
-      font-size: 16px;
+      font-size: var(--font-size-lg);
       line-height: 14px;
     }
   }
@@ -91,8 +91,8 @@ defineProps<{
 }
 
 .bold {
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
   line-height: 14px;
   font-variant: all-small-caps;
 }

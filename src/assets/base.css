@@ -37,6 +37,26 @@
 
   --popup-max-width: 420px;
   --popup-side-gap: 20px;
+
+  /* Typography — sizes bumped so form controls stay ≥16px (iOS zoom) */
+  --font-size-2xs: 10px;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 22px;
+  --font-size-3xl: 26px;
+  --font-size-4xl: 30px;
+  --font-size-5xl: 34px;
+
+  --font-weight-extralight: 200;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  --el-font-size-base: var(--font-size-md);
 }
 
 *,
@@ -44,7 +64,7 @@
 *::after {
   box-sizing: border-box;
   margin: 0;
-  font-weight: normal;
+  font-weight: var(--font-weight-regular);
 }
 
 a {
@@ -72,10 +92,18 @@ body {
     "Droid Sans",
     "Helvetica Neue",
     sans-serif;
-  font-size: 14px;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+input,
+textarea,
+select,
+button {
+  font-size: var(--font-size-md);
 }
 
 html,
@@ -108,7 +136,7 @@ body,
 .el-empty__description {
   p {
     font-variant: all-small-caps;
-    font-size: 16px !important;
+    font-size: var(--font-size-lg) !important;
   }
 }
 

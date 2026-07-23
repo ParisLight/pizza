@@ -1,6 +1,7 @@
-import type { Swiper as SwiperType } from "swiper/types";
+import type { Swiper as SwiperType } from "swiper/types"
+import { toValue, type MaybeRefOrGetter } from "vue"
 
-export const useSwiper = (startIndex: number) => {
+export const useSwiper = (startIndex: MaybeRefOrGetter<number> = 0) => {
   const swiperInstance = ref<SwiperType | null>(null)
   const activeIndex = ref(0)
 
@@ -8,12 +9,7 @@ export const useSwiper = (startIndex: number) => {
 
   const onSwiper = (swiper: SwiperType): void => {
     swiperInstance.value = swiper
-
-    if(startIndex) {
-      slideTo(startIndex)
-    } else {
-      activeIndex.value = swiper.activeIndex
-    }
+    slideTo(toValue(startIndex))
   }
 
   const onSlideChange = (swiper: SwiperType) => {

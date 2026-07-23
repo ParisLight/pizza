@@ -42,6 +42,7 @@ const model = defineModel<string>({
   }
   :deep(input) {
     color: white;
+    font-size: var(--font-size-md);
     &::placeholder {
       color: var(--color-secondary);
     }
@@ -52,8 +53,8 @@ const model = defineModel<string>({
     padding-left: 8px;
     padding-bottom: 2px;
     span {
-      font-size: 12px;
-      line-height: 14px;
+      font-size: var(--font-size-sm);
+      line-height: var(--font-size-md);
       font-variant: all-small-caps;
       color: var(--color-white);
       opacity: 0.5;

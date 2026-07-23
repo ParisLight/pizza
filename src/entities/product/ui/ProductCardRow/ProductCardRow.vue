@@ -99,8 +99,8 @@ const onClickImg = () => {
   }
 
   &__category {
-    font-size: 12px;
-    line-height: 14px;
+    font-size: var(--font-size-sm);
+    line-height: var(--font-size-md);
     color: var(--color-white);
     opacity: 0.5;
     font-variant: all-small-caps;
@@ -117,15 +117,15 @@ const onClickImg = () => {
   }
 
   &__name {
-    font-size: 16px;
+    font-size: var(--font-size-lg);
     line-height: 1.2;
-    font-weight: 700;
+    font-weight: var(--font-weight-bold);
     color: var(--color-golden);
     margin: 4px 0;
   }
 
   &__weight {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
     line-height: 1;
     color: var(--color-white);
     opacity: 0.5;
@@ -133,7 +133,7 @@ const onClickImg = () => {
   }
 
   &__description {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
     line-height: 1;
     color: var(--color-white);
     opacity: 0.5;
@@ -148,8 +148,8 @@ const onClickImg = () => {
   }
 
   &__price {
-    font-size: 20px;
-    font-weight: 700;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
     line-height: 1.5;
     color: var(--color-golden);
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="category-card">
     <div class="category-card__image">
-      <img src="@/assets/images/search-icon.svg" alt="category-img" />
+      <img :src="data.icon || '@/assets/images/search-icon.svg'" alt="category-img" />
     </div>
     <div class="category-card__name">
       <span>{{ data.name || "name" }}</span>
@@ -45,9 +45,9 @@ defineProps<{
     }
   }
   &__name span {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
     line-height: 18px;
-    font-weight: 700;
+    font-weight: var(--font-weight-bold);
     color: var(--color-white);
     opacity: 0.5;
     transition: 0.2s ease-in-out opacity;

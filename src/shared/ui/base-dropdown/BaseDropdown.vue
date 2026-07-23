@@ -68,9 +68,9 @@ const displayValue = computed(() => selectedItem.value?.label ?? "")
     padding-bottom: 2px;
 
     span {
-      font-weight: 400;
-      font-size: 12px;
-      line-height: 14px;
+      font-weight: var(--font-weight-regular);
+      font-size: var(--font-size-sm);
+      line-height: var(--font-size-md);
       font-variant: all-small-caps;
       opacity: 0.5;
     }
@@ -97,8 +97,8 @@ const displayValue = computed(() => selectedItem.value?.label ?? "")
 
   span {
     color: var(--color-white);
-    font-size: 14px;
-    line-height: 14px;
+    font-size: var(--font-size-md);
+    line-height: var(--font-size-md);
   }
 
   &__arrow {

@@ -27,8 +27,8 @@ defineProps({
     padding-bottom: 2px;
     padding-left: 8px;
     span {
-      font-size: 12px;
-      line-height: 14px;
+      font-size: var(--font-size-sm);
+      line-height: var(--font-size-md);
       font-variant: all-small-caps;
       color: var(--color-white);
       opacity: 0.5;
@@ -42,6 +42,7 @@ defineProps({
     border-radius: var(--radius-8);
     box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.5490196078);
     color: var(--color-white);
+    font-size: var(--font-size-md);
     padding: 12px;
     &::placeholder {
       color: var(--color-secondary);

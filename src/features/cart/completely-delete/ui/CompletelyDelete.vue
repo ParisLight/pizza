@@ -48,9 +48,9 @@ const { completelyDelete } = useCompletelyDeleteActions()
   &__title {
     text-align: center;
     span {
-      font-size: 16px;
+      font-size: var(--font-size-lg);
       line-height: 14px;
-      font-weight: 700;
+      font-weight: var(--font-weight-bold);
       color: var(--color-white);
     }
   }

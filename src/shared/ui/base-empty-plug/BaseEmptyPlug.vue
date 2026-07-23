@@ -14,7 +14,7 @@
   row-gap: 12px;
   &__text {
     span {
-      font-size: 24px;
+      font-size: var(--font-size-3xl);
       line-height: 14px;
       font-variant: all-small-caps;
       color: var(--color-golden);

@@ -74,9 +74,9 @@ const links: IMenuLink[] = [
     cursor: pointer;
     span {
       color: var(--color-golden);
-      font-size: 16px;
+      font-size: var(--font-size-lg);
       line-height: 24px;
-      font-weight: 400;
+      font-weight: var(--font-weight-regular);
       font-variant: all-small-caps;
     }
   }
@@ -102,9 +102,9 @@ const links: IMenuLink[] = [
   &__text {
     text-align: center;
     span {
-      font-size: 10px;
-      line-height: 9px;
-      font-weight: 300;
+      font-size: var(--font-size-xs);
+      line-height: 12px;
+      font-weight: var(--font-weight-light);
       color: var(--color-white);
       opacity: 0.5;
     }

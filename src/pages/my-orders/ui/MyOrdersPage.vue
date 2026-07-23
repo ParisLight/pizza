@@ -46,8 +46,8 @@ onMounted(async () => {
   }
   &__title {
     span {
-      font-size: 24px;
-      font-weight: 700;
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-bold);
       line-height: 14px;
       color: var(--color-golden);
       font-variant: all-small-caps;

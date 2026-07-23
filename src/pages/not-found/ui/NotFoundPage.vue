@@ -14,7 +14,7 @@
   &__text {
     color: var(--color-golden);
     font-variant: all-small-caps;
-    font-size: 24px;
+    font-size: var(--font-size-3xl);
   }
 }
 </style>

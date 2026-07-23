@@ -69,7 +69,7 @@ const { add, remove } = useChangeQuantity()
     .change-quantity__quantity {
       min-width: 20px;
       span {
-        font-size: 18px;
+        font-size: var(--font-size-xl);
         line-height: 26px;
         color: var(--color-white);
       }

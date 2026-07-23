@@ -73,8 +73,8 @@ const getDashWidth = (): DashWidth => {
 .nutrition-info {
   &__total {
     span {
-      font-size: 12px;
-      line-height: 14px ;
+      font-size: var(--font-size-sm);
+      line-height: var(--font-size-md);
       color: var(--color-white);
       opacity: 0.4;
     }
@@ -96,16 +96,16 @@ const getDashWidth = (): DashWidth => {
     width: 100%;
   }
   &__name {
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 14px;
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-sm);
+    line-height: var(--font-size-md);
     color: var(--color-white);
     opacity: 0.4;
   }
   &__value {
-    font-size: 14px;
-    line-height: 14px;
-    font-weight: 700;
+    font-size: var(--font-size-md);
+    line-height: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
     color: green;
   }
 }

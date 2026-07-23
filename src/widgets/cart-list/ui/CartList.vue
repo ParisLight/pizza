@@ -100,7 +100,7 @@ onMounted(async () => {
     span {
       color: var(--color-red);
       font-variant: all-small-caps;
-      font-size: 16px;
+      font-size: var(--font-size-lg);
     }
   }
 
@@ -160,23 +160,23 @@ onMounted(async () => {
     flex-direction: column;
   }
   &__category {
-    font-size: 12px;
-    line-height: 14px;
+    font-size: var(--font-size-sm);
+    line-height: var(--font-size-md);
     color: var(--color-white);
     opacity: 0.5;
     font-variant: all-small-caps;
   }
   &__name {
-    font-size: 16px;
-    line-height: 14px;
-    font-weight: 700;
+    font-size: var(--font-size-lg);
+    line-height: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
     color: var(--color-golden);
   }
   &__price {
     margin-top: 16px;
     span {
-      font-size: 20px;
-      font-weight: 700;
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
       line-height: 29px;
       color: var(--color-golden);
     }
