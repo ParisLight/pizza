@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { useCompletelyDeleteActions } from "@/features/cart"
 
-const props = defineProps<{
+defineProps<{
   productId: number
 }>()
 

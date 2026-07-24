@@ -1,7 +1,15 @@
 import { expect, test } from "vitest"
 import { mapFormToOrderDraft } from "./mapFormToOrder"
-import { DeliveryType, type IOrderDraft, PaymentType } from "@/entities/order"
+import { DeliveryType, type IOrderDraft, PaymentType, type TimeSlot } from "@/entities/order"
 import type { OrderFormValues } from "../model"
+
+const makeTimeSlot = (from: Date, to: Date): TimeSlot => ({
+  value: `${from.toISOString()}-${to.toISOString()}`,
+  label: "slot",
+  from,
+  to,
+  isToday: true,
+})
 
 test("maps delivery form to order draft", () => {
   const deliveryFrom = new Date("2026-07-18T12:00:00.000Z")
@@ -18,8 +26,8 @@ test("maps delivery form to order draft", () => {
     dontRingIntercom: true,
     floor: "3",
     flat: "10",
-    deliveryTime: { from: deliveryFrom, to: deliveryTo },
-    readyBy: { from: readyFrom, to: readyTo },
+    deliveryTime: makeTimeSlot(deliveryFrom, deliveryTo),
+    readyBy: makeTimeSlot(readyFrom, readyTo),
     orderComment: "Call before delivery",
   }
 
@@ -56,8 +64,8 @@ test("maps pickup form to order draft", () => {
     dontRingIntercom: true,
     floor: "3",
     flat: "10",
-    deliveryTime: { from: deliveryFrom, to: deliveryTo },
-    readyBy: { from: readyFrom, to: readyTo },
+    deliveryTime: makeTimeSlot(deliveryFrom, deliveryTo),
+    readyBy: makeTimeSlot(readyFrom, readyTo),
     orderComment: "No onions",
   }
 
