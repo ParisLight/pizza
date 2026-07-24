@@ -8,9 +8,10 @@
     "build": "vite build",
     "preview": "vite preview",
     "test:unit": "vitest",
+    "test:unit:ci": "vitest run",
     "type-check": "vue-tsc --build",
-    "check": "npm run type-check && npm run build",
-    "lint": "eslint . --fix",
+    "check:ci": "npm run type-check && npm run lint && npm run test:unit:ci && npm run build ",
+    "lint": "eslint .",
     "format": "prettier --write src/"
   },
   "dependencies": {
