@@ -11,6 +11,10 @@ export default defineConfig((env) =>
         exclude: [...configDefaults.exclude, 'e2e/**'],
         root: fileURLToPath(new URL('./', import.meta.url)),
         css: true,
+        env: {
+          VITE_SUPABASE_URL: 'http://127.0.0.1:54321',
+          VITE_SUPABASE_KEY: 'test-anon-key',
+        },
         server: {
           deps: {
             inline: [/element-plus/],
